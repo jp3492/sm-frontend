@@ -1,0 +1,186 @@
+.sequencer {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  grid-template-rows: max-content 1fr;
+  background-color: var(--cl-grey-light);
+  overflow: hidden;
+  > * {
+    background-color: white;
+  }
+  .sequencer_header {
+    grid-column: 1 / 2;
+    height: 45px;
+    display: grid;
+    grid-template-columns: max-content 1fr max-content max-content;
+    align-items: center;
+    z-index: 2;
+    column-gap: 1rem;
+    > button {
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      height: 100%;
+      color: white;
+      background-color: var(--cl-grey);
+      cursor: pointer;
+      i {
+        padding-right: 1rem;
+        color: white;
+      }
+    }
+    > a {
+      padding: 0 1rem;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      border-right: 2px solid var(--cl-grey-light);
+    }
+    .sequencer_header-videos {
+      position: relative;
+      display: grid;
+      grid-template-rows: 45px max-content;
+      > div {
+        border-left: 2px solid var(--cl-grey-light);
+      }
+      > div, > ul > li {
+        display: grid;
+        grid-template-columns: max-content 1fr max-content;
+        column-gap: 2rem;
+        padding: 0 1rem;
+        align-items: center;
+      }
+      > ul {
+        z-index: 1;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 45px;
+        border: 2px solid var(--cl-grey-light);
+        border-top: none;
+        border-right: none;
+        li {
+          height: 45px;
+        }
+      }
+    }
+  }
+  .sequencer_video {
+    overflow: hidden;
+    z-index: 1;
+  }
+  .sequencer_list {
+    position: relative;
+    width: 300px;
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+    display: grid;
+    grid-template-rows: max-content 1fr max-content max-content;
+    .sequencer_list-header {
+      height: 45px;
+      display: grid;
+      grid-template-columns: 1fr max-content;
+      box-shadow: var(--shadow-s);
+      z-index: 1;
+      i {
+        padding: 0 0.5rem;
+        align-self: center;
+      }
+      input {
+        padding-left: 1rem;
+        border: none;
+        border-radius: 0;
+        height: 100%;
+        background-color: var(--cl-grey-light);
+      }
+    }
+    .sequencer_list-list {
+      border-top: 2px solid var(--cl-grey-light);
+      li {
+        display: grid;
+        grid-template-columns: max-content max-content 1fr;
+        align-items: center;
+        column-gap: 2px;
+        border-bottom: 2px solid var(--cl-grey-light);
+        background-color: var(--cl-grey-light);
+        place-items: stretch;
+        > * {
+          background-color: white;
+          display: grid;
+          align-items: center;
+          padding: 0.2rem 0.5rem;
+        }
+        > div {
+          display: grid;
+          font-size: 80%;
+
+        }
+      }
+    }
+    .sequencer_actions {
+      display: grid;
+      height: 45px;
+      grid-auto-flow: column;
+      border-top: 2px solid var(--cl-grey-light);
+      place-items: stretch;
+      button {
+	      background-color: var(--cl-grey-light);
+      }
+    }
+    .sequencer_controls {
+      z-index: 1;
+      display: grid;
+      grid-auto-flow: column;
+      height: 45px;
+      gap: 1px;
+      background-color: white;
+      button {
+        background-color: var(--cl-grey-light);
+      }
+    }
+    .sequencer_list-tagger {
+      box-shadow: var(--shadow-l);
+      display: grid;
+      place-items: stretch;
+      grid-template-rows: 45px max-content;
+      border-top: 2px solid var(--cl-grey-light);
+      grid-template-columns: 1fr max-content 1fr;
+      textarea {
+        grid-column: 1 / 4;
+        height: 80px;
+        padding: 0.5rem;
+        border-top: 2px solid var(--cl-grey-light);
+        border-bottom: 2px solid var(--cl-grey-light);
+      }
+      span, i {
+        display: grid;
+        place-items: center;
+        grid-auto-flow: column;
+      }
+      span.active {
+        background-color: var(--cl-grey-light);
+      }
+      button {
+        grid-column: 3 / 4;
+        justify-self: end;
+        font-weight: bold;
+        padding: 1rem;
+      }
+      &[data-state="loading"] {
+        grid-template-columns: 1fr;
+      }
+      &[data-state="idle"] {
+        grid-template-columns: 1fr 2fr;
+        button {
+          justify-self: start;
+          grid-column: 2 / 3;
+          width: 100%;
+          background-color: var(--cl-grey);
+          text-align: start;
+          font-weight: 500;
+          color: white;
+        }
+      }
+
+    }
+  }
+}

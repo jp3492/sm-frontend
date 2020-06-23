@@ -1,0 +1,33 @@
+.path {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  align-items: center;
+  column-gap: 10px;
+  height: 45px;
+  grid-auto-columns: max-content;
+  align-items: center;
+  border-bottom: 2px solid var(--cl-grey-light);
+  > div {
+    display: grid;
+    grid-auto-columns: max-content;
+    grid-auto-flow: column;
+    align-items: center;
+    column-gap: 10px;
+    height: 45px;
+    padding: 0.5em 1em;
+    grid-auto-columns: max-content;
+    align-items: center;
+    > div {
+    display: grid;
+    column-gap: 10px;
+    grid-auto-flow: column;
+  }
+}
+button {
+  place-self: stretch;
+  padding: 0 1em;
+  display: flex;
+  align-items: center;
+  border-left: 2px solid var(--cl-grey-light);
+}
+}

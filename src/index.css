@@ -1,13 +1,151 @@
+:root {
+  --cl-grey-dark: #616161;
+	--cl-grey: #9E9E9E;
+	--cl-grey-opace: #d2d2d2a1;
+	--cl-selected: #e8e7e7;
+	--cl-grey-light: #f4f4f4;
+	--cl-white-opace: #ffffffd9;
+	--cl-black-opace: rgba(0, 0, 0, 0.60);
+	--cl-green: #FFECB3;
+	--cl-green-m: #97c067;
+	--cl-red: #ffa9a2;
+	--cl-green: #b3d888;
+	--cl-blue: #99c6f7;
+
+	--cl-background: #e4e4e16b;
+
+	--shadow-xl: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+	--shadow-l: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+	--shadow-m: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+	--shadow-m-inset: inset 0 10px 20px rgba(0, 0, 0, 0.19), inset 0 6px 6px rgba(0, 0, 0, 0.23);
+	--shadow-m-w: 0 10px 20px rgba(255, 255, 255, 0.19), 0 6px 6px rgba(255, 255, 255, 0.23);
+	--shadow-s: 0 3px 6px rgba(0,0,0,0.16), 0 0px 4px rgba(0,0,0,0.23);
+	--shadow-s-inset: inset 0 3px 6px rgba(0,0,0,0.16), inset 0 0px 4px rgba(0,0,0,0.23);
+	--shadow-s-m: 0 3px 6px rgba(255, 255, 255, 0.19), 0 0px 4px rgba(255, 255, 255, 0.19);
+	--shadow-xs: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+
+	--shadow-text-m: -15px 0 20px rgba(0, 0, 0, 0.4), 15px 0 20px rgba(0, 0, 0, 0.4), 0 15px 20px rgba(0, 0, 0, 0.4), 0 -15px 20px rgba(0, 0, 0, 0.4);
+	--shadow-text-xl: -25px 0 38px rgba(0, 0, 0, 0.4), 25px 0 38px rgba(0, 0, 0, 0.4), 0 25px 38px rgba(0, 0, 0, 0.4), 0 -25px 38px rgba(0, 0, 0, 0.4);
+
+	--shadow-white-around: 0 19px 38px #ffffff5c, 19px 0 38px #ffffff5c, 0 -19px 38px #ffffff5c, -19px 0 38px #ffffff5c;
+
+	--drop-shadow-s: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+
+	--speed-ease: cubic-bezier(0.4, 0.0, 0.2, 1);
+	--speed-dec-ease: cubic-bezier(0.0, 0.0, 0.2, 1);
+	--speed-acc-ease: cubic-bezier(0.4, 0.0, 1, 1);
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+  color: var(--cl-grey-dark);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  display: grid;
+  min-height: 100vh;
+  width: 100%;
+}
+
+button {
+	background-color: inherit;
+	border: none;
+	outline: none;
+	line-height: 1;
+}
+
+button:disabled {
+	background-color: white !important;
+}
+
+button:disabled > i {
+	color: var(--cl-grey);
+	pointer-events: none;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+	list-style-type: none;
+}
+
+ul, p {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+input {
+  padding: 0.8em 0.5em;
+  border: 1px solid lightgrey;
+  border-radius: 8px;
+}
+
+textarea {
+	border: none;
+}
+
+textarea:focus, input:focus {
+	outline: none;
+}
+
+.form-field {
+  display: grid;
+  justify-items: start;
+}
+
+.hover:hover {
+	background-color: var(--cl-selected);
+}
+
+form {
+	display: grid;
+	min-width: 350px;
+}
+
+form > label {
+	display: grid;
+	justify-items: start;
+}
+
+form > label > input {
+	justify-self: stretch;
+}
+
+i {
+	color: var(--cl-grey-dark);
+	cursor: pointer;
+}
+.icon-disabled {
+	color: var(--cl-grey);
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+.selected {
+	background-color: var(--cl-grey-light);
 }

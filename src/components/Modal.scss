@@ -1,0 +1,14 @@
+.modal {
+  z-index: 2;
+  position: fixed;
+  height: 100%;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  background-color: var(--cl-grey-opace);
+  display: grid;
+  place-items: center;
+  > * {
+    box-shadow: var(--shadow-l);
+  }
+}

@@ -1,0 +1,36 @@
+.video-preview {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  bottom: 0;
+  right: 100%;
+  background-color: white;
+
+  &.open {
+    display: inline;
+  }
+
+  overflow: hidden;
+  width: calc(100vw - 100%);
+  height: calc(100vh - 60px);
+  .video-preview__header {
+    display: grid;
+    padding: 0.5em;
+    height: 45px;
+    border-right: 2px solid var(--cl-grey-light);
+    grid-template-columns: 1fr max-content max-content;
+    align-items: center;
+    z-index: 1;
+  }
+  &.minimized {
+
+    border-left: 2px solid var(--cl-grey-light);
+    border-top: 2px solid var(--cl-grey-light);
+    height: 350px;
+    width: 500px;
+  }
+  > div:last-of-type {
+    bottom: 0;
+  }
+  .player {}
+}

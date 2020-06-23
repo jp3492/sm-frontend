@@ -1,0 +1,17 @@
+.hint {
+  position: fixed;
+  bottom: 2em;
+  left: 2em;
+  padding: 2em;
+  padding-right: 3em;
+  background-color: var(--cl-grey-light);
+  display: grid;
+  align-items: center;
+  box-shadow: var(--shadow-m);
+  border-radius: 8px;
+  i {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+  }
+}

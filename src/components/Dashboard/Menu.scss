@@ -1,0 +1,101 @@
+.menu {
+  overflow: hidden;
+  width: 0;
+  background-color: white;
+
+  &.open {
+
+    width: 300px;
+    border-right: 2px solid var(--cl-grey-light);
+  }
+
+  .menu_videos, .menu_sequences {
+    padding: 0.5em 1em;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: 10px;
+    align-items: center;
+  }
+  .menu_sequences > i {
+    transform: rotate(45deg);
+  }
+}
+
+.menu_backdrop {
+  position: fixed;
+  top: 60px;
+  bottom: 0;
+  width: 100vw;
+  transform: translateX(-100%);
+  background-color: var(--cl-grey-opace);
+
+  &.open {
+    transform: translateX(0);
+  }
+
+}
+.menu_item {
+
+  &.selected > .menu_dir_header {
+    background-color: var(--cl-grey-light);
+  }
+  .menu_item_header {
+    padding: 0.5em 1em;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: 10px;
+    align-items: center;
+    height: 45px;
+  }
+  .folder {
+    .folder_header {
+      padding: 0.5em 1em;
+      display: grid;
+      grid-template-columns: max-content 1fr max-content;
+      column-gap: 10px;
+      background-color: white;
+
+      > i:first-of-type {
+        transform: rotate(90deg);
+        &.no_child_folder {
+          transform: rotate(0deg);
+          font-size: 100%;
+          display: grid;
+          place-items: center;
+          pointer-events: none;
+          opacity: 0;
+        }
+      }
+    }
+    &.selected > .folder_header {
+      background-color: var(--cl-grey-light);
+      position: relative;
+      &:after {
+        content: "";
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background-color: var(--cl-grey-light);
+        top: 0;
+        transform: translateX(-100%);
+        z-index: 1;
+      }
+    }
+    .folder_folders {
+      position: relative;
+      padding-left: 1rem;
+      &:after {
+        content: "";
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background-color: white;
+        top: 0;
+        transform: translateX(-100%);
+      }
+    }
+    &.open > .folder_header > i:first-of-type {
+      transform: rotate(135deg);
+    }
+  }
+}
