@@ -11,9 +11,12 @@ export const DirectoryVideo = ({
   onDragOver,
   onDragStart,
   handleSelect,
-  handleEdit
+  handleEdit,
+  onShare
 }) => {
   const handleKeywordClick = (e) => {};
+
+  const handleShare = () => onShare(DIRECTORY_TYPES.VIDEO, id);
 
   return (
     <li
@@ -58,7 +61,9 @@ export const DirectoryVideo = ({
         <i className="material-icons">
           {selected ? "check_box" : "check_box_outline_blank"}
         </i>
-        <i className="material-icons">share</i>
+        <i onClick={handleShare} className="material-icons">
+          share
+        </i>
         <Link to={`/sequencer/video/${id}`}>
           <i className="material-icons">open_in_new</i>
         </Link>

@@ -36,7 +36,6 @@ export const getVideo = async (id) => {
   try {
     const res = await request("videos", "/" + id);
     const data = await res.json();
-    console.log(data);
 
     setGlobalState(VIDEOS, [data.video]);
     setGlobalState(SEQUENCES, data.sequences);
@@ -79,6 +78,21 @@ export const patchVideo = async ({ id, ...values }) => {
     setGlobalState(
       VIDEOS,
       videos.map((v) => (v.id === id ? { id, ...values } : v))
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteVideo = async (id) => {
+  try {
+    await request("videos", "/" + id, {
+      method: "DELETE"
+    });
+    const videos = getGlobalState(VIDEOS);
+    setGlobalState(
+      VIDEOS,
+      videos.filter((v) => v.id !== id)
     );
   } catch (error) {
     console.log(error);

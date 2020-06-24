@@ -9,8 +9,7 @@ import {
 
 let timeout;
 
-export const SequencerList = () => {
-  const [sequences] = useGlobalState(FILTERED_SEQUENCES);
+export const SequencerList = ({ sequences }) => {
   const [selectedSequences, setSelectedSequences] = useGlobalState(
     SELECTED_SEQUENCES
   );

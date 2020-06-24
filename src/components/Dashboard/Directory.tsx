@@ -119,21 +119,6 @@ export const Directory = () => {
     }
   };
 
-  // const hanleSequencer = (e) => {
-  //   const id = e.target.closest("li").id;
-  //   if (selectedDirectory === DIRECTORY_TYPES.VIDEO) {
-  //     const video = videos.find((f) => f.id === id);
-  //     setGlobalState(SEQUENCER_VIDEOS, [id]);
-  //   } else if (selectedDirectory === DIRECTORY_TYPES.PLAYLIST) {
-  //     const playlist = playlists.find((p) => p.id === id);
-  //     setGlobalState(MODAL, {
-  //       component: "playlist",
-  //       props: playlist
-  //     });
-  //   } else {
-  //   }
-  // };
-
   const handleAdd = () => {
     setGlobalState(MODAL, {
       component: "folder",
@@ -141,6 +126,13 @@ export const Directory = () => {
         directory: selectedDirectory,
         folder: selectedFolder
       }
+    });
+  };
+
+  const handleShare = (type, id) => {
+    setGlobalState(MODAL, {
+      component: "share",
+      props: { type, id }
     });
   };
 
@@ -165,6 +157,7 @@ export const Directory = () => {
                 onDragOver={onDragOver}
                 onDragStart={onDragStart}
                 handleDrop={handleDrop}
+                onShare={handleShare}
               />
             );
           } else if (selectedDirectory === DIRECTORY_TYPES.VIDEO) {
@@ -179,6 +172,7 @@ export const Directory = () => {
                 onDragOver={onDragOver}
                 onDragStart={onDragStart}
                 handleDrop={handleDrop}
+                onShare={handleShare}
               />
             );
           } else if (selectedDirectory === DIRECTORY_TYPES.SEQUENCE) {
@@ -193,6 +187,7 @@ export const Directory = () => {
                 onDragOver={onDragOver}
                 onDragStart={onDragStart}
                 handleDrop={handleDrop}
+                onShare={handleShare}
               />
             );
           } else {

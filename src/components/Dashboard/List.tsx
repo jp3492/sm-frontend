@@ -95,6 +95,22 @@ export const Playlist = () => {
             items: [...playlist.items, ...newSequences]
           });
         }
+      } else if (type === DIRECTORY_TYPES.PLAYLIST) {
+        const draggedPlaylists = playlists.filter((p) => ids.includes(p.id));
+        const draggedItemIds = draggedPlaylists.reduce((prev, curr) => {
+          return Array.from(new Set([...prev, ...curr.items]));
+        }, []);
+        const newDraggedItemIds = Array.from(
+          new Set([...playlist.items, ...draggedItemIds])
+        );
+        if (newDraggedItemIds.length > playlist.items.length) {
+          patchPlaylist({
+            ...playlist,
+            items: newDraggedItemIds
+          });
+        } else {
+          console.log("No New Items to add");
+        }
       }
     } else {
       if (type === DIRECTORY_TYPES.VIDEO) {

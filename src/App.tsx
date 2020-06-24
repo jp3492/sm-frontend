@@ -9,6 +9,7 @@ import { useGlobalState } from "react-global-state-hook";
 import { Modal } from "./components/Modal";
 import { Sequencer } from "./views/Sequencer";
 import { Landing } from "./views/Landing";
+import { Viewer } from "./views/Viewer";
 
 const App = () => {
   const [auth] = useGlobalState("AUTH", "pending");
@@ -24,10 +25,11 @@ const App = () => {
             <Route path="/auth/:type" component={Auth} />
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/sequencer/:type/:id" component={Sequencer} />
+            <Route path="/viewer/:type/:id" component={Viewer} />
           </Switch>
+          <Modal />
         </BrowserRouter>
       )}
-      <Modal />
     </div>
   );
 };

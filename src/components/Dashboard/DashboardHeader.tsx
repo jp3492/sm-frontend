@@ -13,20 +13,10 @@ import { DIRECTORY_TYPES } from "../../stores/folder";
 
 export const VIDEO_DETECTED = "VIDEO_DETECTED";
 
-const onFocus = async () => {
-  const videos = getGlobalState(VIDEOS);
-  const url = await navigator.clipboard.readText();
-  const add = videos.every((v) => v.url !== url);
-  // await navigator.clipboard.writeText("");
-  if (ReactPlayer.canPlay(url) && add) {
-    setGlobalState(VIDEO_DETECTED, url);
-  }
-};
-
 export const Header = () => {
   const [menuOpen, setMenuOpen] = useGlobalState("MENU_OPEN", true);
   const [profileOpen, setProfileOpen] = useGlobalState("PROFILE_OPEN", false);
-  const [url] = useGlobalState(VIDEO_DETECTED);
+  const [url, setUrl] = useGlobalState(VIDEO_DETECTED);
 
   useEffect(() => {
     window.addEventListener("focus", onFocus);
@@ -34,6 +24,23 @@ export const Header = () => {
       window.removeEventListener("focus", onFocus);
     };
   });
+
+  const onFocus = async () => {
+    const url = await navigator.clipboard.readText();
+    addUrl(url);
+  };
+
+  const handleChangeUrl = ({ target: { value } }) => {
+    addUrl(value);
+  };
+
+  const addUrl = (url) => {
+    const videos = getGlobalState(VIDEOS);
+    const add = videos.every((v) => v.url !== url);
+    if (ReactPlayer.canPlay(url) && add) {
+      setUrl(url);
+    }
+  };
 
   const handleVideoAdd = () => {
     setGlobalState(MODAL, {
@@ -45,21 +52,35 @@ export const Header = () => {
     });
   };
 
+  const handlePaste = async () => {
+    const url = await navigator.clipboard.readText();
+    addUrl(url);
+  };
+
   return (
     <header>
       <div
         onClick={() => setMenuOpen(!menuOpen)}
         className={`header_menu ${menuOpen ? "open" : ""}`}
       >
-        <i className="material-icons">menu</i>
+        <i className="material-icons">{menuOpen ? "menu_open" : "menu"}</i>
       </div>
-      <Add />
-      <div className="header_logo">
-        {!!url && (
-          <button onClick={handleVideoAdd}>
-            <i className="material-icons">ondemand_video</i>
-            Video
+      {/* <Add /> */}
+      <div className="header_add">
+        <i className="material-icons">ondemand_video</i>
+        <input
+          type="text"
+          placeholder="Paste video url here:"
+          value={url}
+          onChange={handleChangeUrl}
+        />
+        {url ? (
+          <button disabled={!url} onClick={handleVideoAdd}>
             <i className="material-icons">add</i>
+          </button>
+        ) : (
+          <button onClick={handlePaste}>
+            <i className="material-icons">content_paste</i>
           </button>
         )}
       </div>

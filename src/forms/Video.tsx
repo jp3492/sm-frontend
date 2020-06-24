@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { patchVideo, postVideo } from "../stores/videos";
+import { patchVideo, postVideo, deleteVideo } from "../stores/videos";
 import { getGlobalState, setGlobalState } from "react-global-state-hook";
 import ReactPlayer from "react-player";
 import { VIDEO_DETECTED } from "../components/Dashboard/DashboardHeader";
@@ -87,9 +87,13 @@ export const Video = ({ onSubmit, closeModal, id, ...values }) => {
     }
   };
 
-  const handleDelete = () => {
-    if (deletable) {
-      alert("Video not used");
+  const handleDelete = async () => {
+    if (
+      deletable &&
+      window.confirm("Are you sure you want to delete this video?")
+    ) {
+      await deleteVideo(id);
+      closeModal();
     } else {
       alert("Video is used in playlists and/or sequences");
     }

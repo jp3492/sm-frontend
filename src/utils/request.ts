@@ -12,7 +12,8 @@ const APIS = {
   videos: "http://localhost:4001",
   playlists: "http://localhost:4002",
   projects: "http://localhost:4003",
-  sequences: "http://localhost:4004"
+  sequences: "http://localhost:4004",
+  viewer: "http://localhost:4005"
 };
 
 export const request = (api: string, path: string = "", options: any = {}) => {

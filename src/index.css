@@ -63,6 +63,10 @@ button {
 	border: none;
 	outline: none;
 	line-height: 1;
+	cursor: pointer;
+}
+button * {
+	cursor: pointer;
 }
 
 button:disabled {
@@ -101,7 +105,7 @@ ul, p {
 
 input {
   padding: 0.8em 0.5em;
-  border: 1px solid lightgrey;
+  border: 1px solid var(--cl-grey-light);
   border-radius: 8px;
 }
 

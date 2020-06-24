@@ -1,5 +1,6 @@
 import React from "react";
 import "./Path.scss";
+
 import { useGlobalState } from "react-global-state-hook";
 import {
   FOLDERS,
@@ -53,9 +54,9 @@ export const Path = () => {
         <div onClick={handleDirClick}>
           <i className="material-icons">folder</i>
         </div>
-        {path.map((p) => {
+        {path.map((p, i) => {
           return (
-            <div onClick={() => setSelectedFolder(p.id)}>
+            <div key={i} onClick={() => setSelectedFolder(p.id)}>
               <i className="material-icons">keyboard_arrow_right</i>
               {p.label}
             </div>

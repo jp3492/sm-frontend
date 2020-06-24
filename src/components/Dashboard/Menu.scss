@@ -58,12 +58,10 @@
       > i:first-of-type {
         transform: rotate(90deg);
         &.no_child_folder {
-          transform: rotate(0deg);
-          font-size: 100%;
+          transform: rotate(135deg);
           display: grid;
           place-items: center;
           pointer-events: none;
-          opacity: 0;
         }
       }
     }

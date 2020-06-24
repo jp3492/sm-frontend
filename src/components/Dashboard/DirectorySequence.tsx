@@ -10,9 +10,12 @@ export const DirectorySequence = ({
   onDragOver,
   onDragStart,
   handleSelect,
-  handleEdit
+  handleEdit,
+  onShare
 }) => {
   const handleKeywordClick = (e) => {};
+
+  const handleShare = () => onShare(DIRECTORY_TYPES.SEQUENCE, id);
 
   return (
     <li
@@ -51,7 +54,9 @@ export const DirectorySequence = ({
         <i className="material-icons">
           {selected ? "check_box" : "check_box_outline_blank"}
         </i>
-        <i className="material-icons">share</i>
+        <i onClick={handleShare} className="material-icons">
+          share
+        </i>
         <i className="material-icons">ondemand_video</i>
         <i className="material-icons">play_arrow</i>
       </div>

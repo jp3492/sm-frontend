@@ -1,9 +1,7 @@
 const listeners: any = [];
 
-const handleClick = e => {
-  console.log(e);
-
-  Object.keys(listeners).forEach(query => {
+const handleClick = (e) => {
+  Object.keys(listeners).forEach((query) => {
     const outside = !e.target.closest(query);
     if (outside) {
       listeners[query](e);

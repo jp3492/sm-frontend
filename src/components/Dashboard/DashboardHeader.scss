@@ -2,15 +2,48 @@ header {
   box-sizing: content-box;
   grid-area: header;
   display: grid;
-  grid-template-columns: max-content max-content max-content 1fr max-content;
+  grid-template-columns: max-content 1fr 1fr max-content;
   place-items: center;
+  column-gap: 1em;
   // box-shadow: var(--shadow-s);
   border-bottom: 2px solid var(--cl-grey-light);
   .header_menu {
     padding: 5px;
     &.open > i {
-      border-radius: 50%;
+      border-top-right-radius: 8px;
       background-color: var(--cl-grey-light);
+    }
+  }
+  .header_add {
+    width: 100%;
+    max-width: 600px;
+    display: grid;
+    grid-template-columns: max-content 1fr max-content;
+    > * {
+
+      background-color: var(--cl-grey-light);
+    }
+    > i {
+      border: 1px solid var(--cl-grey-light);
+      border-radius: 8px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-right: 0;
+    }
+    > input {
+      border-left: none;
+      border-right: none;
+      border-radius: 0;
+    }
+    > button {
+      border: 1px solid var(--cl-grey-light);
+      border-radius: 0;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      border-left: none;
+      > i {
+        margin-right: 0;
+      }
     }
   }
   i {
@@ -18,29 +51,29 @@ header {
     position: relative;
 
   }
-  button {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    // background-color: var(--cl-green);
-    // box-shadow: var(--shadow-s);
-    border: 2px solid var(--cl-grey-light);
-    border-radius: 12px;
-    width: max-content;
-    padding: 0em 1em;
-    font-size: 110%;
-    i {
-      padding: 0;
-    }
-    i:first-of-type {
-      margin-right: 0.5em;
-      padding: 0;
-    }
-    i:nth-of-type(2) {
-      margin-left: 0.5em;
-      padding: 0;
-    }
-  }
+  // button {
+  //   display: flex;
+  //   align-items: center;
+  //   text-align: center;
+  //   // background-color: var(--cl-green);
+  //   // box-shadow: var(--shadow-s);
+  //   border: 2px solid var(--cl-grey-light);
+  //   border-radius: 12px;
+  //   width: max-content;
+  //   padding: 0em 1em;
+  //   font-size: 110%;
+  //   i {
+  //     padding: 0;
+  //   }
+  //   i:first-of-type {
+  //     margin-right: 0.5em;
+  //     padding: 0;
+  //   }
+  //   i:nth-of-type(2) {
+  //     margin-left: 0.5em;
+  //     padding: 0;
+  //   }
+  // }
   .menu-add {
     position: relative;
     display: grid;

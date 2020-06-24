@@ -1,0 +1,48 @@
+.viewer {
+  display: grid;
+  overflow: hidden;
+  .video_viewer {
+
+  }
+  .sequence_viewer {
+
+  }
+  .playlist_viewer {
+    display: grid;
+    grid-template-columns: 1fr max-content;
+    background-color: black;
+    .playlist_viewer-list {
+      display: grid;
+      grid-template-rows: max-content 1fr;
+      row-gap: 5px;
+      width: 300px;
+      input {
+        border-radius: 0;
+        background-color: var(--cl-grey);
+        color: white;
+        border: none;
+        height: 50px;
+        font-weight: 200;
+        font-size: 100%;
+        &::placeholder {
+          color: white;
+        }
+      }
+      ul {
+        display: grid;
+        row-gap: 2px;
+        background-color: black;
+        grid-auto-rows: max-content;
+        li {
+          background-color: var(--cl-grey-dark);
+          display: grid;
+          padding: 0.5em 1em;
+          color: white;
+          &[data-active="true"] {
+            background-color: var(--cl-grey);
+          }
+        }
+      }
+    }
+  }
+}

@@ -6,6 +6,8 @@ import { Video } from "../forms/Video";
 import { Playlist } from "../forms/Playlist";
 import { New } from "../forms/New";
 import { SelectFolder } from "../forms/SelectFolder";
+import { Share } from "../forms/Share";
+import { Replay } from "../forms/Replay";
 
 export const MODAL = "MODAL";
 
@@ -19,7 +21,9 @@ const COMPONENTS = {
   VIDEO: Video,
   PLAYLIST: Playlist,
   NEW: New,
-  SELECTFOLDER: SelectFolder
+  SELECTFOLDER: SelectFolder,
+  SHARE: Share,
+  REPLAY: Replay
 };
 
 export const closeModal = () => {

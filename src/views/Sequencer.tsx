@@ -75,6 +75,14 @@ export const Sequencer = ({
     }
   };
 
+  const videoSequences = useMemo(() => {
+    if (target) {
+      return sequences.filter((s) => s.videoId === target.id);
+    }
+    return [];
+  }, [sequences, target]);
+  console.log(videoSequences);
+
   return (
     <div className="sequencer">
       <SequencerHeader
@@ -86,7 +94,7 @@ export const Sequencer = ({
       <SequencerVideo selectedVideo={selectedVideo} />
       <div className="sequencer_list">
         <SequencerListHeader sequences={sequences} />
-        <SequencerList />
+        <SequencerList sequences={videoSequences} />
         <SequencerActions />
         <Tagger onSubmit={handleSubmit} />
         <SequencerControls />
