@@ -26,14 +26,17 @@ const COMPONENTS = {
   REPLAY: Replay
 };
 
-export const closeModal = () => {
-  setGlobalState(MODAL, INITIAL_CONFIG);
-};
-
 export const Modal = () => {
   const [modal, setModal] = useGlobalState(MODAL, INITIAL_CONFIG);
 
   const component = modal.component.toUpperCase();
+
+  const closeModal = () => {
+    if (modal.onClose) {
+      modal.onClose();
+    }
+    setGlobalState(MODAL, INITIAL_CONFIG);
+  };
 
   if (!Object.keys(COMPONENTS).includes(component)) {
     document.body.style.overflow = "auto";

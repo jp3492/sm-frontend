@@ -24,7 +24,7 @@ const App = () => {
             <Route exact path="/" component={Landing} />
             <Route path="/auth/:type" component={Auth} />
             <Route path="/dashboard" component={Dashboard} />
-            <Route path="/sequencer/:type/:id" component={Sequencer} />
+            <Route path="/sequencer/:id" component={Sequencer} />
             <Route path="/viewer/:type/:id" component={Viewer} />
           </Switch>
           <Modal />

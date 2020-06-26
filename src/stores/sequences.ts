@@ -60,7 +60,7 @@ export const postSequence = async (body) => {
         stop: Number(body.stop)
       })
     });
-    const id = res.text();
+    const id = await res.text();
     const sequences = getGlobalState(SEQUENCES);
     setGlobalState(SEQUENCES, [...sequences, { ...body, id }]);
   } catch (error) {
@@ -84,14 +84,22 @@ export const patchSequence = async ({ id, ...body }) => {
   }
 };
 
-export const deleteProject = async (id) => {
+export const deleteSequences = async (id) => {
   try {
-    await request("sequences", "/" + id, { method: "DELETE" });
-    const folders = getGlobalState(SEQUENCES);
-    setGlobalState(
-      SEQUENCES,
-      folders.filter((f) => f.id !== id)
-    );
+    const res = await request("sequences", "/" + id, {
+      method: "DELETE"
+    });
+    if (res.status != 403) {
+      const folders = getGlobalState(SEQUENCES);
+      setGlobalState(
+        SEQUENCES,
+        folders.filter((f) => f.id !== id)
+      );
+    } else {
+      alert(
+        "Sequences not deletable. At least one sequence is existing in at least one of your Playlist"
+      );
+    }
   } catch (error) {
     console.log(error);
   }

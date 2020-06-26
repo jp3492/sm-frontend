@@ -1,24 +1,50 @@
-import React, { useState } from "react";
+import React, { useCallback } from "react";
 
 import ReactPlayer from "react-player";
 
-import { setGlobalState } from "react-global-state-hook";
+import {
+  setGlobalState,
+  useGlobalState,
+  getGlobalState
+} from "react-global-state-hook";
 import { PLAYER_PROGRESS } from "../../views/Sequencer";
 
-const handleProgress = (progress) =>
-  setGlobalState(PLAYER_PROGRESS, {
-    playedSeconds: progress.playedSeconds.toFixed(2)
-  });
+export const SEQUENCER_PLAYER = "SEQUENCER_PLAYER";
+export const SEQUENCER_PLAYER_PLAYING = "SEQUENCER_PLAYER_PLAYING";
+export const SEQUENCER_PLAYING_SEQUENCES = "SEQUENCER_PLAYING_SEQUENCES";
 
-export const SequencerVideo = ({ selectedVideo }) => {
-  const [playing] = useState(false);
-  const [player, setPlayer]: any = useState();
+setGlobalState(SEQUENCER_PLAYER, { ready: false, player: null });
+setGlobalState(SEQUENCER_PLAYING_SEQUENCES, []);
 
-  const ref = (player) => setPlayer(player);
+export const SequencerVideo = ({ selectedVideo, sequences }) => {
+  const [playing] = useGlobalState(SEQUENCER_PLAYER_PLAYING, false);
+
+  const handleProgress = useCallback(
+    (progress) => {
+      const playedSeconds = Number(progress.playedSeconds.toFixed(2));
+      setGlobalState(PLAYER_PROGRESS, {
+        playedSeconds
+      });
+      const playingSequences = sequences
+        .filter(
+          ({ start, stop }) => start <= playedSeconds && stop >= playedSeconds
+        )
+        .map((s) => s.id);
+      setGlobalState(SEQUENCER_PLAYING_SEQUENCES, playingSequences);
+    },
+    [sequences]
+  );
+
+  console.log(playing);
+
+  const ref = (p) => {
+    const playerState = getGlobalState(SEQUENCER_PLAYER);
+    setGlobalState(SEQUENCER_PLAYER, { ...playerState, player: p });
+  };
 
   const handleReady = () => {
-    if (player) {
-    }
+    const playerState = getGlobalState(SEQUENCER_PLAYER);
+    setGlobalState(SEQUENCER_PLAYER, { ...playerState, ready: true });
   };
 
   return (

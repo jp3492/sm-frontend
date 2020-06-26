@@ -2,7 +2,16 @@
   overflow: hidden;
   width: 0;
   background-color: white;
-
+  display: grid;
+  grid-template-rows: 45px repeat(3, max-content);
+  h3 {
+    align-self: center;
+    padding: 0 0.5em;
+    border-bottom: 2px solid var(--cl-grey-light);
+    height: 45px;
+    display: grid;
+    align-content: center;
+  }
   &.open {
 
     width: 300px;
@@ -36,9 +45,12 @@
 }
 .menu_item {
 
-  &.selected > .menu_dir_header {
-    background-color: var(--cl-grey-light);
+  &.selected {
+
+  > .menu_dir_header {
+    background-color: var(--cl-selected);
   }
+}
   .menu_item_header {
     padding: 0.5em 1em;
     display: grid;
@@ -65,18 +77,20 @@
         }
       }
     }
-    &.selected > .folder_header {
-      background-color: var(--cl-grey-light);
-      position: relative;
-      &:after {
-        content: "";
-        position: absolute;
-        height: 100%;
-        width: 100%;
+    &.selected {
+      > .folder_header {
         background-color: var(--cl-grey-light);
-        top: 0;
-        transform: translateX(-100%);
-        z-index: 1;
+        position: relative;
+        &:after {
+          content: "";
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          background-color: var(--cl-grey-light);
+          top: 0;
+          transform: translateX(-100%);
+          z-index: 1;
+        }
       }
     }
     .folder_folders {

@@ -15,6 +15,8 @@ export const PLAYER_PLAYING = "PLAYER_PLAYING";
 export const PLAYER_POSITION_CLICK_COUNT = "PLAYER_POSITION_CLICK_COUNT";
 export const PLAYER_ITEM = "PLAYER_ITEM";
 
+setGlobalState(PLAYER_PLAYING, false);
+
 const onPlayerEnd = (id) => {
   const event = new CustomEvent("playerdone", {
     detail: {
@@ -49,7 +51,7 @@ export const openPlayer = (e) => {
 export const Player = () => {
   const [item, setItem] = useGlobalState(PLAYER_ITEM);
 
-  const [playing, setPlaying] = useGlobalState(PLAYER_PLAYING, false);
+  const [playing, setPlaying] = useGlobalState(PLAYER_PLAYING);
   const [playerReady, setPlayerReady] = useState(false);
 
   const [maximized, setMaximized] = useState(false);

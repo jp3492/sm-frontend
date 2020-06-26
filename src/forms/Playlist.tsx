@@ -63,7 +63,6 @@ export const Playlist = ({ onSubmit, closeModal, id, ...values }) => {
       closeModal();
     }
   };
-  console.log("ITEMS", items);
 
   return (
     <form onSubmit={handleSubmit}>

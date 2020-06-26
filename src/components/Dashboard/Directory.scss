@@ -1,6 +1,7 @@
 .directory {
   grid-area: directory;
   overflow: hidden;
+  background-color: var(--cl-grey-light);
    > button {
     border-radius: 8px;
     padding: 0.5rem 1.5rem 0.5rem 1rem;
@@ -8,6 +9,7 @@
     align-items: center;
     font-weight: 600;
     font-size: 100%;
+    height: 45px;
     i {
       font-size: 150%;
       margin-right: 0.5rem;
@@ -15,63 +17,31 @@
   }
   .directory_items {
     display: grid;
-    gap: 1em;
-    padding: 1em;
-    grid-template-columns: repeat(auto-fit, 300px);
-    .directory_project {
+    gap: 2px;
+    .directory_item {
       display: grid;
-      border: 1px solid var(--cl-grey-light);
-      border-radius: 8px;
-      .directory_project-header {
+      padding: 1em 1em;
+      gap: 1.5em;
+      grid-template-columns: minmax(0, max-content) max-content 1fr max-content;
+      > * {
         display: grid;
-        grid-template-columns: 1fr max-content;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 1rem;
-        border-bottom: 2px solid var(--cl-grey-light);
-        i {
-          font-size: 180%;
-        }
-      }
-      .directory_project-keywords {
-        display: grid;
-        align-items: center;
         grid-auto-flow: column;
-        grid-auto-columns: max-content;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        background-color: white;
-        li:first-of-type {
-          font-weight: 500;
-          font-size: 120%;
-          padding: 0 0.2em;
+        align-items: center;
+        gap: 1em;
+      }
+      .directory_item-header {
+        h4 {
+          // width: 350px;
         }
       }
-      .directory_project-videos {
-        display: grid;
-        align-items: center;
-        grid-auto-flow: column;
+      background-color: white;
+      .directory_item-videos {
         grid-auto-columns: max-content;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        background-color: white;
-        li:first-of-type {
-          font-weight: 500;
-          font-size: 120%;
-          padding: 0 0.2em;
-        }
       }
-      .directory_project-footer {
-        display: grid;
-        align-items: center;
-        grid-template-columns: 1fr max-content max-content max-content;
-        gap: 0.5rem;
-        border-top: 2px solid var(--cl-grey-light);
-        background-color: white;
-        i {
-          padding: 1rem;
-        }
+      .directory_item-footer {
+        column-gap: 2em;
       }
     }
   }
+
 }

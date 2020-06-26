@@ -13,6 +13,7 @@ export const Menu = () => {
 
   return (
     <div className={`menu ${menuOpen ? "open" : ""}`}>
+      <h3>Directory</h3>
       <MenuItem directory={DIRECTORY_TYPES.PLAYLIST} folders={folders} />
       <MenuItem directory={DIRECTORY_TYPES.VIDEO} folders={folders} />
       <MenuItem directory={DIRECTORY_TYPES.SEQUENCE} folders={folders} />

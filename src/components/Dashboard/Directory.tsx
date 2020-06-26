@@ -10,15 +10,19 @@ import {
 } from "../../stores/folder";
 import { PLAYLISTS, patchPlaylist } from "../../stores/playlists";
 import { MODAL } from "../Modal";
-import { DirectoryPlaylist } from "./DirectoryPlaylist";
-import { DirectoryVideo } from "./DirectoryVideo";
-// import { SEQUENCER_VIDEOS } from "../../stores/projects";
-import { DirectorySequence } from "./DirectorySequence";
 import { SEQUENCES } from "../../stores/sequences";
+import { DirectoryItem } from "./DirectoryItem";
 
 const onDragOver = (e) => {
   e.stopPropagation();
   e.preventDefault();
+};
+
+export const handleShare = (type, id) => {
+  setGlobalState(MODAL, {
+    component: "share",
+    props: { type, id }
+  });
 };
 
 export const Directory = () => {
@@ -129,13 +133,6 @@ export const Directory = () => {
     });
   };
 
-  const handleShare = (type, id) => {
-    setGlobalState(MODAL, {
-      component: "share",
-      props: { type, id }
-    });
-  };
-
   return (
     <div className="directory">
       <Path />
@@ -145,54 +142,21 @@ export const Directory = () => {
       </button>
       <ul className="directory_items">
         {items.map((item, index) => {
-          if (selectedDirectory === DIRECTORY_TYPES.PLAYLIST) {
-            const selected = selectedPlaylists.includes(item.id);
-            return (
-              <DirectoryPlaylist
-                key={index}
-                {...item}
-                handleSelect={handleSelect}
-                handleEdit={handleEdit}
-                selected={selected}
-                onDragOver={onDragOver}
-                onDragStart={onDragStart}
-                handleDrop={handleDrop}
-                onShare={handleShare}
-              />
-            );
-          } else if (selectedDirectory === DIRECTORY_TYPES.VIDEO) {
-            const selected = selectedVideos.includes(item.id);
-            return (
-              <DirectoryVideo
-                key={index}
-                {...item}
-                handleSelect={handleSelect}
-                handleEdit={handleEdit}
-                selected={selected}
-                onDragOver={onDragOver}
-                onDragStart={onDragStart}
-                handleDrop={handleDrop}
-                onShare={handleShare}
-              />
-            );
-          } else if (selectedDirectory === DIRECTORY_TYPES.SEQUENCE) {
-            const selected = selectedSequences.includes(item.id);
-            return (
-              <DirectorySequence
-                key={index}
-                {...item}
-                handleSelect={handleSelect}
-                handleEdit={handleEdit}
-                selected={selected}
-                onDragOver={onDragOver}
-                onDragStart={onDragStart}
-                handleDrop={handleDrop}
-                onShare={handleShare}
-              />
-            );
-          } else {
-            return null;
-          }
+          const selected = selectedPlaylists.includes(item.id);
+          return (
+            <DirectoryItem
+              key={index}
+              {...item}
+              type={selectedDirectory}
+              handleSelect={handleSelect}
+              handleEdit={handleEdit}
+              selected={selected}
+              onDragOver={onDragOver}
+              onDragStart={onDragStart}
+              handleDrop={handleDrop}
+              onShare={handleShare}
+            />
+          );
         })}
       </ul>
     </div>

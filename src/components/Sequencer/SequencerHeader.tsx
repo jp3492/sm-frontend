@@ -1,18 +1,13 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Videos } from "./Videos";
-import { DIRECTORY_TYPES, FOLDERS } from "../../stores/folder";
+
+import { FOLDERS } from "../../stores/folder";
 import { useGlobalState, setGlobalState } from "react-global-state-hook";
 import { MODAL } from "../Modal";
 
 export const SEQUENCER_TARGET_FOLDER = "SEQUENCER_TARGET_FOLDER";
 
-export const SequencerHeader = ({
-  type,
-  selectedVideo,
-  otherVideos,
-  selectedVideoIndex
-}) => {
+export const SequencerHeader = ({ selectedVideo }) => {
   const [targetFolderId, setTargetFolderId] = useGlobalState(
     SEQUENCER_TARGET_FOLDER,
     null
@@ -32,25 +27,24 @@ export const SequencerHeader = ({
     });
   };
 
+  const handleEdit = () => {
+    setGlobalState(MODAL, {
+      component: "video",
+      props: selectedVideo
+    });
+  };
+
   return (
     <div className="sequencer_header">
       <Link to="/dashboard">
         <i className="material-icons">home</i>
       </Link>
-      {type === DIRECTORY_TYPES.VIDEO ? (
-        <div className="sequencer_header-info">
-          {!selectedVideo ? "Loading Video..." : selectedVideo.label}
-        </div>
-      ) : (
-        <>
-          <div className="sequencer_header-info">Project Name</div>
-          <Videos
-            selectedVideo={selectedVideo}
-            otherVideos={otherVideos}
-            selectedVideoIndex={selectedVideoIndex}
-          />
-        </>
-      )}
+      <div className="sequencer_header-info">
+        {!selectedVideo ? "Loading Video..." : selectedVideo.label}
+        <i onClick={handleEdit} className="material-icons">
+          more_vert
+        </i>
+      </div>
       <button onClick={handleSelectFolder}>
         <i className="material-icons">folder</i>
         {!targetFolder ? "Root Folder" : targetFolder.label}

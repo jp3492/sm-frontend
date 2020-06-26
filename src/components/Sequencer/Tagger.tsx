@@ -1,56 +1,64 @@
-import React, { useState, useEffect } from "react";
-import { useGlobalState } from "react-global-state-hook";
-import { PLAYER_PROGRESS } from "../../views/Sequencer";
-import { EDITING_SEQUENCE, patchSequence } from "../../stores/sequences";
+import React, { useEffect } from "react";
+import {
+  useGlobalState,
+  getGlobalState,
+  setGlobalState
+} from "react-global-state-hook";
+import { PLAYER_PROGRESS, SEQUENCER_VIDEO } from "../../views/Sequencer";
+import {
+  EDITING_SEQUENCE,
+  patchSequence,
+  postSequence
+} from "../../stores/sequences";
+import { secondsToTime } from "../../utils/secondsToTime";
 
-export const Tagger = ({ onSubmit }) => {
-  // states: idle, startSet, stopSet... on submit jump back to idle
-  // and have list manage loading feedback
-  const [state, setState] = useState("idle");
-  const [label, setLabel] = useState("");
-  const [progress] = useGlobalState(PLAYER_PROGRESS);
+export const TAGGER_ACTIVE_TIME = "TAGGER_ACTIVE_TIME";
+export const TAGGER_START = "TAGGER_START";
+export const TAGGER_STOP = "TAGGER_STOP";
+export const TAGGER_LABEL = "TAGGER_LABEL";
 
-  const [start, setStart] = useState();
-  const [stop, setStop] = useState();
-
-  const [activeTime, setActiveTime]: any = useState("start");
-
-  const [editingSequence, setEditingSequence] = useGlobalState(
-    EDITING_SEQUENCE
-  );
-
-  useEffect(() => {
-    if (editingSequence) {
-      setStart(editingSequence.start);
-      setStop(editingSequence.stop);
-      setLabel(editingSequence.label);
-      setState("stopSet");
-      setActiveTime();
+const handleControls = (e) => {
+  const event = e.detail;
+  if (event === "tag") {
+    const activeTime = getGlobalState(TAGGER_ACTIVE_TIME);
+    const start = getGlobalState(TAGGER_START);
+    if (!activeTime && !start) {
+      console.log("starting START");
+      setGlobalState(TAGGER_ACTIVE_TIME, "start");
+    } else if (activeTime === "start") {
+      console.log("SETTING START");
+      setStart();
+    } else if (activeTime === "stop") {
+      console.log("SETTING STOP");
+      setStop();
+    } else {
+      console.log("SBMITTING");
+      handleSubmit();
     }
-  }, [editingSequence]);
+  } else if (event === "tagback") {
+    const activeTime = getGlobalState(TAGGER_ACTIVE_TIME);
+    const start = getGlobalState(TAGGER_START);
+    // only when start has a value
+    console.log({ activeTime, start });
 
-  const setTag = () => {
-    setStart(progress.playedSeconds);
-    setState("startSet");
-    setActiveTime("stop");
-  };
+    if (activeTime === "start") {
+      resetTagger();
+    } else if (activeTime === "stop") {
+      setGlobalState(TAGGER_ACTIVE_TIME, "start");
+    } else if (!activeTime && start) {
+      setGlobalState(TAGGER_ACTIVE_TIME, "stop");
+    }
+  }
+};
 
-  const activateStart = () => setActiveTime("start");
-  const activateStop = () => setActiveTime("stop");
-
-  const handleSetStop = () => {
-    setStop(progress.playedSeconds);
-    setActiveTime();
-    setState("stopSet");
-  };
-
-  const handleSetStart = () => {
-    setStop(progress.playedSeconds);
-    setActiveTime("stop");
-    setState("startSet");
-  };
-
-  const handleSubmit = () => {
+const handleSubmit = () => {
+  const editingSequence = getGlobalState(EDITING_SEQUENCE);
+  const start = getGlobalState(TAGGER_START);
+  const stop = getGlobalState(TAGGER_STOP);
+  const label = getGlobalState(TAGGER_LABEL);
+  if (!label) {
+    alert("Label required!");
+  } else {
     if (editingSequence) {
       patchSequence({
         ...editingSequence,
@@ -59,60 +67,138 @@ export const Tagger = ({ onSubmit }) => {
         label
       });
     } else {
-      onSubmit({ start, stop, label });
+      const { id, url } = getGlobalState(SEQUENCER_VIDEO);
+      postSequence({
+        videoId: id,
+        start,
+        stop,
+        label,
+        url
+      });
     }
     resetTagger();
-  };
+  }
+};
 
-  const resetTagger = () => {
-    setActiveTime("");
-    setLabel("");
-    setState("idle");
-    setEditingSequence(null);
-  };
+const handleStartClick = (e) => {
+  if (e) e.stopPropagation();
+  setStart();
+};
+
+const setStart = () => {
+  const { playedSeconds = 0 } = getGlobalState(PLAYER_PROGRESS);
+  const time = Number(playedSeconds.toFixed(2));
+  setGlobalState(TAGGER_START, time);
+  setGlobalState(TAGGER_ACTIVE_TIME, "stop");
+};
+
+const handleStopClick = (e) => {
+  if (e) e.stopPropagation();
+  setStop();
+};
+
+const setStop = () => {
+  const { playedSeconds } = getGlobalState(PLAYER_PROGRESS);
+  const time = Number(playedSeconds.toFixed(2));
+  setGlobalState(TAGGER_STOP, time);
+  setGlobalState(TAGGER_ACTIVE_TIME, undefined);
+};
+
+const handleDismiss = () => {
+  resetTagger();
+  setGlobalState(EDITING_SEQUENCE, undefined);
+};
+
+const resetTagger = () => {
+  setGlobalState(TAGGER_ACTIVE_TIME, "start");
+  setGlobalState(TAGGER_LABEL, "");
+  setGlobalState(TAGGER_START, undefined);
+  setGlobalState(TAGGER_STOP, undefined);
+};
+
+export const Tagger = () => {
+  const [activeTime, setActiveTime]: any = useGlobalState(
+    TAGGER_ACTIVE_TIME,
+    "start"
+  );
+  const [editingSequence] = useGlobalState(EDITING_SEQUENCE);
+
+  const [label, setLabel] = useGlobalState(TAGGER_LABEL, "");
+  const [progress] = useGlobalState(PLAYER_PROGRESS);
+
+  const [start, setStart]: any = useGlobalState(TAGGER_START);
+  const [stop, setStop]: any = useGlobalState(TAGGER_STOP);
+
+  useEffect(() => {
+    const ta = document.getElementById("tagInput");
+    if (ta) {
+      ta.focus();
+    }
+  }, [start, stop, activeTime]);
+
+  useEffect(() => {
+    document.addEventListener("controls", handleControls);
+    return () => document.removeEventListener("controls", handleControls);
+  }, []);
+
+  useEffect(() => {
+    if (editingSequence) {
+      console.log("EDIETING");
+
+      setStart(editingSequence.start);
+      setStop(editingSequence.stop);
+      setLabel(editingSequence.label);
+      setActiveTime();
+    }
+  }, [editingSequence, setStart, setStop, setLabel, setActiveTime]);
+
+  const activateStart = () =>
+    setActiveTime(activeTime === "start" ? "" : "start");
+  const activateStop = () => setActiveTime(activeTime === "stop" ? "" : "stop");
+  const handleLabelChange = ({ target: { value } }) => setLabel(value);
 
   return (
-    <div
-      data-state={!progress ? "loading" : state}
-      className="sequencer_list-tagger"
-    >
-      {!progress ? (
-        <p>Loading...</p>
-      ) : state === "idle" ? (
-        <>
-          <span>{progress.playedSeconds}</span>
-          <button onClick={setTag}>Set Tag</button>
-        </>
-      ) : (
-        <>
-          <span
-            className={activeTime === "start" ? "active" : ""}
-            onClick={activateStart}
-          >
-            {activeTime === "start" ? progress.playedSeconds : start}
+    <div className="sequencer_list-tagger">
+      <div className="sequencer_list-tagger-times">
+        <div onClick={activateStart}>
+          <span>
+            {activeTime === "start"
+              ? secondsToTime(progress.playedSeconds || 0)
+              : secondsToTime(start)}
           </span>
-          <i className="material-icons">arrow_right_alt</i>
-          <span
-            className={activeTime === "stop" ? "active" : ""}
-            onClick={activateStop}
-          >
-            {activeTime === "stop"
-              ? progress.playedSeconds
-              : stop
-              ? stop
-              : "Set Stop"}
-          </span>
-          <textarea
-            onChange={({ target: { value } }) => setLabel(value)}
-            value={label}
-          />
-          {activeTime === "start" ? (
-            <button onClick={handleSetStart}>Set Start</button>
-          ) : activeTime === "stop" ? (
-            <button onClick={handleSetStop}>Set Stop</button>
-          ) : (
-            <button onClick={handleSubmit}>Submit</button>
+          {activeTime === "start" && (
+            <button onClick={handleStartClick}>Set Tag</button>
           )}
+        </div>
+        {(start || start === 0) && (
+          <div onClick={activateStop}>
+            <span>
+              {activeTime === "stop"
+                ? secondsToTime(progress.playedSeconds)
+                : secondsToTime(stop)}
+            </span>
+            {activeTime === "stop" && (
+              <button onClick={handleStopClick}>Set Stop</button>
+            )}
+          </div>
+        )}
+      </div>
+      {(start || start === 0) && (
+        <>
+          <textarea
+            id="tagInput"
+            onChange={handleLabelChange}
+            value={label}
+            placeholder="Add Label to Tag..."
+          />
+          <div className="sequencer_list-tagger-buttons">
+            <button onClick={handleDismiss}>
+              {editingSequence ? "Dismiss" : "Close"}
+            </button>
+            <button disabled={!start || !label} onClick={handleSubmit}>
+              Submit
+            </button>
+          </div>
         </>
       )}
     </div>

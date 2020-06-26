@@ -1,33 +1,39 @@
-import React, { useState, useEffect } from "react";
-import { useGlobalState } from "react-global-state-hook";
-import { PLAYER_PLAYING } from "../Dashboard/Player";
-import { onClickOutside } from "../../utils/clickOutside";
+import React, { useEffect } from "react";
+import {
+  useGlobalState,
+  setGlobalState,
+  getGlobalState
+} from "react-global-state-hook";
+import { SEQUENCER_PLAYER_PLAYING, SEQUENCER_PLAYER } from "./SequencerVideo";
+import { PLAYER_PROGRESS } from "../../views/Sequencer";
 
-// will later be set differently for every provider
-const speeds = [0.5, 1, 1.5, 2];
+const handleControls = (e) => {
+  const event = e.detail;
+  if (event === "play") {
+    setGlobalState(
+      SEQUENCER_PLAYER_PLAYING,
+      !getGlobalState(SEQUENCER_PLAYER_PLAYING)
+    );
+  } else if (event === "forward" || event === "rewind") {
+    const { player } = getGlobalState(SEQUENCER_PLAYER);
+    if (player) {
+      const progress = getGlobalState(PLAYER_PROGRESS);
+      const to =
+        event === "forward"
+          ? progress.playedSeconds + 5
+          : progress.playedSeconds - 5;
+      player.seekTo(to, "seconds");
+    }
+  }
+};
 
 export const SequencerControls = () => {
-  const [playing] = useGlobalState(PLAYER_PLAYING);
-  const [speed] = useState(1);
-  const [speedOpen, setSpeedOpen] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const [volumeOpen, setVolumeOpen] = useState(false);
+  const [playing] = useGlobalState(SEQUENCER_PLAYER_PLAYING);
 
   useEffect(() => {
-    if (speedOpen) {
-      onClickOutside(".sequencer_controls-speed", () => {
-        setSpeedOpen(false);
-      });
-    }
-  }, [speedOpen]);
-
-  useEffect(() => {
-    if (volumeOpen) {
-      onClickOutside(".sequencer_controls-volume", () => {
-        setVolumeOpen(false);
-      });
-    }
-  }, [volumeOpen]);
+    document.addEventListener("controls", handleControls);
+    return () => document.removeEventListener("controls", handleControls);
+  }, []);
 
   return (
     <div className="sequencer_controls">
@@ -41,43 +47,13 @@ export const SequencerControls = () => {
         <i className="material-icons">fast_forward</i>
       </button>
       <button>
-        <div>
-          <label>
-            {speed}
-            <i className="material-icons">speed</i>
-          </label>
-          {speedOpen && (
-            <div className="sequencer_controls-speed">
-              {/* need to add logic to only enable on players that support speed */}
-              {/* also display different options depending on provider */}
-              {speeds.map((s, i) => (
-                <div key={i}>s</div>
-              ))}
-            </div>
-          )}
-        </div>
-      </button>
-      <button>
-        <label>
-          {volume}
-          <i className="material-icons">volume_down</i>
-        </label>
-        {volumeOpen && (
-          <div className="sequencer_controls-volume">
-            <input
-              type="range"
-              min="0"
-              max="1"
-              onChange={({ target: { value } }) => setVolume(Number(value))}
-            />
-          </div>
-        )}
-      </button>
-      <button>
         <i className="material-icons">keyboard_arrow_up</i>
       </button>
       <button>
         <i className="material-icons">keyboard_arrow_down</i>
+      </button>
+      <button>
+        <i className="material-icons">slow_motion_video</i>
       </button>
     </div>
   );

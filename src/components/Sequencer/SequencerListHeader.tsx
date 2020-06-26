@@ -7,7 +7,7 @@ export const SequencerListHeader = ({ sequences }) => {
 
   useEffect(() => {
     const filtered = sequences.filter((s) =>
-      s.label.toLowerCase().includes(search.toLocaleLowerCase())
+      s.label.toLowerCase().includes(search.toLowerCase())
     );
 
     setGlobalState(FILTERED_SEQUENCES, filtered);

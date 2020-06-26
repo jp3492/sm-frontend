@@ -13,16 +13,16 @@ export const PlaylistViewer = (props: any) => {
 
   const [url, setUrl] = useState();
 
+  const [counter, setCounter] = useState(0);
+
   const player: any = useRef();
   const ref = (p) => (player.current = p);
 
-  const { playlist, videos, sequences } = props;
+  const { videos, sequences } = props;
 
   const handleReady = () => setPlayerReady(true);
 
   const items = useMemo(() => {
-    console.log(props);
-
     return props.playlist.items
       .map((i) => ({
         type: i.split(":")[0],
@@ -61,7 +61,7 @@ export const PlaylistViewer = (props: any) => {
         setPlaying(true);
       }
     }
-  }, [playerReady, currentItem, setPlaying]);
+  }, [playerReady, currentItem, setPlaying, counter]);
 
   const playNext = () => {
     const currentIndex = items.findIndex((i) => i.id === currentItem.id);
@@ -78,7 +78,10 @@ export const PlaylistViewer = (props: any) => {
   const handleProgress = ({ playedSeconds }) =>
     currentItem.stop && playedSeconds >= currentItem.stop && playNext();
 
-  const handleSelect = (e) => setActiveItemId(e.target.closest("li").id);
+  const handleSelect = (e) => {
+    setCounter(counter + 1);
+    setActiveItemId(e.target.id);
+  };
 
   return (
     <div className="playlist_viewer">
