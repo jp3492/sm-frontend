@@ -64,14 +64,16 @@ export const MenuFolder = ({
         draggable={true}
         onDragStart={handleDragStart}
         onClick={handleSelect}
-        className="folder_header"
+        className="folder_header pd-051 grid grid-tc-m1m gap-m bg-white"
       >
         {childFolders.length !== 0 ? (
           <i onClick={() => handleOpenFolder(id)} className="material-icons">
             keyboard_arrow_right
           </i>
         ) : (
-          <i className="material-icons no_child_folder">keyboard_arrow_right</i>
+          <i className="material-icons no_child_folder centered-grid">
+            keyboard_arrow_right
+          </i>
         )}
         <label>{label}</label>
         <i onClick={handleEdit} className="material-icons">

@@ -1,32 +1,56 @@
 import React from "react";
 import "./Hint.scss";
-import { useGlobalState, setGlobalState } from "react-global-state-hook";
+import {
+  useGlobalState,
+  setGlobalState,
+  getGlobalState
+} from "react-global-state-hook";
 
-export const HINT = "HINT";
+const HINTS = "HINTS";
 
-export const closeHint = () => {
-  setGlobalState(HINT, null);
+export const showHint = (msg) => {
+  const hints = getGlobalState(HINTS);
+  setGlobalState(HINTS, [...hints, msg]);
+  setTimeout(() => {
+    const hints = getGlobalState(HINTS);
+    setGlobalState(
+      HINTS,
+      hints.filter((h) => h !== msg)
+    );
+  }, 3000);
+};
+
+const closeHint = (e) => {
+  const msg = e.target.closest("li").id;
+  const hints = getGlobalState(HINTS);
+  setGlobalState(
+    HINTS,
+    hints.filter((h) => h !== msg)
+  );
 };
 
 export const Hint = () => {
-  const [hint, setHint] = useGlobalState(HINT, null);
+  const [hints] = useGlobalState(HINTS, []);
 
-  if (hint === null) {
+  if (hints.length === 0) {
     return null;
   }
 
-  const handleClick = (e) => {
-    if (e.target.classList.contains("hint")) {
-      setHint(null);
-    }
-  };
-
   return (
-    <div onClick={handleClick} className="hint">
-      {hint}
-      <i onClick={closeHint} className="material-icons">
-        close
-      </i>
+    <div className="hint">
+      <ul className="grid">
+        {hints.map((h) => (
+          <li
+            className="rounded shadow-m bg-grey-light aligned-grid pd-1311"
+            id={h}
+          >
+            {h}
+            <i onClick={closeHint} className="material-icons">
+              close
+            </i>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

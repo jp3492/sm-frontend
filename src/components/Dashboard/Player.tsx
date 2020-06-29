@@ -112,13 +112,13 @@ export const Player = () => {
 
   return (
     <div
-      className={`video-preview ${maximized ? "" : "minimized"} ${
-        url ? "open" : ""
-      }`}
+      className={`video-preview bg-white overflow-h shadow-l ${
+        maximized ? "" : "minimized"
+      } ${url ? "open" : ""}`}
     >
       {url && (
         <>
-          <div className="video-preview__header">
+          <div className="video-preview__header aligned-grid pd-05 grid-tc-1mm z1">
             <h4>{item ? item.label : "Loading Player"}</h4>
             <i onClick={handleResize} className="material-icons">
               {maximized ? "minimize" : "maximize"}

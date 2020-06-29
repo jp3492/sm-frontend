@@ -12,8 +12,12 @@ export const Menu = () => {
   const [menuOpen] = useGlobalState(MENU_OPEN, true);
 
   return (
-    <div className={`menu ${menuOpen ? "open" : ""}`}>
-      <h3>Directory</h3>
+    <div
+      className={`menu ${
+        menuOpen ? "open" : ""
+      } overflow-h bg-grey-light gap-s grid`}
+    >
+      <h3 className="aligned-grid pd-005">Directory</h3>
       <MenuItem directory={DIRECTORY_TYPES.PLAYLIST} folders={folders} />
       <MenuItem directory={DIRECTORY_TYPES.VIDEO} folders={folders} />
       <MenuItem directory={DIRECTORY_TYPES.SEQUENCE} folders={folders} />

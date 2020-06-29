@@ -32,15 +32,19 @@ export const DirectoryItem = ({
       draggable={true}
       onClick={handleSelect}
       data-selected={selected ? "selected" : ""}
-      className={`${DIRECTORY_TYPES[type]} directory_item`}
+      className={`${DIRECTORY_TYPES[type]} directory_item grid pd-1 gap-m`}
     >
-      <div className="directory_item-header">
+      <div className="directory_item-header aligned-grid gap-m">
         <i className="material-icons">
-          {selected ? "check_box" : "check_box_outline_blank"}
+          {type === DIRECTORY_TYPES.PLAYLIST
+            ? "playlist_play"
+            : type === DIRECTORY_TYPES.VIDEO
+            ? "subscriptions"
+            : "open_in_full"}
         </i>
         <h4>{label}</h4>
       </div>
-      <ul className="directory_item-keywords">
+      <ul className="directory_item-keywords aligned-grid gap-m">
         {type !== DIRECTORY_TYPES.SEQUENCE && (
           <>
             <li>#</li>
@@ -58,7 +62,10 @@ export const DirectoryItem = ({
           </>
         )}
       </ul>
-      <div className="directory_item-videos" onClick={handleVideosClick}>
+      <div
+        className="directory_item-videos aligned-grid gap-m"
+        onClick={handleVideosClick}
+      >
         {type === DIRECTORY_TYPES.PLAYLIST && (
           <>
             <i className="material-icons">ondemand_video</i>
@@ -68,7 +75,7 @@ export const DirectoryItem = ({
           </>
         )}
       </div>
-      <div className="directory_item-footer">
+      <div className="directory_item-footer aligned-grid gap-l">
         <i onClick={handleShare} className="material-icons">
           share
         </i>
@@ -85,6 +92,9 @@ export const DirectoryItem = ({
         )}
         <i onClick={handleEdit} className="material-icons">
           more_vert
+        </i>
+        <i className="material-icons">
+          {selected ? "check_box" : "check_box_outline_blank"}
         </i>
       </div>
     </li>

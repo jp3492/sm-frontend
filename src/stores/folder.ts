@@ -17,7 +17,6 @@ export const DIRECTORY_TYPES = {
 };
 
 setGlobalState(FOLDERS, []);
-setGlobalState(SELECTED_FOLDER, null);
 setGlobalState(OPEN_FOLDERS, []);
 
 setGlobalState(SELECTED_DIRECTORY, DIRECTORY_TYPES.PLAYLIST);

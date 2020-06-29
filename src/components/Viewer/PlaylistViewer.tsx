@@ -84,7 +84,7 @@ export const PlaylistViewer = (props: any) => {
   };
 
   return (
-    <div className="playlist_viewer">
+    <div className="playlist_viewer grid grid-tc-1m bg-black">
       <div>
         <ReactPlayer
           className={"player_viewer"}
@@ -99,16 +99,18 @@ export const PlaylistViewer = (props: any) => {
           controls={true}
         />
       </div>
-      <div className="playlist_viewer-list">
+      <div className="playlist_viewer-list grid grid-tr-m1 gap-s">
         <input
+          className="bg-grey"
           type="text"
           placeholder="Search Playlist..."
           value={search}
           onChange={({ target: { value } }) => setSearch(value)}
         />
-        <ul>
+        <ul className="grid gap-xs">
           {items.map(({ id, label, type }, i) => (
             <li
+              className="bg-grey-dark pd-051051"
               data-active={activeItemId === id}
               onClick={handleSelect}
               id={id}

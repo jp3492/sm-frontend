@@ -49,9 +49,19 @@ export const Path = () => {
   const handleDirClick = () => setSelectedFolder(null);
 
   return (
-    <div className="path">
-      <div>
-        <div onClick={handleDirClick}>
+    <div className="path aligned-grid grid-tc-1m gap-m bg-white">
+      <div className="aligned-grid gap-m pd-051">
+        <div className="grid gap-m" onClick={handleDirClick}>
+          <i className="material-icons">
+            {selectedDirectory === DIRECTORY_TYPES.PLAYLIST
+              ? "playlist_play"
+              : selectedDirectory === DIRECTORY_TYPES.VIDEO
+              ? "subscriptions"
+              : "open_in_full"}
+          </i>
+          {/* <label>{`${selectedDirectory
+            .toLowerCase()
+            .capitalize()}s  : `}</label> */}
           <i className="material-icons">folder</i>
         </div>
         {path.map((p, i) => {
@@ -63,7 +73,7 @@ export const Path = () => {
           );
         })}
       </div>
-      <button onClick={() => setPlaylistOpen(!playlistOpen)}>
+      <button className="pd-01" onClick={() => setPlaylistOpen(!playlistOpen)}>
         <i className="material-icons">
           {playlistOpen ? "keyboard_arrow_right" : "keyboard_arrow_left"}
         </i>

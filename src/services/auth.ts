@@ -33,7 +33,6 @@ export const setAuthObserver = () => {
 export const initFirebase = async () => {
   try {
     // @ts-ignore
-    setGlobalState("SIGNED");
     await firebase.initializeApp(firebaseConfig);
   } catch (error) {
     console.log(error);

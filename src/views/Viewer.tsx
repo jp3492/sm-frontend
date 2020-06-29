@@ -4,7 +4,6 @@ import { PlaylistViewer } from "../components/Viewer/PlaylistViewer";
 import { VideoViewer } from "../components/Viewer/VideoViewer";
 import { SequenceViewer } from "../components/Viewer/SequenceViewer";
 import { request } from "../utils/request";
-import { Playlist } from "../forms/Playlist";
 
 export const Viewer = ({
   match: {
@@ -34,8 +33,10 @@ export const Viewer = ({
     }
   };
 
+  console.log(type);
+
   return (
-    <div className="viewer">
+    <div className="viewer grid overflow-h">
       {!item ? (
         <div>Loading...</div>
       ) : type === "playlist" ? (

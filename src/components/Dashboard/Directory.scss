@@ -1,38 +1,43 @@
 .directory {
   grid-area: directory;
-  overflow: hidden;
-  background-color: var(--cl-grey-light);
-   > button {
-    border-radius: 8px;
-    padding: 0.5rem 1.5rem 0.5rem 1rem;
-    display: flex;
-    align-items: center;
-    font-weight: 600;
-    font-size: 100%;
+  .directory_header {
     height: 45px;
-    i {
-      font-size: 150%;
-      margin-right: 0.5rem;
+    position: sticky;
+    top: 45px;
+    > button {
+      grid-auto-flow: column;
+      font-weight: 600;
+      font-size: 100%;
+      i {
+        font-size: 150%;
+        margin-right: 0.5rem;
+      }
+      border-right: 1px solid var(--cl-grey);
+    }
+    > div {
+      grid-template-columns: max-content max-content;
+      align-items: end;
+      font-weight: 500;
+      padding-right: 1em;
+      > span {
+        grid-template-columns: max-content max-content;
+        font-weight: normal;
+        font-size: 90%;
+        align-items: end;
+        cursor: pointer;
+        i {
+          font-size: 100%;
+          align-self: center;
+        }
+      }
     }
   }
   .directory_items {
-    display: grid;
-    gap: 2px;
+    grid-auto-rows: max-content;
     .directory_item {
-      display: grid;
-      padding: 1em 1em;
-      gap: 1.5em;
       grid-template-columns: minmax(0, max-content) max-content 1fr max-content;
       > * {
-        display: grid;
         grid-auto-flow: column;
-        align-items: center;
-        gap: 1em;
-      }
-      .directory_item-header {
-        h4 {
-          // width: 350px;
-        }
       }
       background-color: white;
       .directory_item-videos {

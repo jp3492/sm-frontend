@@ -1,9 +1,5 @@
 .dashboard {
-  display: grid;
-  grid-template-rows: max-content 1fr;
-  grid-template-columns: max-content 1fr max-content;
   grid-template-areas:
     "header header header"
     "menu directory playlist";
-  overflow: hidden;
 }

@@ -1,3 +1,4 @@
+import { showHint } from "./../components/Hint";
 import { SEQUENCES } from "./sequences";
 import { request } from "./../utils/request";
 import { setGlobalState, getGlobalState } from "react-global-state-hook";
@@ -27,6 +28,7 @@ export const moveVideos = async ({ folderId, ids, type }) => {
         }
       })
     );
+    showHint("Successfully moved Videos.");
   } catch (error) {
     console.log(error);
   }
@@ -36,7 +38,6 @@ export const getVideo = async (id) => {
   try {
     const res = await request("videos", "/" + id);
     const data = await res.json();
-
     setGlobalState(VIDEOS, [data.video]);
     setGlobalState(SEQUENCES, data.sequences);
   } catch (error) {
@@ -63,6 +64,7 @@ export const postVideo = async (values) => {
     const id = await res.text();
     const videos = getGlobalState(VIDEOS);
     setGlobalState(VIDEOS, [...videos, { id, ...values }]);
+    showHint(`Created new Video: "${values.label}".`);
   } catch (error) {
     console.log(error);
   }
@@ -79,6 +81,7 @@ export const patchVideo = async ({ id, ...values }) => {
       VIDEOS,
       videos.map((v) => (v.id === id ? { id, ...values } : v))
     );
+    showHint(`Videos "${values.label}" successfully updated.`);
   } catch (error) {
     console.log(error);
   }
@@ -94,6 +97,7 @@ export const deleteVideo = async (id) => {
       VIDEOS,
       videos.filter((v) => v.id !== id)
     );
+    showHint("Video deleted successfully.");
   } catch (error) {
     console.log(error);
   }

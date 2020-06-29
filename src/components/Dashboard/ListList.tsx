@@ -43,9 +43,9 @@ export const ListList = ({
   }, []);
 
   return (
-    <ul>
+    <ul className="bg-white overflow-a">
       {items.length === 0 ? (
-        <li className="no-items">
+        <li className="no-items centered-grid pd-2">
           Nothing in selection. Drag video or playlist into here or open an
           existing playlist.
         </li>
@@ -58,7 +58,9 @@ export const ListList = ({
               draggable={true}
               onDragStart={onDragStart}
               onDragOver={onDragOver}
-              className={`${DIRECTORY_TYPES[type]} playlist-item ${
+              className={`${
+                DIRECTORY_TYPES[type]
+              } grid grid-tc-m1m  pd-05 gap-m ${
                 i === position ? "active" : ""
               }`}
               id={id}

@@ -40,8 +40,9 @@ const handleDrop = async (e) => {
 
     const path = getPath(dropFolderId, folders, []);
     const isOutOfPath = path.every((p) => p.id !== dragFolderId);
-
-    if (!isOutOfPath) {
+    if (dragFolderId === dropFolderId) {
+      alert("Cant push into own folder");
+    } else if (!isOutOfPath) {
       alert("Cant push into own path");
     } else if (directory === dragFolder.directory) {
       patchFolder({ id: dragFolderId, folder: dropFolderId || "root" });
@@ -100,7 +101,7 @@ export const MenuItem = ({ folders, directory }) => {
           : ""
       }`}
     >
-      <div className="menu_item_header">
+      <div className="menu_item_header pd-01 aligned-grid grid-tc-m1 gap-m">
         <i className="material-icons">
           {directory === DIRECTORY_TYPES.PLAYLIST
             ? "playlist_play"

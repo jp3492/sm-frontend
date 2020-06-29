@@ -34,7 +34,7 @@ export const ListActions = ({ items }) => {
   const handleDown = () => move(false);
 
   return (
-    <div className="playlist_controls-actions">
+    <div className="playlist_controls-actions stretched-grid bg-grey">
       <button onClick={handlePlay}>
         {/* show loading when player isnt ready yet, otherwise first play press might fail */}
         <i className="material-icons">{playing ? "pause" : "play_arrow"}</i>

@@ -1,5 +1,5 @@
 import { VIDEOS } from "./videos";
-import { HINT } from "./../components/Hint";
+import { showHint } from "./../components/Hint";
 import { request } from "../utils/request";
 import { setGlobalState, getGlobalState } from "react-global-state-hook";
 
@@ -32,6 +32,7 @@ export const movePlaylists = async ({ folderId, ids, type }) => {
         }
       })
     );
+    showHint(`Successfully moved playlists.`);
   } catch (error) {
     console.log(error);
   }
@@ -71,6 +72,7 @@ export const postPlaylist = async (values) => {
     const playlists = getGlobalState(PLAYLISTS);
     setGlobalState(PLAYLISTS, [...playlists, { id, ...values }]);
     setGlobalState(ACTIVE_PLAYLIST, id);
+    showHint(`Created new playlist "${values.label}".`);
   } catch (error) {
     console.log(error);
   }
@@ -87,7 +89,7 @@ export const patchPlaylist = async ({ id, ...values }) => {
       PLAYLISTS,
       playlists.map((v) => (v.id === id ? { id, ...values } : v))
     );
-    setGlobalState(HINT, "Playlist updated successfully.");
+    showHint(`Playlist "${values.label}" updated successfully.`);
   } catch (error) {
     console.log(error);
   }
@@ -101,6 +103,7 @@ export const deletePlaylist = async (id) => {
       PLAYLISTS,
       playlists.filter((f) => f.id !== id)
     );
+    showHint(`Playlist deleted successfully.`);
   } catch (error) {
     console.log(error);
   }

@@ -36,7 +36,7 @@ export const SequencerControls = () => {
   }, []);
 
   return (
-    <div className="sequencer_controls">
+    <div className="sequencer_controls z1 gap-xs bg-white stretched-grid">
       <button>
         <i className="material-icons">{playing ? "pause" : "play_arrow"}</i>
       </button>

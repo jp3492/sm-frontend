@@ -10,12 +10,12 @@ import { MODAL } from "../Modal";
 import ReactPlayer from "react-player";
 import { postVideo, VIDEOS } from "../../stores/videos";
 import { DIRECTORY_TYPES } from "../../stores/folder";
+import { setServers } from "dns";
 
 export const VIDEO_DETECTED = "VIDEO_DETECTED";
 
-export const Header = () => {
+export const Header = ({ push }) => {
   const [menuOpen, setMenuOpen] = useGlobalState("MENU_OPEN", true);
-  const [profileOpen, setProfileOpen] = useGlobalState("PROFILE_OPEN", false);
   const [url, setUrl] = useGlobalState(VIDEO_DETECTED);
 
   useEffect(() => {
@@ -57,8 +57,18 @@ export const Header = () => {
     addUrl(url);
   };
 
+  const handleProfileClick = () =>
+    setGlobalState(MODAL, {
+      component: "profile",
+      onClose: () => {
+        push("/auth/login");
+      }
+    });
+
+  const handleClearSearch = () => setUrl("");
+
   return (
-    <header>
+    <header className="centered-grid grid-tc-m11m bg-grey shadow-s z1">
       <div
         onClick={() => setMenuOpen(!menuOpen)}
         className={`header_menu ${menuOpen ? "open" : ""}`}
@@ -66,14 +76,17 @@ export const Header = () => {
         <i className="material-icons">{menuOpen ? "menu_open" : "menu"}</i>
       </div>
       {/* <Add /> */}
-      <div className="header_add">
-        <i className="material-icons">ondemand_video</i>
+      <div className="header_add grid grid-tc-m1mm" data-active={!!url}>
+        <i className="material-icons rounded">ondemand_video</i>
         <input
           type="text"
           placeholder="Paste video url here:"
           value={url}
           onChange={handleChangeUrl}
         />
+        <i onClick={handleClearSearch} className="material-icons">
+          clear
+        </i>
         {url ? (
           <button disabled={!url} onClick={handleVideoAdd}>
             <i className="material-icons">add</i>
@@ -87,8 +100,8 @@ export const Header = () => {
       <div className="header_search">
         {/* <i className="material-icons">search</i> */}
       </div>
-      <div className="header_profile">
-        <div onClick={() => setProfileOpen(!profileOpen)}>
+      <div className="header_profile stretched-grid">
+        <div onClick={handleProfileClick}>
           <i className="material-icons">person</i>
         </div>
       </div>

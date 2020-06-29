@@ -37,6 +37,12 @@ export const Directory = () => {
   const [selectedVideos, setSelectedVideos]: any = useState([]);
   const [selectedSequences, setSelectedSequences]: any = useState([]);
 
+  const [labelSort, setLabelSort] = useState({
+    SEQUENCE: null,
+    VIDEO: null,
+    PLAYLIST: null
+  });
+
   const items = useMemo(() => {
     if (selectedDirectory === DIRECTORY_TYPES.VIDEO) {
       return videos.filter((v) =>
@@ -133,19 +139,137 @@ export const Directory = () => {
     });
   };
 
+  const handleSort = () => {
+    const sort = labelSort[selectedDirectory];
+    const to = !sort ? "asc" : sort === "asc" ? "desc" : null;
+    setLabelSort({
+      ...labelSort,
+      [selectedDirectory]: to
+    });
+  };
+
+  const sortedItems = useMemo(() => {
+    const copy = [...items];
+    const sort = labelSort[selectedDirectory];
+    if (!sort) {
+      return copy;
+    } else if (sort === "asc") {
+      return copy.sort((a, b) => {
+        var nameA = a.label.toUpperCase(); // ignore upper and lowercase
+        var nameB = b.label.toUpperCase(); // ignore upper and lowercase
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+
+        // names must be equal
+        return 0;
+      });
+    } else {
+      return copy.sort((a, b) => {
+        var nameA = a.label.toUpperCase(); // ignore upper and lowercase
+        var nameB = b.label.toUpperCase(); // ignore upper and lowercase
+        if (nameA > nameB) {
+          return -1;
+        }
+        if (nameA < nameB) {
+          return 1;
+        }
+
+        // names must be equal
+        return 0;
+      });
+    }
+  }, [labelSort, items, selectedDirectory]);
+
+  const handleSelectAll = () => {
+    const [targetSelection, setSelection] =
+      selectedDirectory === DIRECTORY_TYPES.PLAYLIST
+        ? [selectedPlaylists, setSelectedPlaylists]
+        : selectedDirectory === DIRECTORY_TYPES.VIDEO
+        ? [selectedVideos, setSelectedVideos]
+        : [selectedSequences, setSelectedSequences];
+    console.log({ targetSelection, setSelection });
+
+    const localSelection = targetSelection.filter((id) =>
+      items.find((i) => i.id === id)
+    );
+    if (localSelection.length !== items.length) {
+      setSelection(
+        Array.from(new Set([...targetSelection, ...items.map((i) => i.id)]))
+      );
+    } else {
+      setSelection(
+        targetSelection.filter((id) => !localSelection.includes(id))
+      );
+    }
+  };
+
+  const allSelected = useMemo(() => {
+    if (items.length === 0) {
+      return false;
+    }
+    const targetSelection =
+      selectedDirectory === DIRECTORY_TYPES.PLAYLIST
+        ? selectedPlaylists
+        : selectedDirectory === DIRECTORY_TYPES.VIDEO
+        ? selectedVideos
+        : selectedSequences;
+
+    const localSelection = targetSelection.filter((id) =>
+      items.find((i) => i.id === id)
+    );
+    return localSelection.length === items.length;
+  }, [
+    items,
+    selectedDirectory,
+    selectedPlaylists,
+    selectedVideos,
+    selectedSequences
+  ]);
+
   return (
-    <div className="directory">
+    <div className="directory grid gap-s overflow-a grid-tr-mm1 bg-grey-light">
       <Path />
-      <button onClick={handleAdd}>
-        <i className="material-icons">add</i>
-        Folder
-      </button>
-      <ul className="directory_items">
-        {items.map((item, index) => {
-          const selected = selectedPlaylists.includes(item.id);
+      <div className="directory_header aligned-grid grid-tc-m1m gap-m bg-grey-light">
+        <button className="aligned-grid pd-01" onClick={handleAdd}>
+          <i className="material-icons">add</i>
+          Folder
+        </button>
+        <div className="grid gap-m">
+          <label>Sort by:</label>
+          <span className="grid gap-s" onClick={handleSort}>
+            Label
+            <i className="material-icons">
+              {!labelSort[selectedDirectory]
+                ? "unfold_more"
+                : labelSort[selectedDirectory] === "desc"
+                ? "expand_less"
+                : "expand_more"}
+            </i>
+          </span>
+        </div>
+        <div className="grid gap-m">
+          <label>Select all:</label>
+          <i className="material-icons" onClick={handleSelectAll}>
+            {allSelected ? "check_box" : "check_box_outline_blank"}
+          </i>
+        </div>
+      </div>
+      <ul className="directory_items grid gap-xs">
+        {sortedItems.map((item, index) => {
+          const selected = (selectedDirectory === DIRECTORY_TYPES.PLAYLIST
+            ? selectedPlaylists
+            : selectedDirectory === DIRECTORY_TYPES.VIDEO
+            ? selectedVideos
+            : selectedSequences
+          ).includes(item.id);
+
           return (
             <DirectoryItem
-              key={index}
+              key={item.id}
               {...item}
               type={selectedDirectory}
               handleSelect={handleSelect}

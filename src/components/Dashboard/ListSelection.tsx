@@ -8,7 +8,7 @@ export const ListSelection = ({
   handleRemove,
   handleSave
 }) => (
-  <div className="playlist_controls-selection">
+  <div className="playlist_controls-selection overflow-h stretched-grid bg-grey">
     <button>
       {activePlaylist ? (
         <i onClick={handleDelete} className="material-icons">

@@ -120,6 +120,7 @@ export const Video = ({ onSubmit, closeModal, id, ...values }) => {
         <label>
           Label
           <input
+            placeholder="Add Label..."
             name="videoName"
             alt="enter video name"
             type="text"

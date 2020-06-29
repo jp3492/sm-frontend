@@ -5,5 +5,5 @@ export const secondsToTime = (secs) => {
   const seconds = s.length === 1 ? "0" + s : s;
   const miliseconds = ms ? String(ms).slice(0, 2) : 0;
 
-  return `${minutes > 9 ? minutes : "0" + minutes}:${seconds}.${miliseconds}`;
+  return `${minutes > 9 ? minutes : "0" + minutes}:${seconds}`;
 };

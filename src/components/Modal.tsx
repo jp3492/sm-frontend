@@ -8,6 +8,7 @@ import { New } from "../forms/New";
 import { SelectFolder } from "../forms/SelectFolder";
 import { Share } from "../forms/Share";
 import { Replay } from "../forms/Replay";
+import { Profile } from "./Profile";
 
 export const MODAL = "MODAL";
 
@@ -23,7 +24,8 @@ const COMPONENTS = {
   NEW: New,
   SELECTFOLDER: SelectFolder,
   SHARE: Share,
-  REPLAY: Replay
+  REPLAY: Replay,
+  PROFILE: Profile
 };
 
 export const Modal = () => {
@@ -62,7 +64,7 @@ export const Modal = () => {
   };
 
   return (
-    <div onClick={handleClick} className="modal">
+    <div onClick={handleClick} className="modal centered-grid full-screen">
       {renderComponent(component)}
     </div>
   );

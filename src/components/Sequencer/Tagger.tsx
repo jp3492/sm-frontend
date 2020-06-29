@@ -158,27 +158,37 @@ export const Tagger = () => {
   const handleLabelChange = ({ target: { value } }) => setLabel(value);
 
   return (
-    <div className="sequencer_list-tagger">
-      <div className="sequencer_list-tagger-times">
-        <div onClick={activateStart}>
-          <span>
+    <div className="sequencer_list-tagger shadow-l grid">
+      <div className="sequencer_list-tagger-times grid bg-grey-light gap-xs">
+        <div
+          className="bg-white centered-grid grid-tc-m1"
+          onClick={activateStart}
+        >
+          <span className="pd-1">
             {activeTime === "start"
               ? secondsToTime(progress.playedSeconds || 0)
               : secondsToTime(start)}
           </span>
           {activeTime === "start" && (
-            <button onClick={handleStartClick}>Set Tag</button>
+            <button className="pd-1 bg-grey" onClick={handleStartClick}>
+              Set Tag
+            </button>
           )}
         </div>
         {(start || start === 0) && (
-          <div onClick={activateStop}>
-            <span>
+          <div
+            className="bg-white centered-grid grid-tc-m1"
+            onClick={activateStop}
+          >
+            <span className="pd-1">
               {activeTime === "stop"
                 ? secondsToTime(progress.playedSeconds)
                 : secondsToTime(stop)}
             </span>
             {activeTime === "stop" && (
-              <button onClick={handleStopClick}>Set Stop</button>
+              <button className="pd-1 bg-grey" onClick={handleStopClick}>
+                Set Stop
+              </button>
             )}
           </div>
         )}
@@ -186,16 +196,21 @@ export const Tagger = () => {
       {(start || start === 0) && (
         <>
           <textarea
+            className="pd-1"
             id="tagInput"
             onChange={handleLabelChange}
             value={label}
             placeholder="Add Label to Tag..."
           />
-          <div className="sequencer_list-tagger-buttons">
-            <button onClick={handleDismiss}>
+          <div className="sequencer_list-tagger-buttons stretched-grid gap-xs bg-grey-light">
+            <button className="bg-white pd-1" onClick={handleDismiss}>
               {editingSequence ? "Dismiss" : "Close"}
             </button>
-            <button disabled={!start || !label} onClick={handleSubmit}>
+            <button
+              className="bg-white pd-1"
+              disabled={!start || !label}
+              onClick={handleSubmit}
+            >
               Submit
             </button>
           </div>

@@ -11,7 +11,6 @@ import {
 import { VIDEOS } from "../../stores/videos";
 import { MODAL } from "../Modal";
 import { Player, PLAYER_ITEM } from "./Player";
-import { ListSearch } from "./ListSearch";
 import { ListActions } from "./ListActions";
 import { ListSelection } from "./ListSelection";
 import { ListList } from "./ListList";
@@ -26,12 +25,12 @@ export const Playlist = () => {
   const [videos] = useGlobalState(VIDEOS);
   const [sequences] = useGlobalState(SEQUENCES);
   const [playlists] = useGlobalState(PLAYLISTS);
-  const [filteredItems, setFilteredItems] = useState([]);
   const [selectedItems, setSelectedItems] = useGlobalState(
     SELECTED_LIST_ITEMS,
     []
   );
   const [activePlaylist, setActivePlaylist] = useGlobalState(ACTIVE_PLAYLIST);
+  const [search, setSearch] = useState("");
 
   const playlist = useMemo(() => {
     return playlists.find((p) => p.id === activePlaylist);
@@ -58,9 +57,13 @@ export const Playlist = () => {
     }
   }, [playlist, sequences, videos, setItems, setSelectedItems]);
 
-  useEffect(() => {
-    setFilteredItems(items.filter((i) => i.type !== DIRECTORY_TYPES.PLAYLIST));
-  }, [items]);
+  const filteredItems = useMemo(() => {
+    return items.filter(
+      (i) =>
+        i.type !== DIRECTORY_TYPES.PLAYLIST &&
+        i.label.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [items, search]);
 
   const handleDrop = (e) => {
     const { ids, type } = JSON.parse(e.dataTransfer.getData("text/plain"));
@@ -252,11 +255,11 @@ export const Playlist = () => {
     <div
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
-      className={`playlist ${open ? "open" : ""}`}
+      className={`playlist ${open ? "open" : ""} grid grid-tr-1m`}
     >
-      <div className="playlist_header">
-        <div>
-          <h4>
+      <div className="playlist_header stretched-grid overflow-h grid-tr-m1">
+        <div className="stretched-grid bg-white">
+          <h4 className="aligned-grid grid-tc-m1m gap-m pd-05">
             <i className="material-icons">queue_music</i>
             {!playlist ? "No Playlist active" : playlist.label}
             {items.length !== 0 && (
@@ -265,7 +268,16 @@ export const Playlist = () => {
               </i>
             )}
           </h4>
-          {items.length !== 0 && <ListSearch />}
+          {items.length !== 0 && (
+            <div className="stretched-grid">
+              <input
+                type="text"
+                placeholder="Search Playlist..."
+                value={search}
+                onChange={({ target: { value } }) => setSearch(value)}
+              />
+            </div>
+          )}
         </div>
         <ListList
           items={items}
@@ -275,7 +287,7 @@ export const Playlist = () => {
         />
       </div>
 
-      <div className="playlist_controls">
+      <div className="playlist_controls grid gap-xs z1">
         {items.length !== 0 && (
           <>
             {selectedItems.length !== 0 && (

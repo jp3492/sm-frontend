@@ -10,26 +10,43 @@ import { Modal } from "./components/Modal";
 import { Sequencer } from "./views/Sequencer";
 import { Landing } from "./views/Landing";
 import { Viewer } from "./views/Viewer";
+import { AUTH } from "./services/auth";
+import { ErrorPage404 } from "./views/404";
+import { ErrorPage403 } from "./views/403";
 
 const App = () => {
-  const [auth] = useGlobalState("AUTH", "pending");
+  const [auth] = useGlobalState(AUTH, "pending");
+
+  console.log(auth);
 
   return (
     <div className="app">
-      {auth === "pending" ? (
-        <div>Loading App..</div>
-      ) : (
-        <BrowserRouter>
-          <Switch>
-            <Route exact path="/" component={Landing} />
-            <Route path="/auth/:type" component={Auth} />
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/sequencer/:id" component={Sequencer} />
-            <Route path="/viewer/:type/:id" component={Viewer} />
-          </Switch>
-          <Modal />
-        </BrowserRouter>
-      )}
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/viewer/:type/:id" component={Viewer} />
+          {auth === "pending" ? (
+            <div className="centered-grid">
+              <h3>Loading App...</h3>
+            </div>
+          ) : (
+            auth === true && (
+              <>
+                <Route path="/dashboard" component={Dashboard} />
+                <Route path="/sequencer/:id" component={Sequencer} />
+              </>
+            )
+          )}{" "}
+          <Route
+            exact
+            path={["/auth/:type", "/dashboard", "/sequencer/:id"]}
+            component={Auth}
+          />
+          <Route exact path="/403" component={ErrorPage403} />
+          <Route path={["*", "/404"]} component={ErrorPage404} />
+        </Switch>
+        <Modal />
+      </BrowserRouter>
     </div>
   );
 };

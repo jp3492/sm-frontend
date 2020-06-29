@@ -31,7 +31,7 @@ export const SequencerActions = () => {
     handleShare(DIRECTORY_TYPES.SEQUENCE, selectedSequences[0]);
 
   return (
-    <div className="sequencer_actions">
+    <div className="sequencer_actions stretched-grid">
       <button onClick={handleSave} disabled={disabled}>
         <i className="material-icons">playlist_add</i>
       </button>

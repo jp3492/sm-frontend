@@ -14,14 +14,15 @@ export const SequencerListHeader = ({ sequences }) => {
   }, [search, sequences]);
 
   return (
-    <div className="sequencer_list-header">
+    <div className="sequencer_list-header grid grid-tc-1m shadow-s z1">
       <input
+        className="bg-grey-light"
         type="text"
         placeholder="Search sequences..."
         onChange={({ target: { value } }) => setSearch(value)}
         value={search}
       />
-      <i className="material-icons">filter_list</i>
+      <i className="material-icons pd-005">filter_list</i>
     </div>
   );
 };

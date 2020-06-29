@@ -6,15 +6,13 @@ import { register, login } from "../services/auth";
 
 export const Auth = ({
   match: {
-    params: { type }
+    params: { type = "login" }
   },
   history: { push }
-}) => {
+}: any) => {
   const [values, setValues] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  console.log(error);
 
   const handleChange = ({ target: { name, value } }) =>
     setValues({ ...values, [name]: value });
@@ -45,7 +43,10 @@ export const Auth = ({
   };
   return (
     <main className="auth">
-      <form onSubmit={handleSubmit}>
+      <form
+        className="rounded grid gap-m pd-2 shadow-m"
+        onSubmit={handleSubmit}
+      >
         <h2>{type.capitalize()}</h2>
         <label className="form-field">
           Email
@@ -69,7 +70,11 @@ export const Auth = ({
             name="password"
           />
         </label>
-        <button disabled={loading} type="submit">
+        <button
+          className="rounded bg-grey-light pd-1010"
+          disabled={loading}
+          type="submit"
+        >
           {loading ? "Submitting.." : "Submit"}
         </button>
         <Link to={type === "login" ? "/auth/register" : "/auth/login"}>

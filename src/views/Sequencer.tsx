@@ -93,13 +93,13 @@ export const Sequencer = ({
   }, [sequences, selectedVideo]);
 
   return (
-    <div className="sequencer">
+    <div className="sequencer overflow-h grid grid-tc-1m grid-tr-m1 bg-grey-light">
       <SequencerHeader selectedVideo={selectedVideo} />
       <SequencerVideo
         sequences={videoSequences}
         selectedVideo={selectedVideo}
       />
-      <div className="sequencer_list">
+      <div className="sequencer_list grid grid-tr-m1mm">
         <SequencerListHeader sequences={videoSequences} />
         <SequencerList sequences={videoSequences} sequenceId={sequenceId} />
         <SequencerActions />
