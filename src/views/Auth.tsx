@@ -70,6 +70,7 @@ export const Auth = ({
             name="password"
           />
         </label>
+        {error && <p className="error">{error}</p>}
         <button
           className="rounded bg-grey-light pd-1010"
           disabled={loading}

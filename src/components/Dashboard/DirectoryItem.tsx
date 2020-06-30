@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { Link } from "react-router-dom";
+import { getGlobalState } from "react-global-state-hook";
+import { SEQUENCES } from "../../stores/sequences";
+
+const getSequenceCount = (videoId) => {
+  return getGlobalState(SEQUENCES).filter((s) => s.videoId === videoId).length;
+};
 
 export const DirectoryItem = ({
   id,
@@ -23,6 +29,11 @@ export const DirectoryItem = ({
 
   const handleShare = () => onShare(DIRECTORY_TYPES[type], id);
 
+  const count = useMemo(
+    () => (type === DIRECTORY_TYPES.VIDEO ? getSequenceCount(id) : 0),
+    [type, id]
+  );
+
   return (
     <li
       id={id}
@@ -32,47 +43,51 @@ export const DirectoryItem = ({
       draggable={true}
       onClick={handleSelect}
       data-selected={selected ? "selected" : ""}
-      className={`${DIRECTORY_TYPES[type]} directory_item grid pd-1 gap-m`}
+      className={`${DIRECTORY_TYPES[type]} directory_item grid pd-051 gap-l`}
     >
-      <div className="directory_item-header aligned-grid gap-m">
-        <i className="material-icons">
-          {type === DIRECTORY_TYPES.PLAYLIST
-            ? "playlist_play"
-            : type === DIRECTORY_TYPES.VIDEO
-            ? "subscriptions"
-            : "open_in_full"}
-        </i>
+      <div className="directory_item-header aligned-grid grid-tc-m1 cgap-m">
         <h4>{label}</h4>
-      </div>
-      <ul className="directory_item-keywords aligned-grid gap-m">
-        {type !== DIRECTORY_TYPES.SEQUENCE && (
-          <>
-            <li>#</li>
-            {keywords.length === 0 ? (
+        <ul className="directory_item-keywords aligned-grid cgap-s">
+          {type !== DIRECTORY_TYPES.SEQUENCE && (
+            <>
               <li>
-                <small>No keywords</small>
+                <small>#</small>
               </li>
-            ) : (
-              keywords.map((k, i) => (
-                <li onClick={handleKeywordClick} key={i}>
-                  {k}
+              {keywords.length === 0 ? (
+                <li>
+                  <small>No keywords</small>
                 </li>
-              ))
-            )}
-          </>
-        )}
-      </ul>
+              ) : (
+                keywords.map((k, i) => (
+                  <li onClick={handleKeywordClick} key={i}>
+                    {k}
+                  </li>
+                ))
+              )}
+            </>
+          )}
+        </ul>
+      </div>
       <div
         className="directory_item-videos aligned-grid gap-m"
         onClick={handleVideosClick}
       >
-        {type === DIRECTORY_TYPES.PLAYLIST && (
+        {type === DIRECTORY_TYPES.PLAYLIST ? (
           <>
             <i className="material-icons">ondemand_video</i>
-            <span>{`${items.length} ${
-              items.length === 1 ? "Video" : "Videos"
-            }`}</span>
+            <span>
+              {`${items.length} ${items.length === 1 ? "Video" : "Videos"}`}
+            </span>
           </>
+        ) : (
+          type === DIRECTORY_TYPES.VIDEO && (
+            <>
+              <i className="material-icons">open_in_full</i>
+              <span>
+                {`${count} ${count === 1 ? "Sequence" : "Sequences"}`}
+              </span>
+            </>
+          )
         )}
       </div>
       <div className="directory_item-footer aligned-grid gap-l">
@@ -90,9 +105,11 @@ export const DirectoryItem = ({
             </Link>
           )
         )}
-        <i onClick={handleEdit} className="material-icons">
-          more_vert
-        </i>
+        {type !== DIRECTORY_TYPES.SEQUENCE && (
+          <i onClick={handleEdit} className="material-icons">
+            more_vert
+          </i>
+        )}
         <i className="material-icons">
           {selected ? "check_box" : "check_box_outline_blank"}
         </i>

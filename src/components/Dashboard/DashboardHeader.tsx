@@ -10,7 +10,6 @@ import { MODAL } from "../Modal";
 import ReactPlayer from "react-player";
 import { postVideo, VIDEOS } from "../../stores/videos";
 import { DIRECTORY_TYPES } from "../../stores/folder";
-import { setServers } from "dns";
 
 export const VIDEO_DETECTED = "VIDEO_DETECTED";
 

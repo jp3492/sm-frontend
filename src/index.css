@@ -31,11 +31,6 @@
   color: var(--cl-grey-dark);
 }
 
-a {
-	display: grid;
-	align-items: center;
-}
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -80,10 +75,11 @@ h1, h2, h3, h4 {
   margin: 0;
   padding: 0;
 }
-
 a {
   text-decoration: none;
-  color: inherit;
+	color: inherit;
+	display: grid;
+	align-items: center;
 }
 
 ul, p {
@@ -185,13 +181,21 @@ i {
 .grid-tc-m1m {
   grid-template-columns: max-content 1fr max-content;
 }
+.grid-tc-mm1 {
+	grid-template-columns: max-content max-content 1fr;
+}
+.grid-tc-1mm {
+	grid-template-columns: 1fr max-content max-content;
+}
 .grid-tc-m11m {
   grid-template-columns: max-content 1fr 1fr max-content;
 }
 .grid-tc-m1mm {
 	grid-template-columns: max-content 1fr max-content max-content;
 }
-
+.grid-tc-mm1m {
+	grid-template-columns: max-content max-content 1fr max-content;
+}
 .grid-tr-1m {
 	grid-template-rows: 1fr max-content;
 }
@@ -213,6 +217,9 @@ i {
 }
 .gap-m {
 	gap: 1em;
+}
+.cgap-m {
+	column-gap: 1em;
 }
 .gap-l {
 	gap: 2em;
@@ -255,11 +262,17 @@ i {
 .pd-051 {
 	padding: 0.5em 1em;
 }
+.pd-0515 {
+	padding: 0.5em 1.5em;
+}
 .pd-01 {
 	padding: 0 1em;
 }
 .pd-005 {
 	padding: 0 0.5em;
+}
+.pd-01501 {
+	padding: 0 1.5em 0 1em;
 }
 .pd-051051 {
 	padding: 0.5em 1em;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   getGlobalState,
   setGlobalState,
@@ -12,9 +12,9 @@ import {
   SELECTED_FOLDER,
   patchFolder
 } from "../../stores/folder";
-import { movePlaylists } from "../../stores/playlists";
-import { moveVideos } from "../../stores/videos";
-import { moveSequences } from "../../stores/sequences";
+import { movePlaylists, PLAYLISTS } from "../../stores/playlists";
+import { moveVideos, VIDEOS } from "../../stores/videos";
+import { moveSequences, SEQUENCES } from "../../stores/sequences";
 import { MenuFolder } from "./MenuFolder";
 import { getPath } from "./Path";
 
@@ -75,6 +75,16 @@ const handleOpenFolder = (id) => {
   }
 };
 
+const getItemsCount = (directory) => {
+  if (directory === DIRECTORY_TYPES.VIDEO) {
+    return getGlobalState(VIDEOS).length;
+  } else if (directory === DIRECTORY_TYPES.PLAYLIST) {
+    return getGlobalState(PLAYLISTS).length;
+  } else {
+    return getGlobalState(SEQUENCES).length;
+  }
+};
+
 export const MenuItem = ({ folders, directory }) => {
   const [selectedDirectory, setSelectedDirectory] = useGlobalState(
     SELECTED_DIRECTORY
@@ -89,6 +99,8 @@ export const MenuItem = ({ folders, directory }) => {
     setSelectedDirectory(DIRECTORY_TYPES[directory]);
   };
 
+  const count = useMemo(() => getItemsCount(directory), [directory]);
+
   return (
     <div
       onDrop={handleDrop}
@@ -101,7 +113,7 @@ export const MenuItem = ({ folders, directory }) => {
           : ""
       }`}
     >
-      <div className="menu_item_header pd-01 aligned-grid grid-tc-m1 gap-m">
+      <div className="menu_item_header pd-01501 aligned-grid grid-tc-mm1 gap-m">
         <i className="material-icons">
           {directory === DIRECTORY_TYPES.PLAYLIST
             ? "playlist_play"
@@ -112,6 +124,7 @@ export const MenuItem = ({ folders, directory }) => {
         <label>
           {DIRECTORY_TYPES[directory].toLowerCase().capitalize() + "s"}
         </label>
+        <small>({count})</small>
       </div>
       <div className="folder_folders">
         {rootFolders.map((f, i) => {

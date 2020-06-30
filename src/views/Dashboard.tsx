@@ -26,9 +26,11 @@ const getUserData = async () => {
 
 export const Dashboard = ({ history: { push } }) => {
   const [initialized] = useGlobalState(INITIALIZED, false);
+
   useEffect(() => {
     getUserData();
   }, []);
+
   return (
     <div className="dashboard grid grid-tr-m1 grid-tc-m1m bg-grey-light gap-s overflow-h">
       {initialized ? (

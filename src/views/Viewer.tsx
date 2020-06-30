@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Viewer.scss";
+
 import { PlaylistViewer } from "../components/Viewer/PlaylistViewer";
 import { VideoViewer } from "../components/Viewer/VideoViewer";
 import { SequenceViewer } from "../components/Viewer/SequenceViewer";
@@ -11,14 +12,6 @@ export const Viewer = ({
   }
 }) => {
   const [item, setItem] = useState();
-
-  useEffect(() => {
-    if (type && id) {
-      getItem();
-    } else {
-      alert("Type and Id needs to be provided: /video/someid323423");
-    }
-  }, [type, id]);
 
   const getItem = async () => {
     if (type === "playlist") {
@@ -33,12 +26,18 @@ export const Viewer = ({
     }
   };
 
-  console.log(type);
+  useEffect(() => {
+    if (type && id) {
+      getItem();
+    } else {
+      alert("Type and Id needs to be provided: /video/someid323423");
+    }
+  }, [type, id, getItem]);
 
   return (
     <div className="viewer grid overflow-h">
       {!item ? (
-        <div>Loading...</div>
+        <div className="centered-grid bg-grey-dark">Loading...</div>
       ) : type === "playlist" ? (
         <PlaylistViewer {...item} />
       ) : type === "video" ? (
@@ -50,6 +49,9 @@ export const Viewer = ({
   );
 };
 
+// Have these request locally to not conflict with other states and request handlers
+// Viewer should always work completely independent
+// Will move to own app later
 const getPlaylist = async (id) => {
   try {
     const res = await request("viewer", "/playlist/" + id);
@@ -60,7 +62,6 @@ const getPlaylist = async (id) => {
     return error;
   }
 };
-
 const getVideo = async (id) => {
   try {
     const res = await request("viewer", "/video/" + id);
@@ -71,7 +72,6 @@ const getVideo = async (id) => {
     return error;
   }
 };
-
 const getSequence = async (id) => {
   try {
     const res = await request("viewer", "/sequence/" + id);

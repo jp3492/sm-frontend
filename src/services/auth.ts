@@ -16,6 +16,8 @@ const firebaseConfig = {
   measurementId: "G-G26G4NTPC7"
 };
 
+export const getUser = () => firebase.auth().currentUser;
+
 export const setAuthObserver = () => {
   firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {

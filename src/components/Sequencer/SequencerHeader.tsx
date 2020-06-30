@@ -39,16 +39,17 @@ export const SequencerHeader = ({ selectedVideo }) => {
       <Link to="/dashboard" className="pd-01 centered-grid">
         <i className="material-icons">home</i>
       </Link>
-      <div className="sequencer_header-info aligned-grid grid-tc-1m">
+      <div className="sequencer_header-info aligned-grid grid-tc-m1m gap-m">
+        <i className="material-icons">ondemand_video</i>
         {!selectedVideo ? "Loading Video..." : selectedVideo.label}
         <i onClick={handleEdit} className="material-icons">
           more_vert
         </i>
       </div>
-      <button className="pd-01 bg-grey" onClick={handleSelectFolder}>
+      {/* <button className="pd-01 bg-grey" onClick={handleSelectFolder}>
         <i className="material-icons">folder</i>
         {!targetFolder ? "Root Folder" : targetFolder.label}
-      </button>
+      </button> */}
     </div>
   );
 };

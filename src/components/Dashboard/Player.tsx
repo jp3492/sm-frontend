@@ -40,10 +40,11 @@ let PLAYER_COUNT = 0;
 
 export const openPlayer = (e) => {
   PLAYER_COUNT++;
-  const item = getGlobalState(PLAYLIST_ITEMS).find(
-    (i) =>
-      i.id ===
-      (typeof e === "string" ? e : e.target.closest(".playlist-item").id)
+  const items = getGlobalState(PLAYLIST_ITEMS);
+  console.log(typeof e);
+
+  const item = items.find(
+    (i) => i.id === (typeof e == "string" ? e : e.target.closest("li").id)
   );
   setGlobalState(PLAYER_ITEM, { ...item, count: PLAYER_COUNT });
 };

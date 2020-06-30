@@ -1,11 +1,18 @@
-import React from "react";
-import { useGlobalState, setGlobalState } from "react-global-state-hook";
+import React, { useMemo } from "react";
+import {
+  useGlobalState,
+  setGlobalState,
+  getGlobalState
+} from "react-global-state-hook";
 import {
   OPEN_FOLDERS,
   DIRECTORY_TYPES,
   SELECTED_DIRECTORY
 } from "../../stores/folder";
 import { MODAL } from "../Modal";
+import { VIDEOS } from "../../stores/videos";
+import { PLAYLISTS } from "../../stores/playlists";
+import { SEQUENCES } from "../../stores/sequences";
 
 const handleDragStart = (e) => {
   const folderId = e.target.closest(".folder").id;
@@ -15,6 +22,18 @@ const handleDragStart = (e) => {
     "text/plain",
     JSON.stringify({ ids: [folderId], type: "FOLDER", directory })
   );
+};
+
+const getItemsCount = (directory, folderId) => {
+  if (directory === DIRECTORY_TYPES.VIDEO) {
+    return getGlobalState(VIDEOS).filter((v) => v.folder === folderId).length;
+  } else if (directory === DIRECTORY_TYPES.PLAYLIST) {
+    return getGlobalState(PLAYLISTS).filter((p) => p.folder === folderId)
+      .length;
+  } else {
+    return getGlobalState(SEQUENCES).filter((s) => s.folder === folderId)
+      .length;
+  }
 };
 
 export const MenuFolder = ({
@@ -51,6 +70,8 @@ export const MenuFolder = ({
     setGlobalState(SELECTED_DIRECTORY, DIRECTORY_TYPES[directory]);
   };
 
+  const count = useMemo(() => getItemsCount(directory, id), [directory, id]);
+
   return (
     <div
       onDrop={handleDrop}
@@ -64,7 +85,7 @@ export const MenuFolder = ({
         draggable={true}
         onDragStart={handleDragStart}
         onClick={handleSelect}
-        className="folder_header pd-051 grid grid-tc-m1m gap-m bg-white"
+        className="folder_header pd-051 aligned-grid grid-tc-mm1m gap-m bg-white"
       >
         {childFolders.length !== 0 ? (
           <i onClick={() => handleOpenFolder(id)} className="material-icons">
@@ -76,6 +97,7 @@ export const MenuFolder = ({
           </i>
         )}
         <label>{label}</label>
+        <small>({count})</small>
         <i onClick={handleEdit} className="material-icons">
           more_vert
         </i>

@@ -15,6 +15,7 @@ import { SequencerActions } from "../components/Sequencer/SequencerActions";
 import { getFolders } from "../stores/folder";
 
 export const PLAYER_PROGRESS = "PLAYER_PROGRESS";
+export const SEQUENCER_VIDEO = "SEQUENCER_VIDEO";
 
 const KEY_EVENTS = {
   0: "play",
@@ -37,8 +38,6 @@ const handleKeyPress = (e) => {
   }
 };
 
-export const SEQUENCER_VIDEO = "SEQUENCER_VIDEO";
-
 export const Sequencer = ({
   match: {
     params: { id }
@@ -49,6 +48,14 @@ export const Sequencer = ({
   const [sequences] = useGlobalState(SEQUENCES);
 
   useEffect(() => {
+    // Need all folders to select target folder
+    // Maybe sequences should always be saved in seuqnces/videoName?
+    getFolders();
+  }, []);
+
+  useEffect(() => {
+    // listen to keyboard shortcuts
+    // Maybe move this to aservice like script?
     document.addEventListener("keypress", handleKeyPress);
     document.addEventListener("keydown", handleKeyPress);
     return () => {
@@ -58,6 +65,8 @@ export const Sequencer = ({
   }, [id]);
 
   const sequenceId = useMemo(() => {
+    // In case a initial sequence is set as query params
+    // This sequence needs to be selected and played from the beginning
     return search
       .slice(1, search.length)
       .split("&")
@@ -67,10 +76,8 @@ export const Sequencer = ({
   }, [search]);
 
   useEffect(() => {
-    getFolders();
-  }, []);
-
-  useEffect(() => {
+    // Only get the video if its not existing in videos
+    // Makes this view independent of Dashboard
     if (!videos.find((v) => v.id === id)) {
       getVideo(id);
     }

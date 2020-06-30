@@ -172,7 +172,7 @@ export const SequencerList = ({ sequences: seqs, sequenceId }) => {
     <ul className="sequencer_list-list">
       <li className="sequencer_list-list-sort stretched-grid gap-xs bg-grey-light">
         <span
-          className="aligned-grid bg-white pd-05 gap-m"
+          className="centered-grid bg-white pd-05 gap-m"
           onClick={handleSortTime}
         >
           <i className="material-icons">
@@ -218,9 +218,8 @@ export const SequencerList = ({ sequences: seqs, sequenceId }) => {
             key={i}
             className="stretched-grid gap-xs bg-grey-light"
           >
-            <div className="aligned-grid bg-white pd-05">
-              <span>{secondsToTime(s.start)}</span>
-              {/* <span>{secondsToTime(s.stop)}</span> */}
+            <div className="stretched-grid bg-white">
+              <span className="centered-grid">{secondsToTime(s.start)}</span>
             </div>
             <label className="aligned-grid bg-white pd-05 gap-m grid-tc-1m">
               {s.label}

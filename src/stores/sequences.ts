@@ -52,6 +52,8 @@ export const getSequences = async () => {
 
 export const postSequence = async (body) => {
   try {
+    let sequences = getGlobalState(SEQUENCES);
+    setGlobalState(SEQUENCES, [...sequences, body]);
     const res = await request("sequences", "", {
       method: "POST",
       body: JSON.stringify({
@@ -61,8 +63,16 @@ export const postSequence = async (body) => {
       })
     });
     const id = await res.text();
-    const sequences = getGlobalState(SEQUENCES);
-    setGlobalState(SEQUENCES, [...sequences, { ...body, id }]);
+    sequences = getGlobalState(SEQUENCES);
+    setGlobalState(
+      SEQUENCES,
+      sequences.map((i) => {
+        if (!i.id && JSON.stringify(i) === JSON.stringify(body)) {
+          return { ...i, id };
+        }
+        return i;
+      })
+    );
   } catch (error) {
     console.log(error);
   }
@@ -86,6 +96,17 @@ export const patchSequence = async ({ id, ...body }) => {
 
 export const deleteSequences = async (id) => {
   try {
+    const sequences = getGlobalState(SEQUENCES);
+    setGlobalState(
+      SEQUENCES,
+      sequences.map(({ id, ...sequence }) => {
+        if (id === id) {
+          return sequence;
+        }
+        return { id, ...sequence };
+      })
+    );
+    const { id: sequenceId, ...body } = sequences.find((s) => s.id === id);
     const res = await request("sequences", "/" + id, {
       method: "DELETE"
     });
@@ -93,7 +114,9 @@ export const deleteSequences = async (id) => {
       const folders = getGlobalState(SEQUENCES);
       setGlobalState(
         SEQUENCES,
-        folders.filter((f) => f.id !== id)
+        folders.filter(
+          (f) => f.id && JSON.stringify(f) !== JSON.stringify(body)
+        )
       );
     } else {
       alert(

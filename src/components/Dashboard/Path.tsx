@@ -51,7 +51,7 @@ export const Path = () => {
   return (
     <div className="path aligned-grid grid-tc-1m gap-m bg-white">
       <div className="aligned-grid gap-m pd-051">
-        <div className="grid gap-m" onClick={handleDirClick}>
+        <div className="grid gap-s" onClick={handleDirClick}>
           <i className="material-icons">
             {selectedDirectory === DIRECTORY_TYPES.PLAYLIST
               ? "playlist_play"
@@ -59,14 +59,15 @@ export const Path = () => {
               ? "subscriptions"
               : "open_in_full"}
           </i>
-          {/* <label>{`${selectedDirectory
-            .toLowerCase()
-            .capitalize()}s  : `}</label> */}
-          <i className="material-icons">folder</i>
+          <h4>{`${selectedDirectory.toLowerCase().capitalize()}s`}</h4>
         </div>
         {path.map((p, i) => {
           return (
-            <div key={i} onClick={() => setSelectedFolder(p.id)}>
+            <div
+              className="aligned-grid gap-m"
+              key={i}
+              onClick={() => setSelectedFolder(p.id)}
+            >
               <i className="material-icons">keyboard_arrow_right</i>
               {p.label}
             </div>

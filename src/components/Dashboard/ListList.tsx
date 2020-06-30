@@ -25,9 +25,19 @@ export const ListList = ({
   items,
   filteredItems,
   selectedItems,
-  handleSelect
+  setSelectedItems
 }) => {
   const [position] = useGlobalState(PLAYER_POSITION);
+
+  const handleSelect = (e) => {
+    e.stopPropagation();
+    const id = e.target.closest("li").id;
+    if (selectedItems.includes(id)) {
+      setSelectedItems(selectedItems.filter((i) => i !== id));
+    } else {
+      setSelectedItems([...selectedItems, id]);
+    }
+  };
 
   const onDragStart = (e) => {
     const id = e.target.closest("li").id;
