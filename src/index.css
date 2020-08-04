@@ -284,6 +284,9 @@ i {
 .pd-2 {
 	padding: 2em;
 }
+.pd-050 {
+	padding: 0.5em 0;
+}
 .pd-051 {
 	padding: 0.5em 1em;
 }

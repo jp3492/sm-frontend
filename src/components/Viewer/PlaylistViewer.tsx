@@ -6,38 +6,40 @@ import { DIRECTORY_TYPES } from "../../stores/folder";
 
 export const PlaylistViewer = (props: any) => {
   const [search, setSearch] = useState("");
+
   const [activeItemId, setActiveItemId] = useState();
+  const [counter, setCounter] = useState(0);
 
   const [playing, setPlaying] = useState(false);
   const [playerReady, setPlayerReady] = useState(false);
 
   const [url, setUrl] = useState();
 
-  const [counter, setCounter] = useState(0);
-
   const player: any = useRef();
   const ref = (p) => (player.current = p);
 
-  const { videos, sequences } = props;
+  const { videos, sequences, playlist } = props;
 
   const handleReady = () => {
     setPlayerReady(true);
   };
 
-  const items = useMemo(() => {
-    return props.playlist.items
-      .map((i) => ({
-        type: i.split(":")[0],
-        id: i.split(":")[1]
-      }))
-      .map(({ id, type }) => {
-        if (type === DIRECTORY_TYPES.VIDEO) {
-          return { ...videos.find((v) => v.id === id), type };
-        } else if (type === DIRECTORY_TYPES.SEQUENCE) {
-          return { ...sequences.find((s) => s.id === id), type };
-        }
-      });
-  }, [props]);
+  const items = useMemo(
+    () =>
+      playlist.items
+        .map((i) => ({
+          type: i.split(":")[0],
+          id: i.split(":")[1]
+        }))
+        .map(({ id, type }) => {
+          if (type === DIRECTORY_TYPES.VIDEO) {
+            return { ...videos.find((v) => v.id === id), type };
+          } else if (type === DIRECTORY_TYPES.SEQUENCE) {
+            return { ...sequences.find((s) => s.id === id), type };
+          }
+        }),
+    [playlist]
+  );
 
   const currentItem = useMemo(() => items.find((i) => i.id === activeItemId), [
     items,
@@ -57,15 +59,13 @@ export const PlaylistViewer = (props: any) => {
         setPlayerReady(false);
         setUrl(currentItem.url);
       } else if (playerReady) {
-        console.log("Seeking");
-
         const to =
           currentItem.type === DIRECTORY_TYPES.SEQUENCE ? currentItem.start : 0;
-        // player.current.seekTo(to, "seconds");
+        player.current.seekTo(to, "seconds");
         setPlaying(true);
       }
     }
-  }, [playerReady, currentItem, counter]);
+  }, [playerReady, currentItem]);
 
   const playNext = () => {
     const currentIndex = items.findIndex((i) => i.id === currentItem.id);

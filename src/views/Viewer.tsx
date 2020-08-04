@@ -32,7 +32,11 @@ export const Viewer = ({
     } else {
       alert("Type and Id needs to be provided: /video/someid323423");
     }
-  }, [type, id, getItem]);
+  }, [type, id]);
+
+  useEffect(() => {
+    console.log(item);
+  }, [item]);
 
   return (
     <div className="viewer grid overflow-h">

@@ -22,6 +22,8 @@
       .folder_header {
         > i:first-of-type {
           transform: rotate(90deg);
+            padding-right: 0.6em;
+
           &.no_child_folder {
             pointer-events: none;
           }
@@ -31,6 +33,7 @@
         > .folder_header {
           background-color: var(--cl-grey-light);
           position: relative;
+
           &:after {
             content: "";
             position: absolute;

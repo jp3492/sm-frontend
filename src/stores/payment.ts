@@ -4,7 +4,7 @@ export const getClientToken = async () => {
   try {
     const res = await request("payments", "/token");
     const { clientToken } = await res.json();
-    console.log(clientToken);
+    return clientToken;
   } catch (error) {
     console.log(error);
   }

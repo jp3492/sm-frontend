@@ -149,11 +149,10 @@ export const Landing = () => {
       <section className="pricing-section">
         <h4>Pricing</h4>
         <p>
-          Viden is run on cutting edge cloud technology in order to keep prices
-          low, while maintaining high levels of performance and availability. We
-          want to create a sustainable and effective workplace as well as
-          service to our users. Therefore we are trying to have a good balance
-          of utility- and value based pricing.
+          Our goal is to create a sustainable and productive workplace as well
+          as service to our users. Therefore we are trying to have a good
+          balance between utility- and value based pricing. We believe in fair
+          pricing and transparent use of data.
         </p>
         <div>
           <div>
@@ -201,7 +200,13 @@ export const Landing = () => {
           </div>
         </div>
       </section>
-      <footer></footer>
+      <footer>
+        <div>
+          <h2>Viden</h2>
+          <Link to="/impressum">Imprint</Link>
+          <Link to="/datenschutz">Data & Privacy</Link>
+        </div>
+      </footer>
     </div>
   );
 };

@@ -14,6 +14,8 @@ import { AUTH } from "./services/auth";
 import { ErrorPage404 } from "./views/404";
 import { ErrorPage403 } from "./views/403";
 import { Payment } from "./views/Payment";
+import { Impressum } from "./views/Impressum";
+import { Datenschutz } from "./views/Datenschutz";
 
 const App = () => {
   const [auth] = useGlobalState(AUTH, "pending");
@@ -25,6 +27,8 @@ const App = () => {
           <Route exact path="/" component={Landing} />
           <Route exact path="/viewer/:type/:id" component={Viewer} />
           <Route exact path="/auth/:type" component={Auth} />
+          <Route exact path="/impressum" component={Impressum} />
+          <Route exact path="/datenschutz" component={Datenschutz} />
           {auth === "pending" ? (
             <div className="centered-grid">
               <h3>Loading App...</h3>
@@ -34,7 +38,7 @@ const App = () => {
               <>
                 <Route exact path="/dashboard" component={Dashboard} />
                 <Route exact path="/sequencer/:id" component={Sequencer} />
-                <Route exact path="/profile/payment" component={Payment} />
+                {/* <Route exact path="/profile/payment" component={Payment} /> */}
               </>
             )
           )}{" "}

@@ -74,6 +74,7 @@ export const Folder = ({ onSubmit, closeModal, id, directory, ...values }) => {
             alt="enter folder name"
             type="text"
             value={label}
+            placeholder="Folder name"
             onChange={({ target: { value } }) => setLabel(value)}
           />
         </label>

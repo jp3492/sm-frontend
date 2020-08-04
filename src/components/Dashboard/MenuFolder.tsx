@@ -86,7 +86,7 @@ export const MenuFolder = ({
         draggable={true}
         onDragStart={handleDragStart}
         onClick={handleSelect}
-        className="folder_header pd-051 aligned-grid grid-tc-mm1m gap-m bg-white"
+        className="folder_header pd-050 aligned-grid grid-tc-m1mm gap-m bg-white"
       >
         {childFolders.length !== 0 ? (
           <i onClick={() => handleOpenFolder(id)} className="material-icons">
