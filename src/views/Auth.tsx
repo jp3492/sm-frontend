@@ -25,7 +25,7 @@ export const Auth = ({
         await login(values);
         push("/dashboard");
       } catch (error) {
-        setError("Auth Failed");
+        setError("Email or password are incorrect.");
         push("/auth/login");
       } finally {
         setLoading(false);

@@ -23,7 +23,6 @@
         > i:first-of-type {
           transform: rotate(90deg);
           &.no_child_folder {
-            transform: rotate(135deg);
             pointer-events: none;
           }
         }
@@ -58,7 +57,7 @@
         }
       }
       &.open > .folder_header > i:first-of-type {
-        transform: rotate(135deg);
+        transform: rotate(-90deg);
       }
     }
   }

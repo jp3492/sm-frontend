@@ -10,6 +10,7 @@ import { MODAL } from "../Modal";
 import ReactPlayer from "react-player";
 import { postVideo, VIDEOS } from "../../stores/videos";
 import { DIRECTORY_TYPES } from "../../stores/folder";
+import { Link } from "react-router-dom";
 
 export const VIDEO_DETECTED = "VIDEO_DETECTED";
 
@@ -67,12 +68,17 @@ export const Header = ({ push }) => {
   const handleClearSearch = () => setUrl("");
 
   return (
-    <header className="centered-grid grid-tc-m11m bg-grey shadow-s z1">
+    <header className="dashboard-header centered-grid grid-tc-mm11m bg-grey shadow-s z1">
       <div
         onClick={() => setMenuOpen(!menuOpen)}
         className={`header_menu ${menuOpen ? "open" : ""}`}
       >
         <i className="material-icons">{menuOpen ? "menu_open" : "menu"}</i>
+      </div>
+      <div className="pd-01 header_logo">
+        <Link to="/">
+          <h2 className="cl-white">Viden</h2>
+        </Link>
       </div>
       {/* <Add /> */}
       <div className="header_add grid grid-tc-m1mm" data-active={!!url}>

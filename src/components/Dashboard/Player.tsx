@@ -41,7 +41,6 @@ let PLAYER_COUNT = 0;
 export const openPlayer = (e) => {
   PLAYER_COUNT++;
   const items = getGlobalState(PLAYLIST_ITEMS);
-  console.log(typeof e);
 
   const item = items.find(
     (i) => i.id === (typeof e == "string" ? e : e.target.closest("li").id)
@@ -102,7 +101,6 @@ export const Player = () => {
 
   const handleProgress = ({ playedSeconds }) => {
     if (item.stop && playedSeconds >= item.stop) {
-      setPlaying(false);
       onPlayerEnd(item.id);
     }
   };
@@ -110,6 +108,8 @@ export const Player = () => {
   const handleResize = () => {
     setMaximized(!maximized);
   };
+
+  console.log(playing);
 
   return (
     <div

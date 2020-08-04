@@ -41,6 +41,7 @@
     }
     .sequencer_list-list {
       border-top: 2px solid var(--cl-grey-light);
+      overflow-y: auto;
       li {
         grid-template-columns: 50px 1fr max-content;
         border-bottom: 2px solid var(--cl-grey-light);

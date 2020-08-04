@@ -1,5 +1,3 @@
-import { getUser } from "./../services/auth";
-
 const APIS =
   process.env.NODE_ENV === "development"
     ? {
@@ -7,7 +5,8 @@ const APIS =
         videos: "http://localhost:4001",
         playlists: "http://localhost:4002",
         sequences: "http://localhost:4004",
-        viewer: "http://localhost:4005"
+        viewer: "http://localhost:4005",
+        payments: "http://localhost:4006"
       }
     : {
         folders:
@@ -19,7 +18,9 @@ const APIS =
         sequences:
           "https://us-central1-streaming-manager-dc49e.cloudfunctions.net/sequence",
         viewer:
-          "https://us-central1-streaming-manager-dc49e.cloudfunctions.net/viewer"
+          "https://us-central1-streaming-manager-dc49e.cloudfunctions.net/viewer",
+        payment:
+          "https://us-central1-streaming-manager-dc49e.cloudfunctions.net/payment"
       };
 
 export const request = (api: string, path: string = "", options: any = {}) => {

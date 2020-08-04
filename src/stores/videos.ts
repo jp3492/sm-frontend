@@ -79,7 +79,7 @@ export const patchVideo = async ({ id, ...values }) => {
     const videos = getGlobalState(VIDEOS);
     setGlobalState(
       VIDEOS,
-      videos.map((v) => (v.id === id ? { id, ...values } : v))
+      videos.map((v) => (v.id === id ? { id, ...v, ...values } : v))
     );
     showHint(`Videos "${values.label}" successfully updated.`);
   } catch (error) {

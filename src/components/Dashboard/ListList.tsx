@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
-import { useGlobalState, getGlobalState } from "react-global-state-hook";
-import { PLAYER_POSITION, openPlayer } from "./Player";
+import React, { useEffect, useRef } from "react";
+import {
+  useGlobalState,
+  getGlobalState,
+  setGlobalState
+} from "react-global-state-hook";
+import { PLAYER_POSITION, openPlayer, PLAYER_PLAYING } from "./Player";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { PLAYLIST_ITEMS } from "../../stores/playlist_items";
-
-const onDragOver = (e) => {
-  e.stopPropagation();
-  e.preventDefault();
-};
 
 const handlePlayerDone = ({ detail: { id } }: any) => {
   const items = getGlobalState(PLAYLIST_ITEMS);
@@ -18,6 +17,8 @@ const handlePlayerDone = ({ detail: { id } }: any) => {
   if (itemIndex < items.length - 1) {
     const nextItem = items.find((i, index) => index === itemIndex + 1);
     openPlayer(nextItem.id);
+  } else {
+    setGlobalState(PLAYER_PLAYING, false);
   }
 };
 
@@ -25,9 +26,13 @@ export const ListList = ({
   items,
   filteredItems,
   selectedItems,
-  setSelectedItems
+  setSelectedItems,
+  arrangeItems
 }) => {
   const [position] = useGlobalState(PLAYER_POSITION);
+
+  const arrangeTarget: any = useRef();
+  const draggedTarget: any = useRef();
 
   const handleSelect = (e) => {
     e.stopPropagation();
@@ -39,12 +44,82 @@ export const ListList = ({
     }
   };
 
-  const onDragStart = (e) => {
-    const id = e.target.closest("li").id;
+  const handleDragStart = (e) => {
+    const el = e.target.closest("li");
+    const id = el.id;
+    draggedTarget.current = el;
     e.dataTransfer.setData(
       "text/plain",
       JSON.stringify({ items: [...selectedItems, id], type: "list" })
     );
+  };
+
+  const handleDragEnd = (e) => {
+    if (arrangeTarget.current) {
+      arrangeTarget.current.classList.remove("drop-after");
+      arrangeTarget.current.classList.remove("drop-before");
+    }
+  };
+
+  const handleDragEnter = (e) => {
+    const el = e.target.closest("li");
+    arrangeTarget.current = el;
+  };
+
+  const handleDragLeave = (e) => {
+    const el = e.target;
+    el.classList.remove("drop-before");
+    el.classList.remove("drop-after");
+  };
+
+  const handleDragOver = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (
+      arrangeTarget.current &&
+      draggedTarget.current !== arrangeTarget.current
+    ) {
+      const { height, y } = arrangeTarget.current.getBoundingClientRect();
+      const mouseY = e.clientY;
+      const before = mouseY < y + height / 2;
+
+      const dragIndex = draggedTarget.current.dataset.index;
+      const dropIndex = arrangeTarget.current.dataset.index;
+
+      const down = dragIndex < dropIndex;
+
+      const notSame = Math.abs(dragIndex - dropIndex) !== 1;
+
+      if (before) {
+        if (notSame || !down) {
+          arrangeTarget.current.classList.remove("drop-after");
+          arrangeTarget.current.classList.add("drop-before");
+        }
+      } else if (notSame || down) {
+        arrangeTarget.current.classList.add("drop-after");
+        arrangeTarget.current.classList.remove("drop-before");
+      }
+    }
+  };
+
+  const handleDrop = () => {
+    const dragIndex = draggedTarget.current.dataset.index;
+    const dropIndex = arrangeTarget.current.dataset.index;
+
+    if (dragIndex === dropIndex) return;
+
+    let arrangedItems: any = [...items];
+
+    const before = arrangeTarget.current.classList.contains("drop-before");
+    const down = dragIndex < dropIndex;
+
+    const from = dragIndex;
+    const to = before && down ? dropIndex - 1 : dropIndex;
+
+    arrangedItems.move(from, to);
+
+    arrangeItems(arrangedItems);
   };
 
   useEffect(() => {
@@ -66,14 +141,19 @@ export const ListList = ({
             <li
               onClick={openPlayer}
               draggable={true}
-              onDragStart={onDragStart}
-              onDragOver={onDragOver}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+              onDragOver={handleDragOver}
+              onDragEnter={handleDragEnter}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
               className={`${
                 DIRECTORY_TYPES[type]
               } grid grid-tc-m1m  pd-05 gap-m ${
                 i === position ? "active" : ""
               }`}
               id={id}
+              data-index={i}
               key={i}
             >
               <i onClick={handleSelect} className="material-icons">

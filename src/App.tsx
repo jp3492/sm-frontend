@@ -13,6 +13,7 @@ import { Viewer } from "./views/Viewer";
 import { AUTH } from "./services/auth";
 import { ErrorPage404 } from "./views/404";
 import { ErrorPage403 } from "./views/403";
+import { Payment } from "./views/Payment";
 
 const App = () => {
   const [auth] = useGlobalState(AUTH, "pending");
@@ -33,6 +34,7 @@ const App = () => {
               <>
                 <Route exact path="/dashboard" component={Dashboard} />
                 <Route exact path="/sequencer/:id" component={Sequencer} />
+                <Route exact path="/profile/payment" component={Payment} />
               </>
             )
           )}{" "}

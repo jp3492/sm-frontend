@@ -16,31 +16,42 @@ export const TAGGER_ACTIVE_TIME = "TAGGER_ACTIVE_TIME";
 export const TAGGER_START = "TAGGER_START";
 export const TAGGER_STOP = "TAGGER_STOP";
 export const TAGGER_LABEL = "TAGGER_LABEL";
+export const TAGGER_FAST_TAG = "TAGGER_QUICK_TAG";
 
 const handleControls = (e) => {
   const event = e.detail;
+  const fastTagging = getGlobalState(TAGGER_FAST_TAG);
   if (event === "tag") {
     const activeTime = getGlobalState(TAGGER_ACTIVE_TIME);
     const start = getGlobalState(TAGGER_START);
-    if (!activeTime && !start) {
-      console.log("starting START");
-      setGlobalState(TAGGER_ACTIVE_TIME, "start");
-    } else if (activeTime === "start") {
-      console.log("SETTING START");
-      setStart();
-    } else if (activeTime === "stop") {
-      console.log("SETTING STOP");
-      setStop();
+
+    if (fastTagging) {
+      if (activeTime === "start") {
+        setStart();
+      } else {
+        setStop();
+        handleSubmit(true);
+        setStart();
+      }
     } else {
-      console.log("SBMITTING");
-      handleSubmit();
+      if (!activeTime && !start) {
+        console.log("starting START");
+        setGlobalState(TAGGER_ACTIVE_TIME, "start");
+      } else if (activeTime === "start") {
+        console.log("SETTING START");
+        setStart();
+      } else if (activeTime === "stop") {
+        console.log("SETTING STOP");
+        setStop();
+      } else {
+        console.log("SBMITTING");
+        handleSubmit();
+      }
     }
   } else if (event === "tagback") {
     const activeTime = getGlobalState(TAGGER_ACTIVE_TIME);
     const start = getGlobalState(TAGGER_START);
     // only when start has a value
-    console.log({ activeTime, start });
-
     if (activeTime === "start") {
       resetTagger();
     } else if (activeTime === "stop") {
@@ -48,10 +59,14 @@ const handleControls = (e) => {
     } else if (!activeTime && start) {
       setGlobalState(TAGGER_ACTIVE_TIME, "stop");
     }
+  } else if (event === "fasttagging") {
+    setGlobalState(TAGGER_FAST_TAG, !fastTagging);
+  } else if (event === "close") {
+    resetTagger();
   }
 };
 
-const handleSubmit = () => {
+const handleSubmit = (fastTagging?: any) => {
   const editingSequence = getGlobalState(EDITING_SEQUENCE);
   const start = getGlobalState(TAGGER_START);
   const stop = getGlobalState(TAGGER_STOP);
@@ -59,6 +74,7 @@ const handleSubmit = () => {
   if (!label) {
     alert("Label required!");
   } else {
+    resetTagger(fastTagging);
     if (editingSequence) {
       patchSequence({
         ...editingSequence,
@@ -76,7 +92,6 @@ const handleSubmit = () => {
         url
       });
     }
-    resetTagger();
   }
 };
 
@@ -109,10 +124,14 @@ const handleDismiss = () => {
   setGlobalState(EDITING_SEQUENCE, undefined);
 };
 
-const resetTagger = () => {
+const resetTagger = (fastTagging?: boolean) => {
   setGlobalState(TAGGER_ACTIVE_TIME, "start");
   setGlobalState(TAGGER_LABEL, "");
-  setGlobalState(TAGGER_START, undefined);
+  if (fastTagging) {
+    setStart();
+  } else {
+    setGlobalState(TAGGER_START, undefined);
+  }
   setGlobalState(TAGGER_STOP, undefined);
 };
 

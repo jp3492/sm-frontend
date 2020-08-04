@@ -13,7 +13,7 @@ setGlobalState(ACTIVE_PLAYLIST, null);
 
 export const movePlaylists = async ({ folderId, ids, type }) => {
   try {
-    await request("folders", `/moveTo/${folderId || "root"}`, {
+    await request("playlists", `/moveTo/${folderId || "root"}`, {
       method: "POST",
       body: JSON.stringify({ ids, type })
     });

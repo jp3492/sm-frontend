@@ -123,13 +123,38 @@ export const SequencerList = ({ sequences: seqs, sequenceId }) => {
         if (nameA > nameB) {
           return sortLabel === "asc" ? 1 : -1;
         }
-
-        // names must be equal
         return 0;
       });
     }
     return sorted;
   }, [sequences, sortLabel, sortTime]);
+
+  useEffect(() => {
+    document.addEventListener("controls", handleControls);
+    return () => document.removeEventListener("controls", handleControls);
+  }, [sortedSequences, activeSequenceId]);
+
+  const handleControls = (e) => {
+    const event = e.detail;
+    const activeIndex = sortedSequences.findIndex(
+      (i) => i.id == activeSequenceId
+    );
+    if (event === "next" || event === "back") {
+      let nextIndex;
+      if (event === "next") {
+        nextIndex =
+          activeIndex < sortedSequences.length - 1 ? activeIndex + 1 : 0;
+      } else if (event === "back") {
+        nextIndex =
+          activeIndex > 0 ? activeIndex - 1 : sortedSequences.length - 1;
+      }
+      const nextId = sortedSequences[nextIndex].id;
+      setActiveSequenceId(nextId);
+      seekToSequence(nextId);
+    } else if (event === "edit") {
+      editSequence(activeSequenceId);
+    }
+  };
 
   const handleSortLabel = () => {
     if (!sortLabel) {

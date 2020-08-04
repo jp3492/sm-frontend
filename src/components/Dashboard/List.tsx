@@ -15,6 +15,7 @@ import { ListSelection } from "./ListSelection";
 import { ListList } from "./ListList";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { SEQUENCES } from "../../stores/sequences";
+import { itemsToPlaylistItems } from "../../utils/itemsToPlaylistItems";
 
 export const SELECTED_LIST_ITEMS = "SELECTED_LIST_ITEMS";
 
@@ -257,6 +258,20 @@ export const Playlist = () => {
     ]
   );
 
+  const arrangeItems = useCallback(
+    (arrangedItems) => {
+      if (playlist) {
+        patchPlaylist({
+          ...playlist,
+          items: itemsToPlaylistItems(arrangedItems)
+        });
+      } else {
+        setItems(arrangedItems);
+      }
+    },
+    [playlist]
+  );
+
   const handleClose = useCallback(() => {
     setActivePlaylist();
     setGlobalState(PLAYER_ITEM, undefined);
@@ -273,7 +288,7 @@ export const Playlist = () => {
         <div className="stretched-grid bg-white">
           <h4 className="aligned-grid grid-tc-m1m gap-m pd-05">
             <i className="material-icons">queue_music</i>
-            {!playlist ? "No Playlist active" : playlist.label}
+            {!playlist ? "Playlist" : playlist.label}
             {items.length !== 0 && (
               <i onClick={handleClose} className="material-icons">
                 close
@@ -296,6 +311,7 @@ export const Playlist = () => {
           selectedItems={selectedItems}
           filteredItems={filteredItems}
           setSelectedItems={setSelectedItems}
+          arrangeItems={arrangeItems}
         />
       </div>
 

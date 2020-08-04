@@ -17,6 +17,7 @@ import { moveVideos, VIDEOS } from "../../stores/videos";
 import { moveSequences, SEQUENCES } from "../../stores/sequences";
 import { MenuFolder } from "./MenuFolder";
 import { getPath } from "./Path";
+import { MenuFolderCount } from "./MenuFolderCount";
 
 const handleSelectFolder = (id, directory) => {
   setGlobalState(SELECTED_FOLDER, id);
@@ -77,11 +78,11 @@ const handleOpenFolder = (id) => {
 
 const getItemsCount = (directory) => {
   if (directory === DIRECTORY_TYPES.VIDEO) {
-    return getGlobalState(VIDEOS).length;
+    return getGlobalState(VIDEOS).filter((v) => !v.folder).length;
   } else if (directory === DIRECTORY_TYPES.PLAYLIST) {
-    return getGlobalState(PLAYLISTS).length;
+    return getGlobalState(PLAYLISTS).filter((p) => !p.folder).length;
   } else {
-    return getGlobalState(SEQUENCES).length;
+    return getGlobalState(SEQUENCES).filter((s) => !s.folder).length;
   }
 };
 
@@ -98,8 +99,6 @@ export const MenuItem = ({ folders, directory }) => {
     handleSelectFolder(null, directory);
     setSelectedDirectory(DIRECTORY_TYPES[directory]);
   };
-
-  const count = useMemo(() => getItemsCount(directory), [directory]);
 
   return (
     <div
@@ -124,7 +123,7 @@ export const MenuItem = ({ folders, directory }) => {
         <label>
           {DIRECTORY_TYPES[directory].toLowerCase().capitalize() + "s"}
         </label>
-        <small>({count})</small>
+        <MenuFolderCount type={DIRECTORY_TYPES[directory]} />
       </div>
       <div className="folder_folders">
         {rootFolders.map((f, i) => {

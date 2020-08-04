@@ -24,12 +24,18 @@ const KEY_EVENTS = {
   37: "rewind",
   38: "back",
   39: "forward",
-  40: "next"
+  40: "next",
+  81: "fasttagging",
+  67: "close",
+  66: "edit",
+  88: "playback"
 };
 
 const handleKeyPress = (e) => {
   const key = e.keyCode;
   const ctrl = e.ctrlKey;
+  console.log(key);
+
   if (ctrl) {
     if (KEY_EVENTS[key]) {
       const event = new CustomEvent("controls", { detail: KEY_EVENTS[key] });

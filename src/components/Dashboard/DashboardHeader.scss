@@ -1,13 +1,20 @@
-header {
+.dashboard-header {
   grid-area: header;
   height: 55px;
-  .header_menu > i {
-    color: white;
+  .header_menu {
+    width: 50px;
+    > i {
+      color: white;
+    }
+  }
+  .header_logo {
+    width: 250px;
   }
   .header_add {
     width: 100%;
-    max-width: 600px;
+    padding: 0 0.5rem;
     justify-self: start;
+    place-self: center;
     > * {
       background-color: white;
     }

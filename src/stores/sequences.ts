@@ -94,20 +94,22 @@ export const patchSequence = async ({ id, ...body }) => {
   }
 };
 
-export const deleteSequences = async (id) => {
+export const deleteSequences = async (targetId) => {
   try {
     const sequences = getGlobalState(SEQUENCES);
     setGlobalState(
       SEQUENCES,
       sequences.map(({ id, ...sequence }) => {
-        if (id === id) {
+        if (id === targetId) {
           return sequence;
         }
         return { id, ...sequence };
       })
     );
-    const { id: sequenceId, ...body } = sequences.find((s) => s.id === id);
-    const res = await request("sequences", "/" + id, {
+    const { id: sequenceId, ...body } = sequences.find(
+      (s) => s.id === targetId
+    );
+    const res = await request("sequences", "/" + targetId, {
       method: "DELETE"
     });
     if (res.status != 403) {

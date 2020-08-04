@@ -1,166 +1,207 @@
 import React from "react";
 import "./Landing.scss";
+import { useGlobalState } from "react-global-state-hook";
+import { AUTH } from "../services/auth";
 import { Link } from "react-router-dom";
-const dropbox = require("./dropbox.png");
-const soundcloud = require("./soundcloud.png");
-const streamable = require("./streamable.png");
-export const Landing = () => {
-  return (
-    <div className="landing">
-      <svg
-        viewBox="0 0 200 60"
-        preserveAspectRatio="xMidYMid meet"
-        focusable="false"
-        className="style-scope ytd-topbar-logo-renderer"
-        style={{
-          pointerEvents: "none",
-          display: "block",
-          width: "100%",
-          height: "100%"
-        }}
-      >
-        <g
-          viewBox="0 0 200 60"
-          preserveAspectRatio="xMidYMid meet"
-          className="style-scope ytd-topbar-logo-renderer"
-        >
-          <g className="style-scope ytd-topbar-logo-renderer">
-            <path
-              fill="#FF0000"
-              d="M63,14.87c-0.72-2.7-2.85-4.83-5.56-5.56C52.54,8,32.88,8,32.88,8S13.23,8,8.32,9.31
-      c-2.7,0.72-4.83,2.85-5.56,5.56C1.45,19.77,1.45,30,1.45,30s0,10.23,1.31,15.13c0.72,2.7,2.85,4.83,5.56,5.56
-      C13.23,52,32.88,52,32.88,52s19.66,0,24.56-1.31c2.7-0.72,4.83-2.85,5.56-5.56C64.31,40.23,64.31,30,64.31,30
-      S64.31,19.77,63,14.87z"
-              className="style-scope ytd-topbar-logo-renderer"
-            ></path>
-            <polygon
-              fill="#FFFFFF"
-              points="26.6,39.43 42.93,30 26.6,20.57"
-              className="style-scope ytd-topbar-logo-renderer"
-            ></polygon>
-          </g>
-          <g className="style-scope ytd-topbar-logo-renderer">
-            <g
-              id="youtube-paths"
-              className="style-scope ytd-topbar-logo-renderer"
-            >
-              <path
-                fill="#282828"
-                d="M92.69,48.03c-1.24-0.84-2.13-2.14-2.65-3.91c-0.52-1.77-0.79-4.12-0.79-7.06v-4
-        c0-2.97,0.3-5.35,0.9-7.15c0.6-1.8,1.54-3.11,2.81-3.93c1.27-0.82,2.94-1.24,5.01-1.24c2.04,0,3.67,0.42,4.9,1.26
-        c1.23,0.84,2.13,2.15,2.7,3.93c0.57,1.78,0.85,4.16,0.85,7.12v4c0,2.94-0.28,5.3-0.83,7.08c-0.55,1.78-1.45,3.09-2.7,3.91
-        c-1.24,0.82-2.93,1.24-5.06,1.24C95.65,49.29,93.93,48.87,92.69,48.03z M99.66,43.71c0.34-0.9,0.52-2.37,0.52-4.4v-8.59
-        c0-1.98-0.17-3.42-0.52-4.34c-0.34-0.91-0.95-1.37-1.82-1.37c-0.84,0-1.43,0.46-1.78,1.37c-0.34,0.91-0.52,2.36-0.52,4.34v8.59
-        c0,2.04,0.16,3.51,0.49,4.4c0.33,0.9,0.93,1.35,1.8,1.35C98.71,45.06,99.31,44.61,99.66,43.71z"
-                className="style-scope ytd-topbar-logo-renderer"
-              ></path>
-              <path
-                fill="#282828"
-                d="M188.16,37.13v1.39c0,1.77,0.05,3.09,0.16,3.98c0.1,0.88,0.32,1.53,0.65,1.93
-        c0.33,0.4,0.84,0.61,1.53,0.61c0.93,0,1.57-0.36,1.91-1.08c0.34-0.72,0.53-1.92,0.56-3.6l5.35,0.31
-        c0.03,0.24,0.04,0.57,0.04,0.99c0,2.55-0.7,4.45-2.09,5.71c-1.39,1.26-3.36,1.89-5.91,1.89c-3.06,0-5.2-0.96-6.43-2.88
-        c-1.23-1.92-1.84-4.88-1.84-8.9v-4.81c0-4.14,0.64-7.15,1.91-9.06c1.27-1.9,3.45-2.85,6.54-2.85c2.13,0,3.76,0.39,4.9,1.17
-        c1.14,0.78,1.94,1.99,2.41,3.64c0.46,1.65,0.7,3.93,0.7,6.83v4.72H188.16z M188.95,25.53c-0.31,0.39-0.52,1.03-0.63,1.91
-        c-0.11,0.88-0.16,2.23-0.16,4.02v1.98h4.54v-1.98c0-1.77-0.06-3.11-0.18-4.02c-0.12-0.91-0.34-1.56-0.65-1.93
-        c-0.31-0.37-0.8-0.56-1.46-0.56C189.75,24.94,189.26,25.14,188.95,25.53z"
-                className="style-scope ytd-topbar-logo-renderer"
-              ></path>
-              <path
-                fill="#282828"
-                d="M77.59,36.61l-7.06-25.49h6.16l2.47,11.55c0.63,2.85,1.09,5.27,1.39,7.28h0.18
-        c0.21-1.44,0.67-3.85,1.39-7.24l2.56-11.6h6.16L83.7,36.61v12.23h-6.11V36.61z"
-                className="style-scope ytd-topbar-logo-renderer"
-              ></path>
-              <path
-                fill="#282828"
-                d="M126.45,21.28v27.55h-4.85l-0.54-3.37h-0.13c-1.32,2.55-3.3,3.82-5.93,3.82c-1.83,0-3.18-0.6-4.05-1.8
-        c-0.87-1.2-1.3-3.07-1.3-5.62V21.28h6.2v20.23c0,1.23,0.13,2.11,0.4,2.63c0.27,0.52,0.72,0.79,1.35,0.79
-        c0.54,0,1.06-0.16,1.55-0.49c0.49-0.33,0.86-0.75,1.1-1.26V21.28H126.45z"
-                className="style-scope ytd-topbar-logo-renderer"
-              ></path>
-              <path
-                fill="#282828"
-                d="M158.27,21.28v27.55h-4.85l-0.54-3.37h-0.13c-1.32,2.55-3.3,3.82-5.93,3.82c-1.83,0-3.18-0.6-4.05-1.8
-        c-0.87-1.2-1.3-3.07-1.3-5.62V21.28h6.2v20.23c0,1.23,0.13,2.11,0.4,2.63c0.27,0.52,0.72,0.79,1.35,0.79
-        c0.54,0,1.06-0.16,1.55-0.49c0.49-0.33,0.86-0.75,1.1-1.26V21.28H158.27z"
-                className="style-scope ytd-topbar-logo-renderer"
-              ></path>
-              <path
-                fill="#282828"
-                d="M143.31,16.11h-6.16v32.72h-6.07V16.11h-6.16v-4.99h18.38V16.11z"
-                className="style-scope ytd-topbar-logo-renderer"
-              ></path>
-              <path
-                fill="#282828"
-                d="M178.8,25.69c-0.38-1.74-0.98-3-1.82-3.78c-0.84-0.78-1.99-1.17-3.46-1.17c-1.14,0-2.2,0.32-3.19,0.97
-        c-0.99,0.64-1.75,1.49-2.29,2.54h-0.05l0-14.52h-5.98v39.11h5.12l0.63-2.61h0.13c0.48,0.93,1.2,1.66,2.16,2.2
-        c0.96,0.54,2.02,0.81,3.19,0.81c2.1,0,3.64-0.97,4.63-2.9c0.99-1.93,1.48-4.95,1.48-9.06v-4.36
-        C179.36,29.84,179.17,27.43,178.8,25.69z M173.11,36.93c0,2.01-0.08,3.58-0.25,4.72c-0.16,1.14-0.44,1.95-0.83,2.43
-        c-0.39,0.48-0.91,0.72-1.57,0.72c-0.51,0-0.98-0.12-1.42-0.36c-0.43-0.24-0.79-0.6-1.06-1.08V27.71
-        c0.21-0.75,0.57-1.36,1.08-1.84c0.51-0.48,1.06-0.72,1.66-0.72c0.63,0,1.12,0.25,1.46,0.74c0.34,0.49,0.58,1.33,0.72,2.49
-        c0.13,1.17,0.2,2.83,0.2,4.99V36.93z"
-                className="style-scope ytd-topbar-logo-renderer"
-              ></path>
-            </g>
-          </g>
-        </g>
-      </svg>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 1139.43 379.04"
-        className="wordmark-logo grid-start-m-2 grid-span-m-4"
-      >
-        <defs></defs>
-        <g data-name="Layer 2">
-          <g data-name="Layer 1">
-            <path
-              className="wordmark-logo__bg fill-black"
-              d="M1119.44 269.32h-80v-99.75h-20v99.75h-80V20h80v69.78h60l40 39.9zm-199.9-99.75h-80v20h80v79.8H799.6l-40-39.9v-99.79l40-39.9h119.94zm-179.91 0h-70v20h70v79.8H629.69l-40-39.9V20h80v69.78h70zM569.72 69.83h-80V20h80zm0 199.49h-80V89.78h80zm-100 0H229.89l-40-39.9V89.78h80v99.74h20V89.78h80v99.74h20V89.78h80zm-299.8-99.75H100v20h70v79.8H60l-40-39.9V20h80v69.78h70zm919.54-99.74h-50V0H929.75l-50.47 69.83h-89.67l-30 29.92V69.83h-70V0H469.77v69.83H160.42L110 0H0v239.4L139.93 379h139.93v-39.9l40 39.9h269.85v-39.9l40 39.9h129.91v-39.9l40 39.9h249.88l90-89.78V119.7z"
-              fill="#9145ff"
-            ></path>
-            <path
-              className="wordmark-logo__text fill-white"
-              d="M939.53 269.32h79.96v-99.75h19.99v99.75h79.96V129.68l-39.98-39.9h-59.97V19.96h-79.96v249.36zM589.71 229.42l39.97 39.9h109.95v-79.8h-69.96v-19.95h69.96V89.78h-69.96V19.96h-79.96v209.46zM759.62 229.42l39.98 39.9h119.94v-79.8h-79.96v-19.95h79.96V89.78H799.6l-39.98 39.9v99.74zM489.76 19.96h79.96v49.87h-79.96zM169.92 89.78H99.95V19.96H19.99v209.46l39.98 39.9h109.95v-79.8H99.95v-19.95h69.97V89.78zM189.91 229.42l39.97 39.9h239.89V89.78h-79.96v99.74h-20V89.78h-79.95v99.74h-19.99V89.78h-79.96v139.64zM489.76 89.78h79.96v179.54h-79.96z"
-              fill="#FFF"
-            ></path>
-          </g>
-        </g>
-      </svg>
-      <img src={dropbox} />
-      <img src={soundcloud} />
-      <svg viewBox="0 0 109 31">
-        <path
-          d="M88.24 23.443a11.978 11.978 0 01-.054-.678c-.184-3.124.947-5.995 3.394-8.61 2.627-2.905 5.929-4.358 9.908-4.358 2.553 0 4.487.855 5.801 2.561 1.242 1.563 1.807 3.578 1.698 6.047-.147 3.342-1.387 6.23-3.723 8.663-2.335 2.434-5.237 3.65-8.704 3.65-2.882 0-5.072-.926-6.568-2.78a7.757 7.757 0 01-.871-1.372 34.1 34.1 0 01-1.235.727c-3.868 2.217-7.792 3.323-11.769 3.323-2.956 0-5.074-.982-6.35-2.945a7.353 7.353 0 01-.266-.422 21.55 21.55 0 01-.117.103c-2.446 2.108-4.89 3.162-7.335 3.162-2.374 0-3.522-1.307-3.45-3.926.036-1.164.265-2.562.684-4.198.42-1.636.648-2.909.685-3.818.037-1.38-.384-2.073-1.264-2.073-.952 0-2.086 1.13-3.404 3.384-1.392 2.365-2.144 4.656-2.252 6.874-.074 1.566.08 2.767.46 3.603-2.546.073-4.33-.346-5.348-1.256-.911-.8-1.33-2.126-1.255-3.983a14.67 14.67 0 01.537-3.492c.321-1.164.5-2.2.537-3.11.074-1.347-.42-2.02-1.48-2.02-.915 0-1.902 1.038-2.96 3.111-1.06 2.073-1.645 4.239-1.754 6.494-.073 2.037.058 3.455.392 4.256-2.505.073-4.284-.454-5.337-1.58-.48-.518-.817-1.185-1.01-2.002-.205.194-.415.386-.631.574-2.446 2.108-4.89 3.162-7.335 3.162-1.133 0-2-.363-2.601-1.09-.602-.728-.885-1.672-.848-2.836.035-1.199.41-3.053 1.121-5.562.712-2.508 1.069-3.854 1.069-4.036 0-.944-.33-1.417-.985-1.417-.207 0-.77.34-1.69 1.016-.693 2.067-2.205 4.595-4.535 7.584-3.315 4.295-6.119 6.443-8.413 6.443-1.42 0-2.624-1.307-3.606-3.924L5.41 19.497c-.73-2.615-1.512-3.924-2.349-3.924-.182 0-.82.383-1.913 1.145L0 15.244a309.082 309.082 0 003.558-3.163c1.604-1.383 2.809-2.11 3.612-2.183 1.897-.182 3.065 1.111 3.503 3.88.474 2.986.802 4.844.986 5.57.547 2.479 1.148 3.716 1.806 3.716.51 0 1.276-.803 2.298-2.41 1.021-1.608 1.568-2.831 1.642-3.672.146-1.387-.401-2.082-1.642-2.082-.583 0-1.185.134-1.804.399 1.198-3.914 3.487-5.814 6.866-5.706 2.256.066 3.438 1.387 3.546 3.961L26 12.081c1.57-1.383 2.738-2.11 3.506-2.183 1.203-.109 2.088.244 2.654 1.06.564.816.774 1.875.63 3.18-.475 2.212-.987 5.02-1.534 8.425-.037 1.56.53 2.338 1.697 2.338.51 0 1.422-.537 2.737-1.615l.049-.04c.083-.76.218-1.662.405-2.708.3-1.687.468-3 .504-3.945.072-.652-.093-.979-.493-.979-.22 0-.84.369-1.862 1.104l-1.314-1.473c.183-.144 1.331-1.2 3.45-3.164 1.532-1.418 2.572-2.145 3.119-2.182.949-.073 1.715.318 2.299 1.172.584.855.876 1.847.876 2.974 0 .364-.036.71-.108 1.037a10.044 10.044 0 011.916-2.183c1.678-1.455 3.558-2.274 5.638-2.456 1.788-.145 3.064.273 3.833 1.255.619.8.91 1.947.875 3.438a73.7 73.7 0 00.822-.71c.838-.982 1.659-1.763 2.462-2.345 1.35-.982 2.756-1.528 4.215-1.638 1.752-.145 3.01.271 3.777 1.25.656.798.949 1.94.877 3.424-.037 1.015-.284 2.492-.74 4.431-.457 1.94-.684 3.052-.684 3.342-.037.763.037 1.287.22 1.577.181.29.618.434 1.313.434.311 0 .773-.2 1.385-.602a9.877 9.877 0 01-.072-1.43c.035-2.945 1.35-5.745 3.942-8.401 2.845-2.909 6.203-4.365 10.072-4.365 3.576 0 5.474 1.453 5.693 4.355.145 1.85-.877 3.755-3.065 5.715-2.337 2.142-5.276 3.502-8.815 4.082.656.908 1.641 1.36 2.956 1.36 2.627 0 5.492-.664 8.596-1.997.138-.058.274-.117.408-.175zm14.56-5.244c.038-.984-.1-1.886-.41-2.706-.31-.82-.758-1.23-1.341-1.23-1.862 0-3.395 1.002-4.597 3.007-1.024 1.64-1.571 3.39-1.643 5.247-.037.912.128 1.714.492 2.406.4.803.966 1.203 1.697 1.203 1.642 0 3.048-.965 4.216-2.898.985-1.604 1.513-3.28 1.587-5.029zm-21.1-1.834c.035-.976-.365-1.465-1.203-1.465-1.094 0-2.204.751-3.334 2.253-1.13 1.502-1.713 2.94-1.748 4.315-.021 0-.021.236 0 .706a12.322 12.322 0 004.645-2.985c1.056-1.157 1.603-2.1 1.64-2.824zM34.651 2.714c-.036.906-.492 1.775-1.369 2.607-.985.941-2.153 1.412-3.503 1.412-2.08 0-3.084-.905-3.011-2.715.035-.94.592-1.846 1.669-2.715C29.513.435 30.708 0 32.023 0c.766 0 1.405.3 1.917.896.51.598.747 1.204.711 1.818z"
-          fill="#1A2E3A"
-          fillRule="evenodd"
-        ></path>
-      </svg>
-      <img src={streamable} />
-      <div className="landing-card">
-        <i className="material-icons">ondemand_video</i>{" "}
-        <div>
-          <p>
-            This is a platform to organize, analyze and share streaming content.
-          </p>
-          <p>
-            We enable you to use streams from several streaming platforms and
-            let you disect them into sequences.
-          </p>
-          {/* <p>
-            Create playlists with videos as well as sequences and share your
-            content with your firends, audience or use it for work.
-          </p> */}
-        </div>
-        <div>
-          <label>
-            Watch Intro Video
-            <i className="material-icons">open_in_new</i>
-          </label>
-          <Link to="/auth/signup">Signup</Link>
 
+const platforms = {
+  youtube: require("../assets/youtube.svg"),
+  soundcloud: require("../assets/soundcloud.png"),
+  twitch: require("../assets/twitch.svg"),
+  dropbox: require("../assets/dropbox.png"),
+  vimeo: require("../assets/vimeo.svg"),
+  streamable: require("../assets/streamable.png"),
+  wistia: require("../assets/wistia.svg"),
+  dailymotion: require("../assets/dailymotion.svg"),
+  vidyard: require("../assets/vidyard.svg")
+};
+
+export const Landing = () => {
+  const [auth] = useGlobalState(AUTH);
+
+  return (
+    <div className="landing gap-l">
+      <header className="centered-grid grid-tc-1mm gap-l pd-01">
+        <h2 className="js-s">Viden</h2>
+        <nav className="centered-grid grid-ac-m grid-af-c gap-l">
+          <a>How it works</a>
+          <a>Use cases</a>
+          <a>Pricing</a>
+        </nav>
+        {auth ? (
+          <Link to="/dashboard">Dashboard</Link>
+        ) : (
           <Link to="/auth/login">Login</Link>
+        )}
+      </header>
+      <section>
+        <h4>
+          Viden is an online platform to manage streaming videos from multiple
+          sources, disect them into sequences, create playlists and share
+          content.
+        </h4>
+        <div>
+          <ul>
+            {Object.keys(platforms).map((key) => (
+              <li key={key}>
+                <img src={platforms[key]} alt={key} height="30px" />
+              </li>
+            ))}
+            <li>... HLS and DASH are also supported.</li>
+          </ul>
         </div>
-      </div>
+      </section>
+      <section className="how-to-section">
+        <h4>How it works?</h4>
+        <p>
+          <label>1</label>
+          <span>
+            Copy a video link from YouTube, Twitch, Dropbox and others.
+            <br />! No video is saved on this platform. We only save a reference
+            to videos via url and interact with the sources provided player!
+          </span>
+        </p>
+        <p>
+          <label>2</label>
+          <span>
+            Go to your Viden dashboard and save the link into your directory.
+          </span>
+        </p>
+        <p>
+          <label>3</label>
+          <span>
+            You can create folders and organize your videos, playlists and
+            sequences. We provide an easy to use, drag & drop UI with a standard
+            folder system.
+          </span>
+        </p>
+        <p>
+          <label>4</label>
+          <span>
+            Creating playlists is as easy as dropping videos onto the playlist
+            panel. Once saved you can share (if enabled) your playlists as well
+            as videos via link online.
+          </span>
+        </p>
+        <p>
+          <label>5</label>
+          <span>
+            One of the main functionalities of Viden is to disect and tag
+            sequences. You can set a start and stop tag on every video as well
+            as a comment. Sequences can be shared and used in playlists, just
+            like any video.
+          </span>
+        </p>
+        <div></div>
+      </section>
+      <section className="use-cases-section">
+        <h4>Use Cases</h4>
+        <div>
+          <p>
+            <h5>Tutorials and instructions:</h5>
+            <span>
+              Create playlists with videos and sequences for any step-by-step
+              tutorial. Cooking videos, how-to guides or educational playlists
+              can easily be created and shared online. We also enable an embed
+              functionality for anything you have created on Viden.
+            </span>
+          </p>
+          <p>
+            <h5>Music:</h5>
+            <span>
+              Create music playlists with videos from multiple platforms for
+              personal use or to share online. In case you want to add certain
+              songs from a concert or a set, you can simply disect it as a
+              sequence and use it in your playlist.
+            </span>
+          </p>
+          <p>
+            <h5>(e)Sports:</h5>
+            <span>
+              Viden provides a simple to use solution for time based video
+              analysis at very low cost. Tag sequences, create playlists and
+              highlights for your analysis and share them with your staff or
+              players. Live-streams can be used just like any other video!
+            </span>
+          </p>
+          <p>
+            <h5>Media:</h5>
+            <span>
+              Collaborate with your team and use Viden to easily share video
+              content back and forth. In the future we hope to integrate a
+              collborative team functionality, which enables teams and
+              enterprises to enhance their communication and content creation.
+            </span>
+          </p>
+          <p>
+            <h5>Social:</h5>
+            <span>
+              Want to share a small snippet of a video with your friends or a
+              playlists with funny moments or simply organize your favorite
+              online video content? Videns ultimate goal is it to manage, create
+              and share streaming content as easily and user friendly as
+              possible.
+            </span>
+          </p>
+        </div>
+        <div></div>
+      </section>
+      <section className="pricing-section">
+        <h4>Pricing</h4>
+        <p>
+          Viden is run on cutting edge cloud technology in order to keep prices
+          low, while maintaining high levels of performance and availability. We
+          want to create a sustainable and effective workplace as well as
+          service to our users. Therefore we are trying to have a good balance
+          of utility- and value based pricing.
+        </p>
+        <div>
+          <div>
+            <h5>
+              <i className="material-icons">person</i>Private
+            </h5>
+            <div>
+              <p>Default setting when signing up.</p>
+              <p>Full access to all basic functionalities.</p>
+              <p>No functionality to share your content.</p>
+            </div>
+            <span>Free</span>
+          </div>
+
+          <div>
+            <h5>
+              <i className="material-icons">share</i>Social
+            </h5>
+            <div>
+              <p>Full access to all basic functionalities.</p>
+              <p>
+                Content (videos, sequences, playlists) is sharable online via
+                link.
+              </p>
+              <p>Content can be embedded on your website.</p>
+            </div>
+            <span>1€ / month</span>
+          </div>
+
+          <div>
+            <h5>
+              <i className="material-icons">people</i>Team/Enterprise
+            </h5>
+            <div>
+              <p>Full access to all basic functionalities.</p>
+              <p>
+                Content (videos, sequences, playlists) is sharable online via
+                link.
+              </p>
+              <p>Content can be embedded on your website.</p>
+              <p>Privately share and edit content within your team.</p>
+              <p>Commenting functonality on all your content.</p>
+            </div>
+            <span>Coming soon</span>
+          </div>
+        </div>
+      </section>
+      <footer></footer>
     </div>
   );
 };

@@ -31,19 +31,17 @@ export const Dashboard = ({ history: { push } }) => {
     getUserData();
   }, []);
 
-  return (
+  return initialized ? (
     <div className="dashboard grid grid-tr-m1 grid-tc-m1m bg-grey-light gap-s overflow-h">
-      {initialized ? (
-        <>
-          <Header push={push} />
-          <Menu />
-          <Directory />
-          <Playlist />
-          <Hint />
-        </>
-      ) : (
-        <div className="centered-grid">Loading User Data...</div>
-      )}
+      <Header push={push} />
+      <Menu />
+      <Directory />
+      <Playlist />
+      <Hint />
+    </div>
+  ) : (
+    <div className="centered-grid">
+      <b>Loading User Data...</b>
     </div>
   );
 };

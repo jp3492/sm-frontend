@@ -136,6 +136,10 @@ i {
 	background-color: var(--cl-grey-light);
 }
 
+.cl-white {
+	color: white;
+}
+
 .bg-white {
 	background-color: white;
 }
@@ -159,6 +163,14 @@ i {
 .grid {
   display: grid;
 }
+.grid-af-c {
+	grid-auto-flow: column;
+}
+
+.js-s {
+	justify-self: start;
+}
+
 .centered-grid {
 	display: grid;
   place-items: center;
@@ -172,6 +184,16 @@ i {
 	place-items: stretch;
 }
 
+.grid-ac-m {
+	grid-auto-columns: max-content;
+}
+.grid-ac-1 {
+	grid-auto-columns: 1fr;
+}
+
+.grid-tc-mm {
+	grid-template-columns: max-content max-content;
+}
 .grid-tc-1m {
 	grid-template-columns: 1fr max-content;
 }
@@ -207,6 +229,9 @@ i {
 }
 .grid-tr-m1mm {
 	grid-template-rows: max-content 1fr max-content max-content;
+}
+.grid-tc-mm11m {
+	grid-template-columns: max-content max-content 1fr 1fr max-content;
 }
 
 .gap-xs {
@@ -290,4 +315,15 @@ i {
 }
 .z2 {
 	z-index: 2;
+}
+
+.opacity-0 {
+	opacity: 0;
+}
+
+.error {
+	font-size: small;
+	color: var(--cl-red);
+	font-weight: 500;
+	padding-left: 0.5em;
 }

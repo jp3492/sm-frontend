@@ -26,12 +26,19 @@
     }
     > ul > li {
       border-bottom: 1px solid var(--cl-grey-light);
+      transition: border 0.1s ease;
       &.active {
         background-color: var(--cl-grey-light);
       }
       &.no-items {
         height: 100%;
         text-align: center;
+      }
+      &.drop-before {
+        border-top: 30px solid var(--cl-grey-light);
+      }
+      &.drop-after {
+        border-bottom: 30px solid var(--cl-grey-light);
       }
     }
   }

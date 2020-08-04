@@ -20,7 +20,9 @@ export const PlaylistViewer = (props: any) => {
 
   const { videos, sequences } = props;
 
-  const handleReady = () => setPlayerReady(true);
+  const handleReady = () => {
+    setPlayerReady(true);
+  };
 
   const items = useMemo(() => {
     return props.playlist.items
@@ -55,13 +57,15 @@ export const PlaylistViewer = (props: any) => {
         setPlayerReady(false);
         setUrl(currentItem.url);
       } else if (playerReady) {
+        console.log("Seeking");
+
         const to =
           currentItem.type === DIRECTORY_TYPES.SEQUENCE ? currentItem.start : 0;
-        player.current.seekTo(to, "seconds");
+        // player.current.seekTo(to, "seconds");
         setPlaying(true);
       }
     }
-  }, [playerReady, currentItem, setPlaying, counter]);
+  }, [playerReady, currentItem, counter]);
 
   const playNext = () => {
     const currentIndex = items.findIndex((i) => i.id === currentItem.id);
@@ -75,8 +79,9 @@ export const PlaylistViewer = (props: any) => {
 
   const handleEnd = () => playNext();
 
-  const handleProgress = ({ playedSeconds }) =>
+  const handleProgress = ({ playedSeconds }) => {
     currentItem.stop && playedSeconds >= currentItem.stop && playNext();
+  };
 
   const handleSelect = (e) => {
     setCounter(counter + 1);

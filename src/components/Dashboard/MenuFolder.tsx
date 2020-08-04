@@ -13,6 +13,7 @@ import { MODAL } from "../Modal";
 import { VIDEOS } from "../../stores/videos";
 import { PLAYLISTS } from "../../stores/playlists";
 import { SEQUENCES } from "../../stores/sequences";
+import { MenuFolderCount } from "./MenuFolderCount";
 
 const handleDragStart = (e) => {
   const folderId = e.target.closest(".folder").id;
@@ -92,12 +93,12 @@ export const MenuFolder = ({
             keyboard_arrow_right
           </i>
         ) : (
-          <i className="material-icons no_child_folder centered-grid">
+          <i className="material-icons no_child_folder centered-grid opacity-0">
             keyboard_arrow_right
           </i>
         )}
         <label>{label}</label>
-        <small>({count})</small>
+        <MenuFolderCount type={directory} folderId={id} />
         <i onClick={handleEdit} className="material-icons">
           more_vert
         </i>

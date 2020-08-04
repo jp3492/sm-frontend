@@ -45,7 +45,7 @@ export const DirectoryItem = ({
       data-selected={selected ? "selected" : ""}
       className={`${DIRECTORY_TYPES[type]} directory_item grid pd-051 gap-l`}
     >
-      <div className="directory_item-header aligned-grid grid-tc-m1 cgap-m">
+      <div className="directory_item-header aligned-grid grid-tc-1m cgap-m">
         <h4>{label}</h4>
         <ul className="directory_item-keywords aligned-grid cgap-s">
           {type !== DIRECTORY_TYPES.SEQUENCE && (
