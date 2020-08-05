@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./Viewer.scss";
 
 import { PlaylistViewer } from "../components/Viewer/PlaylistViewer";
-import { VideoViewer } from "../components/Viewer/VideoViewer";
 import { SequenceViewer } from "../components/Viewer/SequenceViewer";
 import { request } from "../utils/request";
 
@@ -17,9 +16,6 @@ export const Viewer = ({
     if (type === "playlist") {
       const playlist = await getPlaylist(id);
       setItem(playlist);
-    } else if (type === "video") {
-      const video = await getVideo(id);
-      setItem(video);
     } else {
       const sequence = await getSequence(id);
       setItem(sequence);
@@ -34,18 +30,12 @@ export const Viewer = ({
     }
   }, [type, id]);
 
-  useEffect(() => {
-    console.log(item);
-  }, [item]);
-
   return (
     <div className="viewer grid overflow-h">
       {!item ? (
         <div className="centered-grid bg-grey-dark">Loading...</div>
       ) : type === "playlist" ? (
         <PlaylistViewer {...item} />
-      ) : type === "video" ? (
-        <VideoViewer video={item} />
       ) : (
         <SequenceViewer sequence={item} />
       )}
@@ -66,16 +56,7 @@ const getPlaylist = async (id) => {
     return error;
   }
 };
-const getVideo = async (id) => {
-  try {
-    const res = await request("viewer", "/video/" + id);
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-};
+
 const getSequence = async (id) => {
   try {
     const res = await request("viewer", "/sequence/" + id);

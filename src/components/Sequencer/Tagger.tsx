@@ -1,9 +1,4 @@
 import React, { useEffect } from "react";
-import {
-  useGlobalState,
-  getGlobalState,
-  setGlobalState
-} from "react-global-state-hook";
 import { PLAYER_PROGRESS, SEQUENCER_VIDEO } from "../../views/Sequencer";
 import {
   EDITING_SEQUENCE,
@@ -11,6 +6,7 @@ import {
   postSequence
 } from "../../stores/sequences";
 import { secondsToTime } from "../../utils/secondsToTime";
+import { ggs, sgs, usegs } from "../../utils/rxGlobal";
 
 export const TAGGER_ACTIVE_TIME = "TAGGER_ACTIVE_TIME";
 export const TAGGER_START = "TAGGER_START";
@@ -20,10 +16,10 @@ export const TAGGER_FAST_TAG = "TAGGER_QUICK_TAG";
 
 const handleControls = (e) => {
   const event = e.detail;
-  const fastTagging = getGlobalState(TAGGER_FAST_TAG);
+  const fastTagging = ggs(TAGGER_FAST_TAG);
   if (event === "tag") {
-    const activeTime = getGlobalState(TAGGER_ACTIVE_TIME);
-    const start = getGlobalState(TAGGER_START);
+    const activeTime = ggs(TAGGER_ACTIVE_TIME);
+    const start = ggs(TAGGER_START);
 
     if (fastTagging) {
       if (activeTime === "start") {
@@ -36,7 +32,7 @@ const handleControls = (e) => {
     } else {
       if (!activeTime && !start) {
         console.log("starting START");
-        setGlobalState(TAGGER_ACTIVE_TIME, "start");
+        sgs(TAGGER_ACTIVE_TIME, "start");
       } else if (activeTime === "start") {
         console.log("SETTING START");
         setStart();
@@ -49,28 +45,28 @@ const handleControls = (e) => {
       }
     }
   } else if (event === "tagback") {
-    const activeTime = getGlobalState(TAGGER_ACTIVE_TIME);
-    const start = getGlobalState(TAGGER_START);
+    const activeTime = ggs(TAGGER_ACTIVE_TIME);
+    const start = ggs(TAGGER_START);
     // only when start has a value
     if (activeTime === "start") {
       resetTagger();
     } else if (activeTime === "stop") {
-      setGlobalState(TAGGER_ACTIVE_TIME, "start");
+      sgs(TAGGER_ACTIVE_TIME, "start");
     } else if (!activeTime && start) {
-      setGlobalState(TAGGER_ACTIVE_TIME, "stop");
+      sgs(TAGGER_ACTIVE_TIME, "stop");
     }
   } else if (event === "fasttagging") {
-    setGlobalState(TAGGER_FAST_TAG, !fastTagging);
+    sgs(TAGGER_FAST_TAG, !fastTagging);
   } else if (event === "close") {
     resetTagger();
   }
 };
 
 const handleSubmit = (fastTagging?: any) => {
-  const editingSequence = getGlobalState(EDITING_SEQUENCE);
-  const start = getGlobalState(TAGGER_START);
-  const stop = getGlobalState(TAGGER_STOP);
-  const label = getGlobalState(TAGGER_LABEL);
+  const editingSequence = ggs(EDITING_SEQUENCE);
+  const start = ggs(TAGGER_START);
+  const stop = ggs(TAGGER_STOP);
+  const label = ggs(TAGGER_LABEL);
   if (!label) {
     alert("Label required!");
   } else {
@@ -83,7 +79,7 @@ const handleSubmit = (fastTagging?: any) => {
         label
       });
     } else {
-      const { id, url } = getGlobalState(SEQUENCER_VIDEO);
+      const { id, url } = ggs(SEQUENCER_VIDEO);
       postSequence({
         videoId: id,
         start,
@@ -101,10 +97,10 @@ const handleStartClick = (e) => {
 };
 
 const setStart = () => {
-  const { playedSeconds = 0 } = getGlobalState(PLAYER_PROGRESS);
+  const { playedSeconds = 0 } = ggs(PLAYER_PROGRESS);
   const time = Number(playedSeconds.toFixed(2));
-  setGlobalState(TAGGER_START, time);
-  setGlobalState(TAGGER_ACTIVE_TIME, "stop");
+  sgs(TAGGER_START, time);
+  sgs(TAGGER_ACTIVE_TIME, "stop");
 };
 
 const handleStopClick = (e) => {
@@ -113,40 +109,40 @@ const handleStopClick = (e) => {
 };
 
 const setStop = () => {
-  const { playedSeconds } = getGlobalState(PLAYER_PROGRESS);
+  const { playedSeconds } = ggs(PLAYER_PROGRESS);
   const time = Number(playedSeconds.toFixed(2));
-  setGlobalState(TAGGER_STOP, time);
-  setGlobalState(TAGGER_ACTIVE_TIME, undefined);
+  sgs(TAGGER_STOP, time);
+  sgs(TAGGER_ACTIVE_TIME, undefined);
 };
 
 const handleDismiss = () => {
   resetTagger();
-  setGlobalState(EDITING_SEQUENCE, undefined);
+  sgs(EDITING_SEQUENCE, undefined);
 };
 
 const resetTagger = (fastTagging?: boolean) => {
-  setGlobalState(TAGGER_ACTIVE_TIME, "start");
-  setGlobalState(TAGGER_LABEL, "");
+  sgs(TAGGER_ACTIVE_TIME, "start");
+  sgs(TAGGER_LABEL, "");
   if (fastTagging) {
     setStart();
   } else {
-    setGlobalState(TAGGER_START, undefined);
+    sgs(TAGGER_START, undefined);
   }
-  setGlobalState(TAGGER_STOP, undefined);
+  sgs(TAGGER_STOP, undefined);
 };
 
 export const Tagger = () => {
-  const [activeTime, setActiveTime]: any = useGlobalState(
+  const [activeTime, setActiveTime]: any = usegs(
     TAGGER_ACTIVE_TIME,
     "start"
   );
-  const [editingSequence] = useGlobalState(EDITING_SEQUENCE);
+  const [editingSequence] = usegs(EDITING_SEQUENCE);
 
-  const [label, setLabel] = useGlobalState(TAGGER_LABEL, "");
-  const [progress] = useGlobalState(PLAYER_PROGRESS);
+  const [label, setLabel] = usegs(TAGGER_LABEL, "");
+  const [progress] = usegs(PLAYER_PROGRESS);
 
-  const [start, setStart]: any = useGlobalState(TAGGER_START);
-  const [stop, setStop]: any = useGlobalState(TAGGER_STOP);
+  const [start, setStart]: any = usegs(TAGGER_START);
+  const [stop, setStop]: any = usegs(TAGGER_STOP);
 
   useEffect(() => {
     const ta = document.getElementById("tagInput");
@@ -162,8 +158,6 @@ export const Tagger = () => {
 
   useEffect(() => {
     if (editingSequence) {
-      console.log("EDIETING");
-
       setStart(editingSequence.start);
       setStop(editingSequence.stop);
       setLabel(editingSequence.label);

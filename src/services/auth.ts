@@ -1,7 +1,7 @@
 import * as firebase from "firebase/app";
 import "firebase/auth";
 
-import { setGlobalState } from "react-global-state-hook";
+import { sgs } from '../utils/rxGlobal';
 
 export const AUTH = "AUTH";
 
@@ -23,11 +23,11 @@ export const setAuthObserver = () => {
     if (user) {
       user.getIdToken().then(async (idToken) => {
         localStorage.setItem("ID_TOKEN", idToken);
-        setGlobalState(AUTH, true);
+        sgs(AUTH, true);
       });
     } else {
       localStorage.removeItem("ID_TOKEN");
-      setGlobalState(AUTH, false);
+      sgs(AUTH, false);
     }
   });
 };
@@ -55,9 +55,9 @@ export const login = async ({ email, password }) => {
     // @ts-ignore
     const idToken = await firebase.auth().currentUser.getIdToken(false);
     localStorage.setItem("ID_TOKEN", idToken);
-    setGlobalState(AUTH, true);
+    sgs(AUTH, true);
   } catch (error) {
-    setGlobalState(AUTH, false);
+    sgs(AUTH, false);
     throw error;
   }
 };
@@ -66,7 +66,7 @@ export const logout = async () => {
   try {
     await firebase.auth().signOut();
     localStorage.removeItem("ID_TOKEN");
-    setGlobalState(AUTH, false);
+    sgs(AUTH, false);
   } catch (error) {
     console.log(error);
   }

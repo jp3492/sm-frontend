@@ -1,36 +1,45 @@
-import React from "react";
+import React, { useMemo, useCallback } from "react";
 import { SELECTED_SEQUENCES, deleteSequences } from "../../stores/sequences";
-import { useGlobalState, setGlobalState } from "react-global-state-hook";
 import { MODAL } from "../Modal";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { handleShare } from "../Dashboard/Directory";
 import { TAGGER_FAST_TAG } from "./Tagger";
+import { usegs, sgs } from "../../utils/rxGlobal";
 
 export const SequencerActions = () => {
-  const [selectedSequences, setSelectedSequences] = useGlobalState(
+  const [selectedSequences, setSelectedSequences] = usegs(
     SELECTED_SEQUENCES
   );
-  const [quickTag, setQuickTag] = useGlobalState(TAGGER_FAST_TAG);
+  const [quickTag, setQuickTag] = usegs(TAGGER_FAST_TAG);
 
-  const disabled = selectedSequences.length === 0;
+  const disabled = useMemo(() => selectedSequences.length === 0, [
+    selectedSequences
+  ]);
 
-  const handleSave = () =>
-    setGlobalState(MODAL, {
-      component: DIRECTORY_TYPES.PLAYLIST,
-      onClose: () => setSelectedSequences([]),
-      props: {
-        items: selectedSequences.map((s) => `${DIRECTORY_TYPES.SEQUENCE}:${s}`)
-      }
-    });
+  const handleSave = useCallback(
+    () =>
+      sgs(MODAL, {
+        component: DIRECTORY_TYPES.PLAYLIST,
+        onClose: () => setSelectedSequences([]),
+        props: {
+          items: selectedSequences.map(
+            (s) => `${DIRECTORY_TYPES.SEQUENCE}:${s}`
+          )
+        }
+      }),
+    [selectedSequences]
+  );
 
-  const handleRemove = () => {
+  const handleRemove = useCallback(() => {
     // check with backend if its deletable
     deleteSequences(selectedSequences[0]);
     setSelectedSequences(selectedSequences.filter((s, i) => i !== 0));
-  };
+  }, [selectedSequences]);
 
-  const onShare = () =>
-    handleShare(DIRECTORY_TYPES.SEQUENCE, selectedSequences[0]);
+  const onShare = useCallback(
+    () => handleShare(DIRECTORY_TYPES.SEQUENCE, selectedSequences[0]),
+    [selectedSequences]
+  );
 
   return (
     <div className="sequencer_actions stretched-grid grid-ac-1">

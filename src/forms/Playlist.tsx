@@ -4,10 +4,10 @@ import {
   postPlaylist,
   deletePlaylist
 } from "../stores/playlists";
-import { getGlobalState, useGlobalState } from "react-global-state-hook";
 import { FOLDERS, DIRECTORY_TYPES } from "../stores/folder";
 import { VIDEOS } from "../stores/videos";
 import { SEQUENCES } from "../stores/sequences";
+import { ggs, usegs } from "../utils/rxGlobal";
 
 export const Playlist = ({ onSubmit, closeModal, id, ...values }) => {
   const [label, setLabel] = useState(values.label || "");
@@ -15,11 +15,11 @@ export const Playlist = ({ onSubmit, closeModal, id, ...values }) => {
   const [keywords, setKeywords] = useState(values.keywords || []);
   const [keyword, setKeyword] = useState("");
   const [folderName, setFolderName] = useState("");
-  const [videos] = useGlobalState(VIDEOS);
-  const [sequences] = useGlobalState(SEQUENCES);
+  const [videos] = usegs(VIDEOS);
+  const [sequences] = usegs(SEQUENCES);
 
   useEffect(() => {
-    const folders = getGlobalState(FOLDERS);
+    const folders = ggs(FOLDERS);
     const folder = folders.find((f) => f.id === values.folder);
     if (folder) {
       setFolderName(folder.label);

@@ -10,25 +10,25 @@ import { getVideos } from "../stores/videos";
 import { getPlaylists } from "../stores/playlists";
 import { Hint } from "../components/Hint";
 import { getSequences } from "../stores/sequences";
-import { setGlobalState, useGlobalState } from "react-global-state-hook";
+import { sgs, usegs } from "../utils/rxGlobal";
 
 export const INITIALIZED = "INITIALIZED";
 
-const getUserData = async () => {
+const getUserData: any = async () => {
   await Promise.all([
     getFolders(),
     getVideos(),
     getPlaylists(),
     getSequences()
   ]);
-  setGlobalState(INITIALIZED, true);
+  sgs(INITIALIZED, true);
 };
 
 export const Dashboard = ({ history: { push } }) => {
-  const [initialized] = useGlobalState(INITIALIZED, false);
+  const [initialized] = usegs(INITIALIZED, false);
 
   useEffect(() => {
-    getUserData();
+    getUserData()
   }, []);
 
   return initialized ? (

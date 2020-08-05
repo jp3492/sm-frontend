@@ -1,14 +1,13 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo
+} from "react";
 import ReactPlayer from "react-player";
-import { setGlobalState } from "react-global-state-hook";
-import { MODAL } from "../Modal";
 
-// Simple player with:
-// loop button
-// play/pause
-// seekToSlider?
-// share button
-// save button when logged in
+import { platforms } from "../../views/Landing";
 
 export const SequenceViewer = ({ sequence }) => {
   const [playing, setPlaying] = useState(false);
@@ -17,34 +16,67 @@ export const SequenceViewer = ({ sequence }) => {
   const player: any = useRef();
   const ref = (p) => (player.current = p);
 
-  const handleReady = () => setPlayerReady(true);
+  const handleReady = useCallback(() => setPlayerReady(true), []);
 
   useEffect(() => {
     if (playerReady) {
       player.current.seekTo(sequence.start, "seconds");
-      setPlaying(true);
     }
   }, [playerReady]);
 
-  const handleReplay = () => {
+  const handleReplay = useCallback(() => {
     player.current.seekTo(sequence.start, "seconds");
     setPlaying(true);
-  };
+  }, [sequence]);
 
-  const handleProgress = ({ playedSeconds }) => {
-    if (sequence.stop && playedSeconds >= sequence.stop) {
-      setPlaying(false);
-      setGlobalState(MODAL, {
-        component: "replay",
-        props: {
-          onReplay: handleReplay
-        }
-      });
-    }
-  };
+  const handleProgress = useCallback(
+    ({ playedSeconds }) => {
+      if (sequence.stop && playedSeconds >= sequence.stop) {
+        setPlaying(false);
+      }
+    },
+    [sequence]
+  );
+
+  const handlePlay = useCallback(() => {
+    if (playerReady) setPlaying(true);
+  }, [playerReady]);
+
+  const handlePause = useCallback(() => setPlaying(false), []);
+
+  const platform = useMemo(() => platforms[sequence.url.split(".")[1]], [
+    sequence
+  ]);
 
   return (
     <div className="sequence_viewer">
+      {!playing && (
+        <div className="info">
+          <div>
+            <div>
+              <img src={platform} height="20px" alt="platform" />
+              <h5>{sequence.videoLabel}</h5>
+            </div>
+            <p>"{sequence.label}"</p>
+            {playerReady && (
+              <button onClick={handleReplay}>
+                <i className="material-icons">replay</i>
+                Replay
+              </button>
+            )}
+            <button onClick={handlePlay}>
+              {!playerReady ? (
+                "Loading..."
+              ) : (
+                <>
+                  <i className="material-icons">play_arrow</i>
+                  Play
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      )}
       <ReactPlayer
         className={"player_viewer"}
         height="100%"
@@ -52,6 +84,7 @@ export const SequenceViewer = ({ sequence }) => {
         playing={playing}
         ref={ref}
         url={sequence.url}
+        onPause={handlePause}
         onReady={handleReady}
         onProgress={handleProgress}
       />

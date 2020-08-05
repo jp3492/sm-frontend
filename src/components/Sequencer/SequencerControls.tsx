@@ -1,23 +1,19 @@
 import React, { useEffect } from "react";
-import {
-  useGlobalState,
-  setGlobalState,
-  getGlobalState
-} from "react-global-state-hook";
 import { SEQUENCER_PLAYER_PLAYING, SEQUENCER_PLAYER } from "./SequencerVideo";
 import { PLAYER_PROGRESS } from "../../views/Sequencer";
+import { sgs, ggs, usegs } from "../../utils/rxGlobal";
 
 const handleControls = (e) => {
   const event = e.detail;
   if (event === "play") {
-    setGlobalState(
+    sgs(
       SEQUENCER_PLAYER_PLAYING,
-      !getGlobalState(SEQUENCER_PLAYER_PLAYING)
+      !ggs(SEQUENCER_PLAYER_PLAYING)
     );
   } else if (event === "forward" || event === "rewind") {
-    const { player } = getGlobalState(SEQUENCER_PLAYER);
+    const { player } = ggs(SEQUENCER_PLAYER);
     if (player) {
-      const progress = getGlobalState(PLAYER_PROGRESS);
+      const progress = ggs(PLAYER_PROGRESS);
       const to =
         event === "forward"
           ? progress.playedSeconds + 5
@@ -28,7 +24,7 @@ const handleControls = (e) => {
 };
 
 export const SequencerControls = () => {
-  const [playing] = useGlobalState(SEQUENCER_PLAYER_PLAYING);
+  const [playing] = usegs(SEQUENCER_PLAYER_PLAYING);
 
   useEffect(() => {
     document.addEventListener("controls", handleControls);

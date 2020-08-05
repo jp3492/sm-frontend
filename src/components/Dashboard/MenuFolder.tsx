@@ -1,10 +1,5 @@
 import React, { useMemo } from "react";
 import {
-  useGlobalState,
-  setGlobalState,
-  getGlobalState
-} from "react-global-state-hook";
-import {
   OPEN_FOLDERS,
   DIRECTORY_TYPES,
   SELECTED_DIRECTORY
@@ -14,6 +9,7 @@ import { VIDEOS } from "../../stores/videos";
 import { PLAYLISTS } from "../../stores/playlists";
 import { SEQUENCES } from "../../stores/sequences";
 import { MenuFolderCount } from "./MenuFolderCount";
+import { usegs, sgs, ggs } from "../../utils/rxGlobal";
 
 const handleDragStart = (e) => {
   const folderId = e.target.closest(".folder").id;
@@ -27,12 +23,12 @@ const handleDragStart = (e) => {
 
 const getItemsCount = (directory, folderId) => {
   if (directory === DIRECTORY_TYPES.VIDEO) {
-    return getGlobalState(VIDEOS).filter((v) => v.folder === folderId).length;
+    return ggs(VIDEOS).filter((v) => v.folder === folderId).length;
   } else if (directory === DIRECTORY_TYPES.PLAYLIST) {
-    return getGlobalState(PLAYLISTS).filter((p) => p.folder === folderId)
+    return ggs(PLAYLISTS).filter((p) => p.folder === folderId)
       .length;
   } else {
-    return getGlobalState(SEQUENCES).filter((s) => s.folder === folderId)
+    return ggs(SEQUENCES).filter((s) => s.folder === folderId)
       .length;
   }
 };
@@ -47,11 +43,11 @@ export const MenuFolder = ({
   handleSelectFolder,
   handleDrop
 }) => {
-  const [openFolders] = useGlobalState(OPEN_FOLDERS);
-  const [selectedFolder] = useGlobalState(
+  const [openFolders] = usegs(OPEN_FOLDERS);
+  const [selectedFolder] = usegs(
     `SELECTED_FOLDER_${DIRECTORY_TYPES[directory]}`
   );
-  const [selectedDirectory] = useGlobalState(SELECTED_DIRECTORY);
+  const [selectedDirectory] = usegs(SELECTED_DIRECTORY);
 
   const childFolders = folders.filter((f) => f.folder === id);
 
@@ -59,7 +55,7 @@ export const MenuFolder = ({
   const selected = selectedFolder === id && directory === selectedDirectory;
 
   const handleEdit = () => {
-    setGlobalState(MODAL, {
+    sgs(MODAL, {
       component: "folder",
       props: { id, label, folder, directory }
     });
@@ -68,10 +64,8 @@ export const MenuFolder = ({
   const handleSelect = (e) => {
     e.stopPropagation();
     handleSelectFolder(id, directory);
-    setGlobalState(SELECTED_DIRECTORY, DIRECTORY_TYPES[directory]);
+    sgs(SELECTED_DIRECTORY, DIRECTORY_TYPES[directory]);
   };
-
-  const count = useMemo(() => getItemsCount(directory, id), [directory, id]);
 
   return (
     <div

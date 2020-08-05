@@ -6,19 +6,19 @@ import {
   FOLDERS,
   DIRECTORY_TYPES
 } from "../stores/folder";
-import { getGlobalState, useGlobalState } from "react-global-state-hook";
+import { usegs, ggs } from "../utils/rxGlobal";
 
 export const Folder = ({ onSubmit, closeModal, id, directory, ...values }) => {
-  const [folders] = useGlobalState(FOLDERS);
+  const [folders] = usegs(FOLDERS);
   const [folder] = useState(
     id
       ? values.folder
-      : getGlobalState(`SELECTED_FOLDER_${DIRECTORY_TYPES[directory]}`)
+      : ggs(`SELECTED_FOLDER_${DIRECTORY_TYPES[directory]}`)
   );
   const [label, setLabel] = useState(values.label || "");
 
   const deletable = useMemo(() => {
-    const usedFolderIds = getGlobalState(
+    const usedFolderIds = ggs(
       DIRECTORY_TYPES[directory] + "S"
     ).reduce((prev, curr) => {
       return Array.from(new Set([...prev, curr.folder]));

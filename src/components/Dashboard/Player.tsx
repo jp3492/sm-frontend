@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import "./Player.scss";
-import {
-  useGlobalState,
-  setGlobalState,
-  getGlobalState
-} from "react-global-state-hook";
 import ReactPlayer from "react-player";
 import { PLAYLIST_ITEMS } from "../../stores/playlist_items";
 import { DIRECTORY_TYPES } from "../../stores/folder";
+import { sgs, ggs, usegs, ugs } from "../../utils/rxGlobal";
 
 export const PLAYER = "PLAYER";
 export const PLAYER_POSITION = "PLAYER_POSITION";
@@ -15,7 +11,7 @@ export const PLAYER_PLAYING = "PLAYER_PLAYING";
 export const PLAYER_POSITION_CLICK_COUNT = "PLAYER_POSITION_CLICK_COUNT";
 export const PLAYER_ITEM = "PLAYER_ITEM";
 
-setGlobalState(PLAYER_PLAYING, false);
+sgs(PLAYER_PLAYING, false);
 
 const onPlayerEnd = (id) => {
   const event = new CustomEvent("playerdone", {
@@ -26,32 +22,24 @@ const onPlayerEnd = (id) => {
   document.dispatchEvent(event);
 };
 
-export const togglePlay = () => {
-  const playing = getGlobalState(PLAYER_PLAYING);
-  setGlobalState(PLAYER_PLAYING, !playing);
-};
+export const togglePlay = () => ugs(PLAYER_PLAYING, playing => !playing);
 
-// when clicked on a video, the player needs to change urls if neccessary
-// if correct url is used, player.seekTo(0)
-
-// when a sequence is clicked, the player need to change urls if neccessary
-// if correct url is used, player.seekTo(start)
 let PLAYER_COUNT = 0;
 
 export const openPlayer = (e) => {
   PLAYER_COUNT++;
-  const items = getGlobalState(PLAYLIST_ITEMS);
+  const items = ggs(PLAYLIST_ITEMS);
 
   const item = items.find(
     (i) => i.id === (typeof e == "string" ? e : e.target.closest("li").id)
   );
-  setGlobalState(PLAYER_ITEM, { ...item, count: PLAYER_COUNT });
+  sgs(PLAYER_ITEM, { ...item, count: PLAYER_COUNT });
 };
 
 export const Player = () => {
-  const [item, setItem] = useGlobalState(PLAYER_ITEM);
+  const [item, setItem] = usegs(PLAYER_ITEM);
 
-  const [playing, setPlaying] = useGlobalState(PLAYER_PLAYING);
+  const [playing, setPlaying] = usegs(PLAYER_PLAYING);
   const [playerReady, setPlayerReady] = useState(false);
 
   const [maximized, setMaximized] = useState(false);
@@ -108,8 +96,6 @@ export const Player = () => {
   const handleResize = () => {
     setMaximized(!maximized);
   };
-
-  console.log(playing);
 
   return (
     <div

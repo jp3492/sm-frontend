@@ -1,8 +1,12 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  useCallback
+} from "react";
 import ReactPlayer from "react-player";
 import { DIRECTORY_TYPES } from "../../stores/folder";
-
-// Like List in Dashboard
 
 export const PlaylistViewer = (props: any) => {
   const [search, setSearch] = useState("");
@@ -20,26 +24,33 @@ export const PlaylistViewer = (props: any) => {
 
   const { videos, sequences, playlist } = props;
 
-  const handleReady = () => {
+  const handleReady = useCallback(() => {
     setPlayerReady(true);
-  };
+  }, []);
 
-  const items = useMemo(
-    () =>
-      playlist.items
-        .map((i) => ({
-          type: i.split(":")[0],
-          id: i.split(":")[1]
-        }))
-        .map(({ id, type }) => {
-          if (type === DIRECTORY_TYPES.VIDEO) {
-            return { ...videos.find((v) => v.id === id), type };
-          } else if (type === DIRECTORY_TYPES.SEQUENCE) {
-            return { ...sequences.find((s) => s.id === id), type };
-          }
-        }),
-    [playlist]
-  );
+  const items = useMemo(() => {
+    return playlist.items
+      .map((i) => ({
+        type: i.split(":")[0],
+        id: i.split(":")[1]
+      }))
+      .map(({ id, type }) => {
+        if (type === DIRECTORY_TYPES.VIDEO) {
+          return { ...videos.find((v) => v.id === id), type };
+        } else if (type === DIRECTORY_TYPES.SEQUENCE) {
+          return { ...sequences.find((s) => s.id === id), type };
+        }
+      });
+  }, [playlist]);
+
+  const searchedItems = useMemo(() => {
+    if (!search) {
+      return items;
+    }
+    return items.filter((i) =>
+      i.label.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [items, search]);
 
   const currentItem = useMemo(() => items.find((i) => i.id === activeItemId), [
     items,
@@ -65,9 +76,9 @@ export const PlaylistViewer = (props: any) => {
         setPlaying(true);
       }
     }
-  }, [playerReady, currentItem]);
+  }, [playerReady, currentItem, counter]);
 
-  const playNext = () => {
+  const playNext = useCallback(() => {
     const currentIndex = items.findIndex((i) => i.id === currentItem.id);
     if (currentIndex === items.length - 1) {
       setPlaying(false);
@@ -75,18 +86,24 @@ export const PlaylistViewer = (props: any) => {
       const newItem = items.find((it, i) => i === currentIndex + 1);
       setActiveItemId(newItem.id);
     }
-  };
+  }, [items, currentItem]);
 
-  const handleEnd = () => playNext();
+  const handleEnd = useCallback(() => playNext(), []);
 
-  const handleProgress = ({ playedSeconds }) => {
-    currentItem.stop && playedSeconds >= currentItem.stop && playNext();
-  };
+  const handleProgress = useCallback(
+    ({ playedSeconds }) => {
+      if (currentItem.stop && playedSeconds >= currentItem.stop) playNext();
+    },
+    [currentItem]
+  );
 
-  const handleSelect = (e) => {
-    setCounter(counter + 1);
-    setActiveItemId(e.target.id);
-  };
+  const handleSelect = useCallback(
+    (e) => {
+      setCounter(counter + 1);
+      setActiveItemId(e.target.id);
+    },
+    [counter]
+  );
 
   return (
     <div className="playlist_viewer grid grid-tc-1m bg-black">
@@ -104,16 +121,20 @@ export const PlaylistViewer = (props: any) => {
           controls={true}
         />
       </div>
-      <div className="playlist_viewer-list grid grid-tr-m1 gap-s">
+      <div className="playlist_viewer-list grid grid-tr-mm1">
+        <h5>
+          <i className="material-icons">playlist_play</i>
+          {playlist.label}
+        </h5>
         <input
-          className="bg-grey"
+          className="bg-grey-dark"
           type="text"
           placeholder="Search Playlist..."
           value={search}
           onChange={({ target: { value } }) => setSearch(value)}
         />
         <ul className="grid gap-xs">
-          {items.map(({ id, label, type }, i) => (
+          {searchedItems.map(({ id, label }, i) => (
             <li
               className="bg-grey-dark pd-051051"
               data-active={activeItemId === id}

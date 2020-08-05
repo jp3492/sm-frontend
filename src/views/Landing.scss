@@ -1,7 +1,5 @@
 .landing {
   background: linear-gradient(to right, #757575, #BDBDBD);
-  display: grid;
-  grid-auto-rows: max-content;
   height: max-content;
   * {
     color: white;
@@ -18,7 +16,10 @@
     width: 100%;
     margin: 0 auto;
     display: grid;
+    grid-auto-rows: max-content;
     gap: 1rem;
+    padding: 60px 0;
+    margin-bottom: 2em;
     > h4 {
       font-size: 180%;
       border-bottom: 1px solid white;
@@ -29,20 +30,35 @@
       padding: 0 1rem;
       // max-width: 700px;
     }
-    &:first-of-type {
+    &.intro-section {
       height: calc(100vh - 60px);
+      display: grid;
+      grid-template-rows: 1fr max-content max-content max-content;
       > h4 {
+        place-self: center;
         border: none;
         font-size: 200%;
-        padding: 4em 2em 2em 2em;
         text-align: center;
       }
-      div {
-        > h6 {
-          font-size: 100%;
-          font-weight: 400;
-          padding: 0.5em 3em;
+      label {
+        justify-self: center;
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.3rem;
+        font-weight: 500;
+        position: relative;
+        &:after {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          width: 130%;
+          left: 50%;
+          transform: translateX(-50%);
+          height: 1px;
+          background-color: white;
         }
+      }
+      div {
+        padding-bottom: 2em;
         ul {
           display: flex;
           flex-wrap: wrap;
@@ -54,6 +70,11 @@
             padding-bottom: 5px;
           }
         }
+      }
+      span {
+        text-align: center;
+        font-weight: 500;
+        font-size: 80%;
       }
     }
     &.how-to-section {

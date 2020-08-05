@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import {
-  useGlobalState,
-  getGlobalState,
-  setGlobalState
-} from "react-global-state-hook";
-import { PLAYER_POSITION, openPlayer, PLAYER_PLAYING } from "./Player";
+  openPlayer,
+  PLAYER_PLAYING,
+  PLAYER_ITEM
+} from "./Player";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { PLAYLIST_ITEMS } from "../../stores/playlist_items";
+import { ggs, sgs, usegs } from "../../utils/rxGlobal";
 
 const handlePlayerDone = ({ detail: { id } }: any) => {
-  const items = getGlobalState(PLAYLIST_ITEMS);
+  const items = ggs(PLAYLIST_ITEMS);
   const itemIndex = items.findIndex((i) => i.id === id);
   // when item is the last in List, do nothing
   // if not get the next id and openPlayer(id);
@@ -18,7 +18,7 @@ const handlePlayerDone = ({ detail: { id } }: any) => {
     const nextItem = items.find((i, index) => index === itemIndex + 1);
     openPlayer(nextItem.id);
   } else {
-    setGlobalState(PLAYER_PLAYING, false);
+    sgs(PLAYER_PLAYING, false);
   }
 };
 
@@ -29,7 +29,7 @@ export const ListList = ({
   setSelectedItems,
   arrangeItems
 }) => {
-  const [position] = useGlobalState(PLAYER_POSITION);
+  const [playerItem] = usegs(PLAYER_ITEM);
 
   const arrangeTarget: any = useRef();
   const draggedTarget: any = useRef();
@@ -150,7 +150,7 @@ export const ListList = ({
               className={`${
                 DIRECTORY_TYPES[type]
               } grid grid-tc-m1m  pd-05 gap-m ${
-                i === position ? "active" : ""
+                playerItem && id === playerItem.id ? "active" : ""
               }`}
               id={id}
               data-index={i}

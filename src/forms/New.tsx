@@ -1,19 +1,19 @@
 import React from "react";
-import { setGlobalState } from "react-global-state-hook";
 import { MODAL } from "../components/Modal";
 import { DIRECTORY_TYPES } from "../stores/folder";
+import { sgs } from "../utils/rxGlobal";
 
 export const New = ({ closeModal }) => {
   const openFolder = () => {
     closeModal();
-    setGlobalState(MODAL, {
+    sgs(MODAL, {
       component: "folder"
     });
   };
 
   const openVideo = () => {
     closeModal();
-    setGlobalState(MODAL, {
+    sgs(MODAL, {
       component: DIRECTORY_TYPES.VIDEO
     });
   };

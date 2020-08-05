@@ -1,45 +1,43 @@
 import React, { useCallback, useEffect } from "react";
-
 import ReactPlayer from "react-player";
 
-import {
-  setGlobalState,
-  useGlobalState,
-  getGlobalState
-} from "react-global-state-hook";
 import { PLAYER_PROGRESS } from "../../views/Sequencer";
+import { sgs, usegs, ggs, ugs } from "../../utils/rxGlobal";
 
 export const SEQUENCER_PLAYER = "SEQUENCER_PLAYER";
 export const SEQUENCER_PLAYER_PLAYING = "SEQUENCER_PLAYER_PLAYING";
 export const SEQUENCER_PLAYING_SEQUENCES = "SEQUENCER_PLAYING_SEQUENCES";
 export const SEQUENCER_PLAYER_PLAYBACK_RATE = "SEQUENCER_PLAYER_PLAYBACK_RATE";
 
-setGlobalState(SEQUENCER_PLAYER, { ready: false, player: null });
-setGlobalState(SEQUENCER_PLAYING_SEQUENCES, []);
-setGlobalState(SEQUENCER_PLAYER_PLAYBACK_RATE, 1);
+sgs(SEQUENCER_PLAYER, { ready: false, player: null });
+sgs(SEQUENCER_PLAYING_SEQUENCES, []);
+sgs(SEQUENCER_PLAYER_PLAYBACK_RATE, 1);
 
 export const SequencerVideo = ({ selectedVideo, sequences }) => {
-  const [playing] = useGlobalState(SEQUENCER_PLAYER_PLAYING, false);
-  const [playbackRate, setPlaybackRate] = useGlobalState(
+  const [playing, setPlaying] = usegs(SEQUENCER_PLAYER_PLAYING, false);
+  const [playbackRate, setPlaybackRate] = usegs(
     SEQUENCER_PLAYER_PLAYBACK_RATE
   );
 
   useEffect(() => {
     document.addEventListener("controls", handleControls);
     return () => document.removeEventListener("controls", handleControls);
-  }, [playbackRate]);
+  }, []);
 
-  const handleControls = (e) => {
-    const event = e.detail;
-    if (event === "playback") {
-      setPlaybackRate(playbackRate === 1 ? 0.5 : 1);
-    }
-  };
+  const handleControls = useCallback(
+    (e) => {
+      const event = e.detail;
+      if (event === "playback") {
+        setPlaybackRate(playbackRate === 1 ? 0.5 : 1);
+      }
+    },
+    [playbackRate]
+  );
 
   const handleProgress = useCallback(
     (progress) => {
       const playedSeconds = Number(progress.playedSeconds.toFixed(2));
-      setGlobalState(PLAYER_PROGRESS, {
+      sgs(PLAYER_PROGRESS, {
         playedSeconds
       });
       const playingSequences = sequences
@@ -47,22 +45,21 @@ export const SequencerVideo = ({ selectedVideo, sequences }) => {
           ({ start, stop }) => start <= playedSeconds && stop >= playedSeconds
         )
         .map((s) => s.id);
-      setGlobalState(SEQUENCER_PLAYING_SEQUENCES, playingSequences);
+      sgs(SEQUENCER_PLAYING_SEQUENCES, playingSequences);
     },
     [sequences]
   );
 
-  console.log(playing);
+  const ref = useCallback((p) => {
+    ugs(SEQUENCER_PLAYER, playerState => ({ ...playerState, player: p }));
+  }, []);
 
-  const ref = (p) => {
-    const playerState = getGlobalState(SEQUENCER_PLAYER);
-    setGlobalState(SEQUENCER_PLAYER, { ...playerState, player: p });
-  };
+  const handleReady = useCallback(() => {
+    ugs(SEQUENCER_PLAYER, playerState => ({ ...playerState, ready: true }))
+  }, []);
 
-  const handleReady = () => {
-    const playerState = getGlobalState(SEQUENCER_PLAYER);
-    setGlobalState(SEQUENCER_PLAYER, { ...playerState, ready: true });
-  };
+  const handlePause = useCallback(() => setPlaying(false), []);
+  const handlePlay = useCallback(() => setPlaying(true), []);
 
   return (
     <div className="sequencer_video">
@@ -77,6 +74,8 @@ export const SequencerVideo = ({ selectedVideo, sequences }) => {
           ref={ref}
           url={selectedVideo.url}
           onReady={handleReady}
+          onPlay={handlePlay}
+          onPause={handlePause}
           progressInterval={100}
           onProgress={handleProgress}
           controls={true}

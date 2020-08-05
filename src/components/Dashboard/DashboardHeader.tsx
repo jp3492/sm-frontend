@@ -1,22 +1,19 @@
 import React, { useEffect } from "react";
 import "./DashboardHeader.scss";
 
-import {
-  useGlobalState,
-  setGlobalState,
-  getGlobalState
-} from "react-global-state-hook";
 import { MODAL } from "../Modal";
 import ReactPlayer from "react-player";
 import { postVideo, VIDEOS } from "../../stores/videos";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { Link } from "react-router-dom";
+import { MENU_OPEN } from "./Menu";
+import { usegs, ggs, sgs } from "../../utils/rxGlobal";
 
 export const VIDEO_DETECTED = "VIDEO_DETECTED";
 
 export const Header = ({ push }) => {
-  const [menuOpen, setMenuOpen] = useGlobalState("MENU_OPEN", true);
-  const [url, setUrl] = useGlobalState(VIDEO_DETECTED);
+  const [menuOpen, setMenuOpen] = usegs(MENU_OPEN, true);
+  const [url, setUrl] = usegs(VIDEO_DETECTED);
 
   useEffect(() => {
     window.addEventListener("focus", onFocus);
@@ -35,7 +32,7 @@ export const Header = ({ push }) => {
   };
 
   const addUrl = (url) => {
-    const videos = getGlobalState(VIDEOS);
+    const videos = ggs(VIDEOS);
     const add = videos.every((v) => v.url !== url);
     if (ReactPlayer.canPlay(url) && add) {
       setUrl(url);
@@ -43,7 +40,7 @@ export const Header = ({ push }) => {
   };
 
   const handleVideoAdd = () => {
-    setGlobalState(MODAL, {
+    sgs(MODAL, {
       component: DIRECTORY_TYPES.VIDEO,
       props: {
         url,
@@ -58,7 +55,7 @@ export const Header = ({ push }) => {
   };
 
   const handleProfileClick = () =>
-    setGlobalState(MODAL, {
+    sgs(MODAL, {
       component: "profile",
       onClose: () => {
         push("/auth/login");
@@ -111,22 +108,5 @@ export const Header = ({ push }) => {
         </div>
       </div>
     </header>
-  );
-};
-
-const Add = () => {
-  const openNew = () => {
-    setGlobalState(MODAL, {
-      component: "new"
-    });
-  };
-
-  return (
-    <div className="menu-add">
-      <button onClick={openNew}>
-        <i className="material-icons">add</i>
-        New
-      </button>
-    </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useGlobalState } from "react-global-state-hook";
+import { usegs } from "../../utils/rxGlobal";
 
 export const MenuFolderCount = ({
   type,
@@ -9,7 +9,7 @@ export const MenuFolderCount = ({
   folderId?: string;
 }) => {
   // need to change this when updating to rx-global
-  const [items] = useGlobalState(`${type}S`);
+  const [items] = usegs(`${type}S`);
 
   const count = useMemo(
     () =>

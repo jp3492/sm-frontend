@@ -1,13 +1,13 @@
 import React from "react";
 import "./Path.scss";
 
-import { useGlobalState } from "react-global-state-hook";
 import {
   FOLDERS,
   SELECTED_DIRECTORY,
   DIRECTORY_TYPES
 } from "../../stores/folder";
 import { PLAYLIST_OPEN } from "../../stores/playlists";
+import { usegs } from "../../utils/rxGlobal";
 
 export const getPath = (
   id: string | null,
@@ -37,12 +37,12 @@ export const getPath = (
 };
 
 export const Path = () => {
-  const [selectedDirectory] = useGlobalState(SELECTED_DIRECTORY);
-  const [folders] = useGlobalState(FOLDERS);
-  const [selectedFolder, setSelectedFolder] = useGlobalState(
+  const [selectedDirectory] = usegs(SELECTED_DIRECTORY);
+  const [folders] = usegs(FOLDERS);
+  const [selectedFolder, setSelectedFolder] = usegs(
     `SELECTED_FOLDER_${DIRECTORY_TYPES[selectedDirectory]}`
   );
-  const [playlistOpen, setPlaylistOpen] = useGlobalState(PLAYLIST_OPEN);
+  const [playlistOpen, setPlaylistOpen] = usegs(PLAYLIST_OPEN);
 
   const path = getPath(selectedFolder, folders);
 

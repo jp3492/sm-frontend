@@ -34,6 +34,12 @@
   }
   .directory_items {
     grid-auto-rows: max-content;
+    .no-item {
+      background-color: white;
+      // text-align: center;
+      font-weight: 500;
+      padding: 1em 1em;
+    }
     .directory_item {
       grid-template-columns: 1fr minmax(0, max-content) max-content;
       > * {

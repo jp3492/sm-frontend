@@ -1,10 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
-
-import {
-  useGlobalState,
-  setGlobalState,
-  getGlobalState
-} from "react-global-state-hook";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import {
   FILTERED_SEQUENCES,
   SELECTED_SEQUENCES,
@@ -16,19 +10,19 @@ import {
   SEQUENCER_PLAYING_SEQUENCES
 } from "./SequencerVideo";
 import { secondsToTime } from "../../utils/secondsToTime";
+import { usegs, ggs, sgs } from "../../utils/rxGlobal";
 
 let timeout;
 let lastSort;
 
 export const SequencerList = ({ sequences: seqs, sequenceId }) => {
-  const [selectedSequences, setSelectedSequences] = useGlobalState(
+  const [selectedSequences, setSelectedSequences] = usegs(
     SELECTED_SEQUENCES
   );
-  const [sequences] = useGlobalState(FILTERED_SEQUENCES);
-  // const [sequences] = useGlobalState(FILTERED_SEQUENCES);
+  const [sequences] = usegs(FILTERED_SEQUENCES);
   const [activeSequenceId, setActiveSequenceId] = useState(sequenceId);
-  const [playingSequenceIds] = useGlobalState(SEQUENCER_PLAYING_SEQUENCES);
-  const [editingSequence, setEditingSequence] = useGlobalState(
+  const [playingSequenceIds] = usegs(SEQUENCER_PLAYING_SEQUENCES);
+  const [editingSequence, setEditingSequence] = usegs(
     EDITING_SEQUENCE
   );
   const [sortTime, setSortTime]: any = useState("asc");
@@ -51,21 +45,27 @@ export const SequencerList = ({ sequences: seqs, sequenceId }) => {
     }
   }, [sequenceId, sequences]);
 
-  const handleSelect = (e) => {
-    e.stopPropagation();
-    const id = e.target.closest("li").id;
+  const handleSelect = useCallback(
+    (e) => {
+      e.stopPropagation();
+      const id = e.target.closest("li").id;
 
-    if (selectedSequences.includes(id)) {
-      setSelectedSequences(selectedSequences.filter((s) => s !== id));
-    } else {
-      setSelectedSequences([...selectedSequences, id]);
-    }
-  };
+      if (selectedSequences.includes(id)) {
+        setSelectedSequences(selectedSequences.filter((s) => s !== id));
+      } else {
+        setSelectedSequences([...selectedSequences, id]);
+      }
+    },
+    [selectedSequences]
+  );
 
-  const editSequence = (id) => {
-    const sequence = sequences.find((s) => s.id === id);
-    setEditingSequence(sequence);
-  };
+  const editSequence = useCallback(
+    (id) => {
+      const sequence = sequences.find((s) => s.id === id);
+      setEditingSequence(sequence);
+    },
+    [sequences]
+  );
 
   const handleClick = (e) => {
     const id = e.target.closest("li").id;
@@ -85,20 +85,23 @@ export const SequencerList = ({ sequences: seqs, sequenceId }) => {
     }
   };
 
-  const seekToSequence = (id) => {
-    const { player, ready } = getGlobalState(SEQUENCER_PLAYER);
-    if (player && ready) {
-      const sequence = sequences.find((s) => s.id === id);
-      if (sequence) {
-        player.seekTo(sequence.start, "seconds");
-        setGlobalState(SEQUENCER_PLAYER_PLAYING, true);
+  const seekToSequence = useCallback(
+    (id) => {
+      const { player, ready } = ggs(SEQUENCER_PLAYER);
+      if (player && ready) {
+        const sequence = sequences.find((s) => s.id === id);
+        if (sequence) {
+          player.seekTo(sequence.start, "seconds");
+          sgs(SEQUENCER_PLAYER_PLAYING, true);
+        }
+      } else {
+        setTimeout(() => {
+          seekToSequence(id);
+        }, 500);
       }
-    } else {
-      setTimeout(() => {
-        seekToSequence(id);
-      }, 500);
-    }
-  };
+    },
+    [sequences]
+  );
 
   const handleEdit = (e) => {
     e.stopPropagation();

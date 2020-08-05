@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import "./List.scss";
-import { useGlobalState, setGlobalState } from "react-global-state-hook";
 import { PLAYLIST_ITEMS } from "../../stores/playlist_items";
 import {
   PLAYLIST_OPEN,
@@ -16,20 +15,21 @@ import { ListList } from "./ListList";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { SEQUENCES } from "../../stores/sequences";
 import { itemsToPlaylistItems } from "../../utils/itemsToPlaylistItems";
+import { usegs, sgs } from "../../utils/rxGlobal";
 
 export const SELECTED_LIST_ITEMS = "SELECTED_LIST_ITEMS";
 
 export const Playlist = () => {
-  const [open] = useGlobalState(PLAYLIST_OPEN);
-  const [items, setItems] = useGlobalState(PLAYLIST_ITEMS);
-  const [videos] = useGlobalState(VIDEOS);
-  const [sequences] = useGlobalState(SEQUENCES);
-  const [playlists] = useGlobalState(PLAYLISTS);
-  const [selectedItems, setSelectedItems] = useGlobalState(
+  const [open] = usegs(PLAYLIST_OPEN);
+  const [items, setItems] = usegs(PLAYLIST_ITEMS);
+  const [videos] = usegs(VIDEOS);
+  const [sequences] = usegs(SEQUENCES);
+  const [playlists] = usegs(PLAYLISTS);
+  const [selectedItems, setSelectedItems] = usegs(
     SELECTED_LIST_ITEMS,
     []
   );
-  const [activePlaylist, setActivePlaylist] = useGlobalState(ACTIVE_PLAYLIST);
+  const [activePlaylist, setActivePlaylist] = usegs(ACTIVE_PLAYLIST);
   const [search, setSearch] = useState("");
 
   const playlist = useMemo(() => {
@@ -274,7 +274,7 @@ export const Playlist = () => {
 
   const handleClose = useCallback(() => {
     setActivePlaylist();
-    setGlobalState(PLAYER_ITEM, undefined);
+    sgs(PLAYER_ITEM, undefined);
     setItems([]);
   }, [setActivePlaylist, setItems]);
 

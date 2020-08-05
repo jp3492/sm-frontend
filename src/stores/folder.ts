@@ -1,5 +1,5 @@
 import { request } from "../utils/request";
-import { setGlobalState, getGlobalState } from "react-global-state-hook";
+import { sgs, ugs } from "../utils/rxGlobal";
 
 export const FOLDERS = "FOLDERS";
 export const SELECTED_FOLDER = "SELECTED_FOLDER";
@@ -16,16 +16,16 @@ export const DIRECTORY_TYPES = {
   SEQUENCE: "SEQUENCE"
 };
 
-setGlobalState(FOLDERS, []);
-setGlobalState(OPEN_FOLDERS, []);
+sgs(FOLDERS, []);
+sgs(OPEN_FOLDERS, []);
 
-setGlobalState(SELECTED_DIRECTORY, DIRECTORY_TYPES.PLAYLIST);
+sgs(SELECTED_DIRECTORY, DIRECTORY_TYPES.PLAYLIST);
 
-export const getFolders = async () => {
+export const getFolders: any = async () => {
   try {
     const res = await request("folders");
     const data = await res.json();
-    setGlobalState(FOLDERS, data);
+    sgs(FOLDERS, data);
   } catch (error) {
     console.log(error);
   }
@@ -38,8 +38,9 @@ export const postFolder = async (body) => {
       body: JSON.stringify(body)
     });
     const id = await res.text();
-    const folders = getGlobalState(FOLDERS);
-    setGlobalState(FOLDERS, [...folders, { ...body, id }]);
+    // const folders = getGlobalState(FOLDERS);
+    // setGlobalState(FOLDERS, [...folders, { ...body, id }]);
+    ugs(FOLDERS, folders => ([...folders, { ...body, id }]));
   } catch (error) {
     console.log(error);
   }
@@ -51,19 +52,15 @@ export const patchFolder = async ({ id, ...body }) => {
       method: "PATCH",
       body: JSON.stringify(body)
     });
-    const folders = getGlobalState(FOLDERS);
-    let newFolder = { ...body, id, folder: body.folder };
-    if (body.folder === "root") {
-      delete newFolder.folder;
-    }
-    console.log(newFolder);
-
-    setGlobalState(
-      FOLDERS,
-      folders.map(({ folder, ...f }) =>
+    ugs(FOLDERS, folders => {
+      let newFolder = { ...body, id, folder: body.folder };
+      if (body.folder === "root") {
+        delete newFolder.folder;
+      }
+      return folders.map(({ folder, ...f }) =>
         f.id === id ? { ...f, ...newFolder } : { ...f, folder }
       )
-    );
+    });
   } catch (error) {
     console.log(error);
   }
@@ -72,11 +69,7 @@ export const patchFolder = async ({ id, ...body }) => {
 export const deleteFolder = async (id) => {
   try {
     await request("folders", "/" + id, { method: "DELETE" });
-    const folders = getGlobalState(FOLDERS);
-    setGlobalState(
-      FOLDERS,
-      folders.filter((f) => f.id !== id)
-    );
+    ugs(FOLDERS, folders => folders.filter((f) => f.id !== id));
   } catch (error) {
     console.log(error);
   }

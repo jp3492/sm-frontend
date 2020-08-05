@@ -1,8 +1,8 @@
 import React from "react";
-import { setGlobalState } from "react-global-state-hook";
 import { MODAL } from "../Modal";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { patchPlaylist } from "../../stores/playlists";
+import { sgs } from "../../utils/rxGlobal";
 
 const handleAdd = () => {};
 
@@ -18,7 +18,7 @@ export const ListSelection = ({
       .filter((i) => selectedItems.includes(i.id))
       .map((i) => `${i.type}:${i.id}`);
 
-    setGlobalState(MODAL, {
+    sgs(MODAL, {
       component: DIRECTORY_TYPES.PLAYLIST,
       props: {
         items: selection

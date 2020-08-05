@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { Link } from "react-router-dom";
-import { getGlobalState } from "react-global-state-hook";
 import { SEQUENCES } from "../../stores/sequences";
+import { ggs } from "../../utils/rxGlobal";
 
 const getSequenceCount = (videoId) => {
-  return getGlobalState(SEQUENCES).filter((s) => s.videoId === videoId).length;
+  return ggs(SEQUENCES).filter((s) => s.videoId === videoId).length;
 };
 
 export const DirectoryItem = ({

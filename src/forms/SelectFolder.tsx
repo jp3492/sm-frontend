@@ -5,11 +5,11 @@ import {
   FOLDERS,
   SELECTED_FOLDER_SEQUENCE
 } from "../stores/folder";
-import { useGlobalState } from "react-global-state-hook";
+import { usegs } from "../utils/rxGlobal";
 
 export const SelectFolder = ({ onSelect }) => {
-  const [folders] = useGlobalState(FOLDERS);
-  const [selectedFolderId] = useGlobalState(SELECTED_FOLDER_SEQUENCE);
+  const [folders] = usegs(FOLDERS);
+  const [selectedFolderId] = usegs(SELECTED_FOLDER_SEQUENCE);
 
   const selectedFolder = useMemo(
     () => folders.find((f) => f.id === selectedFolderId),

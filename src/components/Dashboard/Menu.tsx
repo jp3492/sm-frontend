@@ -1,15 +1,15 @@
 import React from "react";
 import "./Menu.scss";
 
-import { useGlobalState } from "react-global-state-hook";
 import { DIRECTORY_TYPES, FOLDERS } from "../../stores/folder";
 import { MenuItem } from "./MenuItem";
+import { usegs } from "../../utils/rxGlobal";
 
 export const MENU_OPEN = "MENU_OPEN";
 
 export const Menu = () => {
-  const [folders] = useGlobalState(FOLDERS);
-  const [menuOpen] = useGlobalState(MENU_OPEN, true);
+  const [folders] = usegs(FOLDERS);
+  const [menuOpen] = usegs(MENU_OPEN, true);
 
   return (
     <div

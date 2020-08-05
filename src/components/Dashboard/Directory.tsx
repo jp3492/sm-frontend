@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from "react";
 import "./Directory.scss";
 import { Path } from "./Path";
-import { useGlobalState, setGlobalState } from "react-global-state-hook";
 import { VIDEOS } from "../../stores/videos";
 import {
   SELECTED_DIRECTORY,
@@ -12,6 +11,7 @@ import { PLAYLISTS, patchPlaylist } from "../../stores/playlists";
 import { MODAL } from "../Modal";
 import { SEQUENCES } from "../../stores/sequences";
 import { DirectoryItem } from "./DirectoryItem";
+import { usegs, sgs } from "../../utils/rxGlobal";
 
 const onDragOver = (e) => {
   e.stopPropagation();
@@ -19,23 +19,25 @@ const onDragOver = (e) => {
 };
 
 export const handleShare = (type, id) => {
-  setGlobalState(MODAL, {
+  sgs(MODAL, {
     component: "share",
     props: { type, id }
   });
 };
 
 export const Directory = () => {
-  const [videos] = useGlobalState(VIDEOS);
-  const [playlists] = useGlobalState(PLAYLISTS);
-  const [sequences] = useGlobalState(SEQUENCES);
+  const [videos] = usegs(VIDEOS);
+  const [playlists] = usegs(PLAYLISTS);
+  const [sequences] = usegs(SEQUENCES);
 
-  const [selectedDirectory] = useGlobalState(SELECTED_DIRECTORY);
-  const [selectedFolder] = useGlobalState(SELECTED_FOLDER);
+  const [selectedDirectory] = usegs(SELECTED_DIRECTORY);
+  const [selectedFolder] = usegs(SELECTED_FOLDER);
 
   const [selectedPlaylists, setSelectedPlaylists]: any = useState([]);
   const [selectedVideos, setSelectedVideos]: any = useState([]);
   const [selectedSequences, setSelectedSequences]: any = useState([]);
+
+  const [search, setSearch] = useState("");
 
   const [labelSort, setLabelSort] = useState({
     SEQUENCE: null,
@@ -79,6 +81,7 @@ export const Directory = () => {
     if (type === "list") {
       const playlist = playlists.find((p) => p.id === id);
       const urls = videos.filter((v) => ids.includes(v.id)).map((v) => v.url);
+
       // @ts-ignore
       const newUrls = [...new Set([...playlist.urls, ...urls])];
       patchPlaylist({ ...playlist, urls: newUrls });
@@ -112,13 +115,13 @@ export const Directory = () => {
     const id = e.target.closest("li").id;
     if (selectedDirectory === DIRECTORY_TYPES.VIDEO) {
       const video = videos.find((f) => f.id === id);
-      setGlobalState(MODAL, {
+      sgs(MODAL, {
         component: "video",
         props: video
       });
     } else if (selectedDirectory === DIRECTORY_TYPES.PLAYLIST) {
       const playlist = playlists.find((p) => p.id === id);
-      setGlobalState(MODAL, {
+      sgs(MODAL, {
         component: "playlist",
         props: playlist
       });
@@ -130,7 +133,7 @@ export const Directory = () => {
   };
 
   const handleAdd = () => {
-    setGlobalState(MODAL, {
+    sgs(MODAL, {
       component: "folder",
       props: {
         directory: selectedDirectory,
@@ -184,6 +187,16 @@ export const Directory = () => {
     }
   }, [labelSort, items, selectedDirectory]);
 
+  const searchedItems = useMemo(() => {
+    if (!search) {
+      return sortedItems;
+    } else {
+      return sortedItems.filter((i) =>
+        i.label.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+  }, [sortedItems, search]);
+
   const handleSelectAll = () => {
     const [targetSelection, setSelection] =
       selectedDirectory === DIRECTORY_TYPES.PLAYLIST
@@ -191,7 +204,6 @@ export const Directory = () => {
         : selectedDirectory === DIRECTORY_TYPES.VIDEO
         ? [selectedVideos, setSelectedVideos]
         : [selectedSequences, setSelectedSequences];
-    console.log({ targetSelection, setSelection });
 
     const localSelection = targetSelection.filter((id) =>
       items.find((i) => i.id === id)
@@ -233,7 +245,7 @@ export const Directory = () => {
   return (
     <div className="directory grid gap-s overflow-a grid-tr-mm1 bg-grey-light">
       <Path />
-      <div className="directory_header aligned-grid grid-tc-m1m gap-m bg-grey-light">
+      <div className="directory_header aligned-grid grid-tc-mm1m gap-m bg-grey-light">
         <button className="aligned-grid pd-01" onClick={handleAdd}>
           <i className="material-icons">add</i>
           Folder
@@ -251,6 +263,14 @@ export const Directory = () => {
             </i>
           </span>
         </div>
+        <div>
+          <input
+            type="text"
+            value={search}
+            onChange={({ target: { value } }) => setSearch(value)}
+            placeholder="Search files.."
+          />
+        </div>
         <div className="grid gap-m">
           <label>Select all:</label>
           <i className="material-icons" onClick={handleSelectAll}>
@@ -259,29 +279,33 @@ export const Directory = () => {
         </div>
       </div>
       <ul className="directory_items grid gap-xs">
-        {sortedItems.map((item, index) => {
-          const selected = (selectedDirectory === DIRECTORY_TYPES.PLAYLIST
-            ? selectedPlaylists
-            : selectedDirectory === DIRECTORY_TYPES.VIDEO
-            ? selectedVideos
-            : selectedSequences
-          ).includes(item.id);
+        {searchedItems.length === 0 ? (
+          <li className="no-item">No item in directory.</li>
+        ) : (
+          searchedItems.map((item, index) => {
+            const selected = (selectedDirectory === DIRECTORY_TYPES.PLAYLIST
+              ? selectedPlaylists
+              : selectedDirectory === DIRECTORY_TYPES.VIDEO
+              ? selectedVideos
+              : selectedSequences
+            ).includes(item.id);
 
-          return (
-            <DirectoryItem
-              key={item.id}
-              {...item}
-              type={selectedDirectory}
-              handleSelect={handleSelect}
-              handleEdit={handleEdit}
-              selected={selected}
-              onDragOver={onDragOver}
-              onDragStart={onDragStart}
-              handleDrop={handleDrop}
-              onShare={handleShare}
-            />
-          );
-        })}
+            return (
+              <DirectoryItem
+                key={item.id}
+                {...item}
+                type={selectedDirectory}
+                handleSelect={handleSelect}
+                handleEdit={handleEdit}
+                selected={selected}
+                onDragOver={onDragOver}
+                onDragStart={onDragStart}
+                handleDrop={handleDrop}
+                onShare={handleShare}
+              />
+            );
+          })
+        )}
       </ul>
     </div>
   );

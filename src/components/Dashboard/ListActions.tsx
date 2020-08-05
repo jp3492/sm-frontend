@@ -1,10 +1,10 @@
 import React from "react";
-import { useGlobalState } from "react-global-state-hook";
 import { PLAYER_PLAYING, PLAYER_ITEM } from "./Player";
+import { usegs } from "../../utils/rxGlobal";
 
 export const ListActions = ({ items }) => {
-  const [playing, setPlaying] = useGlobalState(PLAYER_PLAYING);
-  const [item, setItem] = useGlobalState(PLAYER_ITEM);
+  const [playing, setPlaying] = usegs(PLAYER_PLAYING);
+  const [item, setItem] = usegs(PLAYER_ITEM);
 
   const handlePlay = () => {
     if (!item) {

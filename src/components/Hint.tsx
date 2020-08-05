@@ -1,36 +1,23 @@
 import React from "react";
 import "./Hint.scss";
-import {
-  useGlobalState,
-  setGlobalState,
-  getGlobalState
-} from "react-global-state-hook";
+import { usegs, ugs } from "../utils/rxGlobal";
 
 const HINTS = "HINTS";
 
 export const showHint = (msg) => {
-  const hints = getGlobalState(HINTS);
-  setGlobalState(HINTS, [...hints, msg]);
+  ugs(HINTS, hints => ([...hints, msg]));
   setTimeout(() => {
-    const hints = getGlobalState(HINTS);
-    setGlobalState(
-      HINTS,
-      hints.filter((h) => h !== msg)
-    );
+    ugs(HINTS, hints => hints.filter((h) => h !== msg));
   }, 3000);
 };
 
 const closeHint = (e) => {
   const msg = e.target.closest("li").id;
-  const hints = getGlobalState(HINTS);
-  setGlobalState(
-    HINTS,
-    hints.filter((h) => h !== msg)
-  );
+  ugs(HINTS, hints => hints.filter((h) => h !== msg));
 };
 
 export const Hint = () => {
-  const [hints] = useGlobalState(HINTS, []);
+  const [hints] = usegs(HINTS, []);
 
   if (hints.length === 0) {
     return null;

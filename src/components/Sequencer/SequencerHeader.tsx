@@ -2,33 +2,24 @@ import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 
 import { FOLDERS } from "../../stores/folder";
-import { useGlobalState, setGlobalState } from "react-global-state-hook";
 import { MODAL } from "../Modal";
+import { usegs, sgs } from "../../utils/rxGlobal";
 
 export const SEQUENCER_TARGET_FOLDER = "SEQUENCER_TARGET_FOLDER";
 
 export const SequencerHeader = ({ selectedVideo }) => {
-  const [targetFolderId, setTargetFolderId] = useGlobalState(
+  const [targetFolderId, setTargetFolderId] = usegs(
     SEQUENCER_TARGET_FOLDER,
     null
   );
-  const [folders] = useGlobalState(FOLDERS);
+  const [folders] = usegs(FOLDERS);
 
   const targetFolder = useMemo(() => {
     return folders.find((f) => f.id === targetFolderId);
   }, [targetFolderId, folders]);
 
-  const handleSelectFolder = () => {
-    setGlobalState(MODAL, {
-      component: "selectFolder",
-      props: {
-        onSelect: (id) => setTargetFolderId(id)
-      }
-    });
-  };
-
   const handleEdit = () => {
-    setGlobalState(MODAL, {
+    sgs(MODAL, {
       component: "video",
       props: selectedVideo
     });
@@ -46,10 +37,6 @@ export const SequencerHeader = ({ selectedVideo }) => {
           more_vert
         </i>
       </div>
-      {/* <button className="pd-01 bg-grey" onClick={handleSelectFolder}>
-        <i className="material-icons">folder</i>
-        {!targetFolder ? "Root Folder" : targetFolder.label}
-      </button> */}
     </div>
   );
 };

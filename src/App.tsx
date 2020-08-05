@@ -2,10 +2,10 @@ import React from "react";
 import "./App.scss";
 import "./forms/forms.scss";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { usegs } from './utils/rxGlobal';
 
 import { Auth } from "./views/Auth";
 import { Dashboard } from "./views/Dashboard";
-import { useGlobalState } from "react-global-state-hook";
 import { Modal } from "./components/Modal";
 import { Sequencer } from "./views/Sequencer";
 import { Landing } from "./views/Landing";
@@ -13,12 +13,11 @@ import { Viewer } from "./views/Viewer";
 import { AUTH } from "./services/auth";
 import { ErrorPage404 } from "./views/404";
 import { ErrorPage403 } from "./views/403";
-import { Payment } from "./views/Payment";
 import { Impressum } from "./views/Impressum";
 import { Datenschutz } from "./views/Datenschutz";
 
 const App = () => {
-  const [auth] = useGlobalState(AUTH, "pending");
+  const [auth] = usegs(AUTH, "pending");
 
   return (
     <div className="app">
@@ -38,7 +37,6 @@ const App = () => {
               <>
                 <Route exact path="/dashboard" component={Dashboard} />
                 <Route exact path="/sequencer/:id" component={Sequencer} />
-                {/* <Route exact path="/profile/payment" component={Payment} /> */}
               </>
             )
           )}{" "}

@@ -1,9 +1,4 @@
-import React, { useMemo } from "react";
-import {
-  getGlobalState,
-  setGlobalState,
-  useGlobalState
-} from "react-global-state-hook";
+import React from "react";
 import {
   OPEN_FOLDERS,
   SELECTED_DIRECTORY,
@@ -12,21 +7,22 @@ import {
   SELECTED_FOLDER,
   patchFolder
 } from "../../stores/folder";
-import { movePlaylists, PLAYLISTS } from "../../stores/playlists";
-import { moveVideos, VIDEOS } from "../../stores/videos";
-import { moveSequences, SEQUENCES } from "../../stores/sequences";
+import { movePlaylists } from "../../stores/playlists";
+import { moveVideos } from "../../stores/videos";
+import { moveSequences } from "../../stores/sequences";
 import { MenuFolder } from "./MenuFolder";
 import { getPath } from "./Path";
 import { MenuFolderCount } from "./MenuFolderCount";
+import { ggs, sgs, usegs, ugs } from "../../utils/rxGlobal";
 
 const handleSelectFolder = (id, directory) => {
-  setGlobalState(SELECTED_FOLDER, id);
-  setGlobalState(`SELECTED_FOLDER_${DIRECTORY_TYPES[directory]}`, id);
+  sgs(SELECTED_FOLDER, id);
+  sgs(`SELECTED_FOLDER_${DIRECTORY_TYPES[directory]}`, id);
 };
 
 const handleDrop = async (e) => {
   e.stopPropagation();
-  const folders = getGlobalState(FOLDERS);
+  const folders = ggs(FOLDERS);
   const dropFolderId = e.target.closest(".folder").id;
   const dropFolder = folders.find((f) => f.id === dropFolderId);
 
@@ -64,30 +60,16 @@ const handleDrop = async (e) => {
   }
 };
 
-const handleOpenFolder = (id) => {
-  const openFolders = getGlobalState(OPEN_FOLDERS);
-  if (openFolders.includes(id)) {
-    setGlobalState(
-      OPEN_FOLDERS,
-      openFolders.filter((f) => f !== id)
-    );
-  } else {
-    setGlobalState(OPEN_FOLDERS, [...openFolders, id]);
-  }
-};
-
-const getItemsCount = (directory) => {
-  if (directory === DIRECTORY_TYPES.VIDEO) {
-    return getGlobalState(VIDEOS).filter((v) => !v.folder).length;
-  } else if (directory === DIRECTORY_TYPES.PLAYLIST) {
-    return getGlobalState(PLAYLISTS).filter((p) => !p.folder).length;
-  } else {
-    return getGlobalState(SEQUENCES).filter((s) => !s.folder).length;
-  }
-};
+const handleOpenFolder = (id) =>
+  ugs(OPEN_FOLDERS, openFolders => {
+    if (openFolders.includes(id)) {
+      return openFolders.filter((f) => f !== id)
+    }
+    return [...openFolders, id];
+  });
 
 export const MenuItem = ({ folders, directory }) => {
-  const [selectedDirectory, setSelectedDirectory] = useGlobalState(
+  const [selectedDirectory, setSelectedDirectory] = usegs(
     SELECTED_DIRECTORY
   );
   const rootFolders = folders.filter(

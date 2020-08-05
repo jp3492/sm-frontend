@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { setGlobalState } from "react-global-state-hook";
 import { FILTERED_SEQUENCES } from "../../stores/sequences";
+import { sgs } from "../../utils/rxGlobal";
 
 export const SequencerListHeader = ({ sequences }) => {
   const [search, setSearch] = useState("");
@@ -9,8 +9,7 @@ export const SequencerListHeader = ({ sequences }) => {
     const filtered = sequences.filter((s) =>
       s.label.toLowerCase().includes(search.toLowerCase())
     );
-
-    setGlobalState(FILTERED_SEQUENCES, filtered);
+    sgs(FILTERED_SEQUENCES, filtered);
   }, [search, sequences]);
 
   return (

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { patchVideo, postVideo, deleteVideo } from "../stores/videos";
-import { getGlobalState, setGlobalState } from "react-global-state-hook";
 import ReactPlayer from "react-player";
 import { VIDEO_DETECTED } from "../components/Dashboard/DashboardHeader";
 import {
@@ -10,6 +9,7 @@ import {
 } from "../stores/folder";
 import { PLAYLISTS } from "../stores/playlists";
 import { SEQUENCES } from "../stores/sequences";
+import { ggs, sgs } from "../utils/rxGlobal";
 
 export const Video = ({ onSubmit, closeModal, id, ...values }) => {
   const [label, setLabel] = useState(values.label || "");
@@ -18,11 +18,11 @@ export const Video = ({ onSubmit, closeModal, id, ...values }) => {
   const [keyword, setKeyword] = useState("");
   const [folderName, setFolderName] = useState("");
 
-  const folderId = getGlobalState(SELECTED_FOLDER_VIDEO) || "root";
-  const folder = getGlobalState(FOLDERS).find((f) => f.id === folderId);
+  const folderId = ggs(SELECTED_FOLDER_VIDEO) || "root";
+  const folder = ggs(FOLDERS).find((f) => f.id === folderId);
 
   useEffect(() => {
-    const folders = getGlobalState(FOLDERS);
+    const folders = ggs(FOLDERS);
     const folder = folders.find((f) => f.id === values.folder);
     if (folder) {
       setFolderName(folder.label);
@@ -32,7 +32,7 @@ export const Video = ({ onSubmit, closeModal, id, ...values }) => {
   }, [values]);
 
   const deletable = useMemo(() => {
-    const usedPlaylistVideoIds = getGlobalState(PLAYLISTS).reduce(
+    const usedPlaylistVideoIds = ggs(PLAYLISTS).reduce(
       (prev, curr) => {
         const videoIds = curr.items
           .filter((i) => i.split(":")[0] === DIRECTORY_TYPES.VIDEO)
@@ -41,7 +41,7 @@ export const Video = ({ onSubmit, closeModal, id, ...values }) => {
       },
       []
     );
-    const usedSequenceVideoIds = getGlobalState(SEQUENCES).reduce(
+    const usedSequenceVideoIds = ggs(SEQUENCES).reduce(
       (prev, curr) => {
         return Array.from(new Set([...prev, curr.videoId]));
       },
@@ -68,7 +68,7 @@ export const Video = ({ onSubmit, closeModal, id, ...values }) => {
         ...addFolder
       });
       closeModal();
-      setGlobalState(VIDEO_DETECTED, false);
+      sgs(VIDEO_DETECTED, false);
     }
   };
 

@@ -1,10 +1,10 @@
 import React from "react";
 import "./Landing.scss";
-import { useGlobalState } from "react-global-state-hook";
 import { AUTH } from "../services/auth";
 import { Link } from "react-router-dom";
+import { usegs } from "../utils/rxGlobal";
 
-const platforms = {
+export const platforms = {
   youtube: require("../assets/youtube.svg"),
   soundcloud: require("../assets/soundcloud.png"),
   twitch: require("../assets/twitch.svg"),
@@ -17,13 +17,13 @@ const platforms = {
 };
 
 export const Landing = () => {
-  const [auth] = useGlobalState(AUTH);
+  const [auth] = usegs(AUTH);
 
   return (
     <div className="landing gap-l">
-      <header className="centered-grid grid-tc-1mm gap-l pd-01">
+      <header className="centered-grid grid-tc-1mm l-gap-l pd-01 s-gap-l">
         <h2 className="js-s">Viden</h2>
-        <nav className="centered-grid grid-ac-m grid-af-c gap-l">
+        <nav className="centered-grid grid-ac-m grid-af-c l-gap-l s-gap-l">
           <a>How it works</a>
           <a>Use cases</a>
           <a>Pricing</a>
@@ -34,12 +34,13 @@ export const Landing = () => {
           <Link to="/auth/login">Login</Link>
         )}
       </header>
-      <section>
+      <section className="intro-section">
         <h4>
           Viden is an online platform to manage streaming videos from multiple
-          sources, disect them into sequences, create playlists and share
-          content.
+          platform and sources, disect them into sequences, create playlists and
+          share content.
         </h4>
+        <label>Supported platforms</label>
         <div>
           <ul>
             {Object.keys(platforms).map((key) => (
@@ -47,9 +48,13 @@ export const Landing = () => {
                 <img src={platforms[key]} alt={key} height="30px" />
               </li>
             ))}
-            <li>... HLS and DASH are also supported.</li>
+            {/* <li>... HLS and DASH are also supported.</li> */}
           </ul>
         </div>
+        <span>
+          Want to use your own streaming service? HLS and DASH are also
+          supported.
+        </span>
       </section>
       <section className="how-to-section">
         <h4>How it works?</h4>

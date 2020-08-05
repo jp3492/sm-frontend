@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import "../components/Sequencer/Sequencer.scss";
 
-import { useGlobalState, setGlobalState } from "react-global-state-hook";
-
 import { VIDEOS, getVideo } from "../stores/videos";
 import { SEQUENCES } from "../stores/sequences";
 import { Tagger } from "../components/Sequencer/Tagger";
@@ -13,6 +11,7 @@ import { SequencerVideo } from "../components/Sequencer/SequencerVideo";
 import { SequencerControls } from "../components/Sequencer/SequencerControls";
 import { SequencerActions } from "../components/Sequencer/SequencerActions";
 import { getFolders } from "../stores/folder";
+import { usegs, sgs } from "../utils/rxGlobal";
 
 export const PLAYER_PROGRESS = "PLAYER_PROGRESS";
 export const SEQUENCER_VIDEO = "SEQUENCER_VIDEO";
@@ -34,13 +33,10 @@ const KEY_EVENTS = {
 const handleKeyPress = (e) => {
   const key = e.keyCode;
   const ctrl = e.ctrlKey;
-  console.log(key);
 
-  if (ctrl) {
-    if (KEY_EVENTS[key]) {
-      const event = new CustomEvent("controls", { detail: KEY_EVENTS[key] });
-      document.dispatchEvent(event);
-    }
+  if (ctrl && KEY_EVENTS[key]) {
+    const event = new CustomEvent("controls", { detail: KEY_EVENTS[key] });
+    document.dispatchEvent(event);
   }
 };
 
@@ -50,13 +46,11 @@ export const Sequencer = ({
   },
   location: { search }
 }) => {
-  const [videos] = useGlobalState(VIDEOS);
-  const [sequences] = useGlobalState(SEQUENCES);
+  const [videos] = usegs(VIDEOS);
+  const [sequences] = usegs(SEQUENCES);
 
   useEffect(() => {
-    // Need all folders to select target folder
-    // Maybe sequences should always be saved in seuqnces/videoName?
-    getFolders();
+    getFolders()
   }, []);
 
   useEffect(() => {
@@ -70,6 +64,14 @@ export const Sequencer = ({
     };
   }, [id]);
 
+  useEffect(() => {
+    // Only get the video if its not existing in videos
+    // Makes this view independent of Dashboard
+    if (!videos.find((v) => v.id === id)) {
+      getVideo(id);
+    }
+  }, [id, videos]);
+
   const sequenceId = useMemo(() => {
     // In case a initial sequence is set as query params
     // This sequence needs to be selected and played from the beginning
@@ -81,20 +83,11 @@ export const Sequencer = ({
       .find((_, i) => i === 0);
   }, [search]);
 
-  useEffect(() => {
-    // Only get the video if its not existing in videos
-    // Makes this view independent of Dashboard
-    if (!videos.find((v) => v.id === id)) {
-      getVideo(id);
-    }
-  }, [id, videos]);
+  const selectedVideo = useMemo(() => {
+    return videos.find((v) => v.id === id);
+  }, [videos, id]);
 
-  const selectedVideo = useMemo(() => videos.find((v) => v.id === id), [
-    videos,
-    id
-  ]);
-
-  useEffect(() => setGlobalState(SEQUENCER_VIDEO, selectedVideo), [
+  useEffect(() => sgs(SEQUENCER_VIDEO, selectedVideo), [
     selectedVideo
   ]);
 
