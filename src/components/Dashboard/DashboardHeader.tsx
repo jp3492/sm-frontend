@@ -8,6 +8,7 @@ import { DIRECTORY_TYPES } from "../../stores/folder";
 import { Link } from "react-router-dom";
 import { MENU_OPEN } from "./Menu";
 import { usegs, ggs, sgs } from "../../utils/rxGlobal";
+import { logout } from "../../services/auth";
 
 export const VIDEO_DETECTED = "VIDEO_DETECTED";
 
@@ -54,13 +55,16 @@ export const Header = ({ push }) => {
     addUrl(url);
   };
 
-  const handleProfileClick = () =>
-    sgs(MODAL, {
-      component: "profile",
-      onClose: () => {
-        push("/auth/login");
-      }
-    });
+  const handleProfileClick = async () => {
+    await logout();
+    push("/auth/login");
+  };
+    // sgs(MODAL, {
+    //   component: "profile",
+    //   onClose: () => {
+    //     push("/auth/login");
+    //   }
+    // });
 
   const handleClearSearch = () => setUrl("");
 

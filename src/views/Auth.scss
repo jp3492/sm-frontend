@@ -1,6 +1,43 @@
 .auth {
+  background: linear-gradient(to bottom right, #E91E63, 20%, var(--cl-grey-dark));
   place-content: center;
-  form > a {
-    place-self: center;
+  header {
+      h1, h2 {
+        color: white;
+        filter: drop-shadow(0 0 0.2rem black);
+        text-align: center;
+        padding-bottom: 2rem;
+      }
+      h2 {
+        text-decoration: underline;
+      }
+    }
+  form {
+    background-color: var(--cl-grey-dark);
+    * { color: white; }
+    input {
+      background-color: var(--cl-grey-light);
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      border-top: 1px solid var(--cl-grey);
+      color: var(--cl-grey-dark);
+    }
+    label {
+      background-color: var(--cl-grey-light);
+      border-radius: 8px;
+      color: var(--cl-grey-dark);
+      padding: 0.2rem 0.5rem;
+    }
+
+    > a {
+      place-self: center;
+      text-decoration: underline;
+    }
+    button {
+      background-color: #E91E63;
+      &:disabled {
+        background-color: var(--cl-grey) !important;
+      }
+    }
   }
 }

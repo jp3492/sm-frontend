@@ -43,11 +43,14 @@ export const Auth = ({
   };
   return (
     <main className="auth">
+      <header>
+        <h1>Welcome to Viden</h1>
+        <h2>{type.capitalize()}</h2>
+      </header>
       <form
         className="rounded grid gap-m pd-2 shadow-m"
         onSubmit={handleSubmit}
       >
-        <h2>{type.capitalize()}</h2>
         <label className="form-field">
           Email
           <input
@@ -79,7 +82,7 @@ export const Auth = ({
           {loading ? "Submitting.." : "Submit"}
         </button>
         <Link to={type === "login" ? "/auth/register" : "/auth/login"}>
-          {type === "login" ? "Register" : "Login"}
+          {type === "login" ? "Register here" : "Login here"}
         </Link>
       </form>
     </main>

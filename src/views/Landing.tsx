@@ -16,6 +16,13 @@ export const platforms = {
   vidyard: require("../assets/vidyard.svg")
 };
 
+const tutorial = require("../assets/tutorial.png");
+const music = require("../assets/music.svg");
+const sports = require("../assets/sports.png");
+const media = require("../assets/media.svg");
+const social = require("../assets/social.svg");
+const code = require("../assets/code.svg");
+
 export const Landing = () => {
   const [auth] = usegs(AUTH);
 
@@ -61,40 +68,38 @@ export const Landing = () => {
         <p>
           <label>1</label>
           <span>
-            Copy a video link from YouTube, Twitch, Dropbox and others.
-            <br />! No video is saved on this platform. We only save a reference
-            to videos via url and interact with the sources provided player!
+            Copy any video link on the internet from any supported platform.
           </span>
         </p>
         <p>
           <label>2</label>
           <span>
-            Go to your Viden dashboard and save the link into your directory.
+            Save that link in your dashboard.
           </span>
         </p>
         <p>
           <label>3</label>
           <span>
-            You can create folders and organize your videos, playlists and
-            sequences. We provide an easy to use, drag & drop UI with a standard
-            folder system.
+            Drag and drop saved video links into playlists.
           </span>
         </p>
         <p>
           <label>4</label>
           <span>
-            Creating playlists is as easy as dropping videos onto the playlist
-            panel. Once saved you can share (if enabled) your playlists as well
-            as videos via link online.
+            Create folders and organize your content.
           </span>
         </p>
         <p>
           <label>5</label>
           <span>
-            One of the main functionalities of Viden is to disect and tag
-            sequences. You can set a start and stop tag on every video as well
-            as a comment. Sequences can be shared and used in playlists, just
-            like any video.
+            You want only part of a video? No problem. Just extract the desired sequence (it's like magic 🙂).<br /><br />
+            !Any sequence and video can be used in a playlist!
+          </span>
+        </p>
+        <p>
+          <label>6</label>
+          <span>
+            Share any playlist, video or sequence with your friends or collegues online via link.
           </span>
         </p>
         <div></div>
@@ -104,6 +109,7 @@ export const Landing = () => {
         <div>
           <p>
             <h5>Tutorials and instructions:</h5>
+            <img src={tutorial} alt="tutorials and instructions" height="80px" />
             <span>
               Create playlists with videos and sequences for any step-by-step
               tutorial. Cooking videos, how-to guides or educational playlists
@@ -113,6 +119,7 @@ export const Landing = () => {
           </p>
           <p>
             <h5>Music:</h5>
+            <img src={music} height="80px" alt="music" />
             <span>
               Create music playlists with videos from multiple platforms for
               personal use or to share online. In case you want to add certain
@@ -122,6 +129,7 @@ export const Landing = () => {
           </p>
           <p>
             <h5>(e)Sports:</h5>
+            <img src={sports} height="80px" alt="sports" />
             <span>
               Viden provides a simple to use solution for time based video
               analysis at very low cost. Tag sequences, create playlists and
@@ -131,6 +139,7 @@ export const Landing = () => {
           </p>
           <p>
             <h5>Media:</h5>
+            <img src={media} height="80px" alt="media" />
             <span>
               Collaborate with your team and use Viden to easily share video
               content back and forth. In the future we hope to integrate a
@@ -140,6 +149,8 @@ export const Landing = () => {
           </p>
           <p>
             <h5>Social:</h5>
+            <img src={social} height="60px" width="80px" alt="music" />
+
             <span>
               Want to share a small snippet of a video with your friends or a
               playlists with funny moments or simply organize your favorite
@@ -148,30 +159,32 @@ export const Landing = () => {
               possible.
             </span>
           </p>
+
+          <p>
+            <h5>Development*:</h5>
+            <img src={code} height="80px" alt="music" />
+            <span>
+              *Coming in the future. We want to open up out api and platform for developers.
+              Providing a simple API and UI, we hope to enable developers to create time-based
+              video software and elevate this platform to the next level.
+            </span>
+          </p>
         </div>
-        <div></div>
       </section>
       <section className="pricing-section">
         <h4>Pricing</h4>
         <p>
           Our goal is to create a sustainable and productive workplace as well
-          as service to our users. Therefore we are trying to have a good
+          as service to our users. Therefore we intend to have a good
           balance between utility- and value based pricing. We believe in fair
-          pricing and transparent use of data.
+          pricing and transparent use of data.<br /><br />
+          By restricting sharing capabilities to a paid account, we intend to ensure
+          higher quality of our community. Free social media platforms tend to run into issues
+           the bigger the user base gets. We hope to prevent some of these issues while attracting
+            people with professional purpose.
         </p>
+          <span>By default, a signed up user has <b>free</b> access to all functionalities, but sharing capabilities are restricted.</span>
         <div>
-          <div>
-            <h5>
-              <i className="material-icons">person</i>Private
-            </h5>
-            <div>
-              <p>Default setting when signing up.</p>
-              <p>Full access to all basic functionalities.</p>
-              <p>No functionality to share your content.</p>
-            </div>
-            <span>Free</span>
-          </div>
-
           <div>
             <h5>
               <i className="material-icons">share</i>Social
@@ -192,16 +205,30 @@ export const Landing = () => {
               <i className="material-icons">people</i>Team/Enterprise
             </h5>
             <div>
-              <p>Full access to all basic functionalities.</p>
+              {/* <p>Full access to all basic functionalities.</p>
               <p>
                 Content (videos, sequences, playlists) is sharable online via
                 link.
               </p>
-              <p>Content can be embedded on your website.</p>
+              <p>Content can be embedded on your website.</p> */}
               <p>Privately share and edit content within your team.</p>
               <p>Commenting functonality on all your content.</p>
+              <p>Integration with private video servers.</p>
             </div>
-            <span>Coming soon</span>
+            <span>Coming in the future</span>
+          </div>
+
+          <div>
+            <h5>
+              <i className="material-icons">code</i>Developer
+            </h5>
+            <div>
+              <p>API access to all content related endpoints.</p>
+              <p>Extended embedd functionalities and configuration.</p>
+              <p>Drop-in UIs for frontend development. (JS, React, Vue, Angular, Svelte)</p>
+              <p>Create and manage accounts for your own users.</p>
+            </div>
+            <span>Coming in the future</span>
           </div>
         </div>
       </section>

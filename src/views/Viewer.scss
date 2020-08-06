@@ -56,7 +56,19 @@
     }
   }
   .playlist_viewer {
-
+    > .players {
+      position: relative;
+      height: 100%;
+      .player {
+        z-index: -1;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        &[data-active="true"] {
+          z-index: 1;
+        }
+      }
+    }
     .playlist_viewer-list {
       width: 300px;
       h5 {
