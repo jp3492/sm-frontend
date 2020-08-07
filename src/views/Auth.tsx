@@ -30,19 +30,23 @@ export const Auth = ({
       } finally {
         setLoading(false);
       }
-    } else {
-      try {
-        await register(values);
-        push("/auth/login");
-      } catch (error) {
-        setError("Failed to register");
-      } finally {
-        setLoading(false);
-      }
     }
+    // else {
+    //   try {
+    //     await register(values);
+    //     push("/auth/login");
+    //   } catch (error) {
+    //     setError("Failed to register");
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // }
   };
   return (
     <main className="auth">
+      <Link to="/">
+        <i className="material-icons">home</i>
+      </Link>
       <header>
         <h1>Welcome to Viden</h1>
         <h2>{type.capitalize()}</h2>
@@ -51,6 +55,7 @@ export const Auth = ({
         className="rounded grid gap-m pd-2 shadow-m"
         onSubmit={handleSubmit}
       >
+        {/* <h2>Login</h2> */}
         <label className="form-field">
           Email
           <input
@@ -81,9 +86,9 @@ export const Auth = ({
         >
           {loading ? "Submitting.." : "Submit"}
         </button>
-        <Link to={type === "login" ? "/auth/register" : "/auth/login"}>
+        {/* <Link to={type === "login" ? "/auth/register" : "/auth/login"}>
           {type === "login" ? "Register here" : "Login here"}
-        </Link>
+        </Link> */}
       </form>
     </main>
   );

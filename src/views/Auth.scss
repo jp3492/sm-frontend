@@ -1,6 +1,16 @@
 .auth {
   background: linear-gradient(to bottom right, #E91E63, 20%, var(--cl-grey-dark));
   place-content: center;
+  > a {
+    > i {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    color: white;
+    font-size: 180%;
+    filter: drop-shadow(0 0 0.2rem black);
+  }
+}
   header {
       h1, h2 {
         color: white;
@@ -9,12 +19,16 @@
         padding-bottom: 2rem;
       }
       h2 {
-        text-decoration: underline;
+        // text-decoration: underline;
       }
     }
   form {
     background-color: var(--cl-grey-dark);
     * { color: white; }
+    h2 {
+      text-align: center;
+      padding-bottom: 1rem;
+    }
     input {
       background-color: var(--cl-grey-light);
       border-top-left-radius: 0;

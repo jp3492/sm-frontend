@@ -31,21 +31,21 @@ export const Landing = () => {
       <header className="centered-grid grid-tc-1mm l-gap-l pd-01 s-gap-l">
         <h2 className="js-s">Viden</h2>
         <nav className="centered-grid grid-ac-m grid-af-c l-gap-l s-gap-l">
-          <a>How it works</a>
-          <a>Use cases</a>
-          <a>Pricing</a>
+          <a href="#how-to">How it works</a>
+          <a href="#use-cases">Use cases</a>
+          <a href="#pricing">Pricing</a>
         </nav>
         {auth ? (
           <Link to="/dashboard">Dashboard</Link>
         ) : (
-          <Link to="/auth/login">Login</Link>
+          <Link to="/auth">Login</Link>
         )}
       </header>
       <section className="intro-section">
         <h4>
-          Viden is an online platform to manage streaming videos from multiple
-          platform and sources, disect them into sequences, create playlists and
-          share content.
+          Viden is a platform that provides tools to work and interact with
+          streamed videos. Our goal is it to add a new dimension to online
+          streaming and help users to create and share content in new ways.
         </h4>
         <label>Supported platforms</label>
         <div>
@@ -63,7 +63,7 @@ export const Landing = () => {
           supported.
         </span>
       </section>
-      <section className="how-to-section">
+      <section id="how-to" className="how-to-section">
         <h4>How it works?</h4>
         <p>
           <label>1</label>
@@ -73,43 +73,45 @@ export const Landing = () => {
         </p>
         <p>
           <label>2</label>
-          <span>
-            Save that link in your dashboard.
-          </span>
+          <span>Save that link in your dashboard.</span>
         </p>
         <p>
           <label>3</label>
-          <span>
-            Drag and drop saved video links into playlists.
-          </span>
+          <span>Drag and drop videos into playlists.</span>
         </p>
         <p>
           <label>4</label>
-          <span>
-            Create folders and organize your content.
-          </span>
+          <span>Create folders and organize your content.</span>
         </p>
         <p>
           <label>5</label>
           <span>
-            You want only part of a video? No problem. Just extract the desired sequence (it's like magic 🙂).<br /><br />
+            You want only part of a video? No problem. Just extract the desired
+            sequence (it's like magic 🙂).
+            <br />
+            <br />
             !Any sequence and video can be used in a playlist!
           </span>
         </p>
         <p>
           <label>6</label>
           <span>
-            Share any playlist, video or sequence with your friends or collegues online via link.
+            Share any playlist, video or sequence with your friends or collegues
+            via link.
           </span>
         </p>
         <div></div>
       </section>
-      <section className="use-cases-section">
+      <section id="use-cases" className="use-cases-section">
         <h4>Use Cases</h4>
         <div>
           <p>
             <h5>Tutorials and instructions:</h5>
-            <img src={tutorial} alt="tutorials and instructions" height="80px" />
+            <img
+              src={tutorial}
+              alt="tutorials and instructions"
+              height="80px"
+            />
             <span>
               Create playlists with videos and sequences for any step-by-step
               tutorial. Cooking videos, how-to guides or educational playlists
@@ -164,26 +166,33 @@ export const Landing = () => {
             <h5>Development*:</h5>
             <img src={code} height="80px" alt="music" />
             <span>
-              *Coming in the future. We want to open up out api and platform for developers.
-              Providing a simple API and UI, we hope to enable developers to create time-based
-              video software and elevate this platform to the next level.
+              *Coming in the future. We want to open up out api and platform for
+              developers. Providing a simple API and UI, we hope to enable
+              developers to create time-based video software and elevate this
+              platform to the next level.
             </span>
           </p>
         </div>
       </section>
-      <section className="pricing-section">
+      <section id="pricing" className="pricing-section">
         <h4>Pricing</h4>
         <p>
           Our goal is to create a sustainable and productive workplace as well
-          as service to our users. Therefore we intend to have a good
-          balance between utility- and value based pricing. We believe in fair
-          pricing and transparent use of data.<br /><br />
-          By restricting sharing capabilities to a paid account, we intend to ensure
-          higher quality of our community. Free social media platforms tend to run into issues
-           the bigger the user base gets. We hope to prevent some of these issues while attracting
-            people with professional purpose.
+          as service to our users. Therefore we intend to have a good balance
+          between utility- and value based pricing. We believe in fair pricing
+          and transparent use of data.
+          <br />
+          <br />
+          By restricting sharing capabilities to a paid account, we intend to
+          ensure higher quality of our community. Free social media platforms
+          tend to run into issues the bigger the user base gets. We hope to
+          prevent some of these issues while attracting people with professional
+          purpose.
         </p>
-          <span>By default, a signed up user has <b>free</b> access to all functionalities, but sharing capabilities are restricted.</span>
+        <span>
+          By default, a signed up user has <b>free</b> access to all
+          functionalities, but sharing capabilities are restricted.
+        </span>
         <div>
           <div>
             <h5>
@@ -224,8 +233,11 @@ export const Landing = () => {
             </h5>
             <div>
               <p>API access to all content related endpoints.</p>
-              <p>Extended embedd functionalities and configuration.</p>
-              <p>Drop-in UIs for frontend development. (JS, React, Vue, Angular, Svelte)</p>
+              <p>Extended embed functionalities and configuration.</p>
+              <p>
+                Drop-in UIs for frontend development. (JS, React, Vue, Angular,
+                Svelte)
+              </p>
               <p>Create and manage accounts for your own users.</p>
             </div>
             <span>Coming in the future</span>

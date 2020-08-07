@@ -2,7 +2,7 @@ import React from "react";
 import "./App.scss";
 import "./forms/forms.scss";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { usegs } from './utils/rxGlobal';
+import { usegs } from "./utils/rxGlobal";
 
 import { Auth } from "./views/Auth";
 import { Dashboard } from "./views/Dashboard";
@@ -25,7 +25,8 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={Landing} />
           <Route exact path="/viewer/:type/:id" component={Viewer} />
-          <Route exact path="/auth/:type" component={Auth} />
+          {/* <Route exact path="/auth/:type" component={Auth} /> */}
+          <Route exact path="/auth" component={Auth} />
           <Route exact path="/impressum" component={Impressum} />
           <Route exact path="/datenschutz" component={Datenschutz} />
           {auth === "pending" ? (
