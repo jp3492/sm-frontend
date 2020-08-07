@@ -3,6 +3,7 @@ import { DIRECTORY_TYPES } from "../../stores/folder";
 import { Link } from "react-router-dom";
 import { SEQUENCES } from "../../stores/sequences";
 import { ggs } from "../../utils/rxGlobal";
+import { platforms } from "../../views/Landing";
 
 const getSequenceCount = (videoId) => {
   return ggs(SEQUENCES).filter((s) => s.videoId === videoId).length;
@@ -45,7 +46,7 @@ export const DirectoryItem = ({
       data-selected={selected ? "selected" : ""}
       className={`${DIRECTORY_TYPES[type]} directory_item grid pd-051 gap-l`}
     >
-      <div className="directory_item-header aligned-grid grid-tc-1m cgap-m">
+      <div className="directory_item-header aligned-grid grid-tc-1mm cgap-m">
         <h4>{label}</h4>
         <ul className="directory_item-keywords aligned-grid cgap-s">
           {type !== DIRECTORY_TYPES.SEQUENCE && (

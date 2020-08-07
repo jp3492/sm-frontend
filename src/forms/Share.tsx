@@ -17,10 +17,13 @@ export const Share = ({ type, id, closeModal }) => {
     }
   }, [type, id]);
 
-  const url = `http://localhost:3000`;
+  const url =
+    process.env.NODE_ENV === "development"
+      ? `http://localhost:3000`
+      : "https://viden.pro";
   const path = `/viewer/${type.toLowerCase()}/${id}`;
 
-  const link = type === DIRECTORY_TYPES.VIDEO ? item.url : `${url} ${path}`;
+  const link = type === DIRECTORY_TYPES.VIDEO ? item.url : `${url}${path}`;
 
   const handleCopy = () => navigator.clipboard.writeText(link);
 

@@ -4,6 +4,7 @@ import "./Viewer.scss";
 import { PlaylistViewer } from "../components/Viewer/PlaylistViewer";
 import { SequenceViewer } from "../components/Viewer/SequenceViewer";
 import { request } from "../utils/request";
+import { DIRECTORY_TYPES } from "../stores/folder";
 
 export const Viewer = ({
   match: {
@@ -30,10 +31,15 @@ export const Viewer = ({
     }
   }, [type, id]);
 
+  const loadingText =
+    type.toUpperCase() === DIRECTORY_TYPES.PLAYLIST
+      ? `Loading Playlist...`
+      : `Loading Sequence...`;
+
   return (
     <div className="viewer grid overflow-h">
       {!item ? (
-        <div className="centered-grid bg-grey-dark">Loading...</div>
+        <div className="centered-grid bg-grey-dark cl-white">{loadingText}</div>
       ) : type === "playlist" ? (
         <PlaylistViewer {...item} />
       ) : (
@@ -43,9 +49,6 @@ export const Viewer = ({
   );
 };
 
-// Have these request locally to not conflict with other states and request handlers
-// Viewer should always work completely independent
-// Will move to own app later
 const getPlaylist = async (id) => {
   try {
     const res = await request("viewer", "/playlist/" + id);

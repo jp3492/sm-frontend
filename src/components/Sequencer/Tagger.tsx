@@ -14,9 +14,13 @@ export const TAGGER_STOP = "TAGGER_STOP";
 export const TAGGER_LABEL = "TAGGER_LABEL";
 export const TAGGER_FAST_TAG = "TAGGER_QUICK_TAG";
 
+sgs(TAGGER_FAST_TAG, false);
+
 const handleControls = (e) => {
   const event = e.detail;
   const fastTagging = ggs(TAGGER_FAST_TAG);
+  console.log("FAST", fastTagging);
+
   if (event === "tag") {
     const activeTime = ggs(TAGGER_ACTIVE_TIME);
     const start = ggs(TAGGER_START);
@@ -132,10 +136,7 @@ const resetTagger = (fastTagging?: boolean) => {
 };
 
 export const Tagger = () => {
-  const [activeTime, setActiveTime]: any = usegs(
-    TAGGER_ACTIVE_TIME,
-    "start"
-  );
+  const [activeTime, setActiveTime]: any = usegs(TAGGER_ACTIVE_TIME, "start");
   const [editingSequence] = usegs(EDITING_SEQUENCE);
 
   const [label, setLabel] = usegs(TAGGER_LABEL, "");
