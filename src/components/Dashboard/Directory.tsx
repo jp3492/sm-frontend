@@ -181,7 +181,6 @@ export const Directory = () => {
           return 1;
         }
 
-        // names must be equal
         return 0;
       });
     }
@@ -245,12 +244,12 @@ export const Directory = () => {
   return (
     <div className="directory grid gap-s overflow-a grid-tr-mm1 bg-grey-light">
       <Path />
-      <div className="directory_header aligned-grid grid-tc-mm1m gap-m bg-grey-light">
+      <div className="directory_header aligned-grid grid-tc-mm1m cgap-m rgap-s bg-grey-light">
         <button className="aligned-grid pd-01" onClick={handleAdd}>
           <i className="material-icons">add</i>
           Folder
         </button>
-        <div className="grid gap-m">
+        <div className="grid cgap-m pd-01">
           <label>Sort by:</label>
           <span className="grid gap-s" onClick={handleSort}>
             Label
@@ -292,7 +291,7 @@ export const Directory = () => {
 
             return (
               <DirectoryItem
-                key={item.id}
+                key={index}
                 {...item}
                 type={selectedDirectory}
                 handleSelect={handleSelect}

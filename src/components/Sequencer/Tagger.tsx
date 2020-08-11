@@ -19,7 +19,6 @@ sgs(TAGGER_FAST_TAG, false);
 const handleControls = (e) => {
   const event = e.detail;
   const fastTagging = ggs(TAGGER_FAST_TAG);
-  console.log("FAST", fastTagging);
 
   if (event === "tag") {
     const activeTime = ggs(TAGGER_ACTIVE_TIME);

@@ -8,6 +8,7 @@ import { SelectFolder } from "../forms/SelectFolder";
 import { Share } from "../forms/Share";
 import { Replay } from "../forms/Replay";
 import { usegs, sgs } from "../utils/rxGlobal";
+import { SelectPlaylist } from "../forms/SelectPlaylist";
 
 export const MODAL = "MODAL";
 
@@ -23,7 +24,8 @@ const COMPONENTS = {
   NEW: New,
   SELECTFOLDER: SelectFolder,
   SHARE: Share,
-  REPLAY: Replay
+  REPLAY: Replay,
+  SELECT_PLAYLIST: SelectPlaylist
 };
 
 export const Modal = () => {
@@ -31,9 +33,9 @@ export const Modal = () => {
 
   const component = modal.component.toUpperCase();
 
-  const closeModal = () => {
+  const closeModal = (payload?: any) => {
     if (modal.onClose) {
-      modal.onClose();
+      modal.onClose(payload);
     }
     sgs(MODAL, INITIAL_CONFIG);
   };

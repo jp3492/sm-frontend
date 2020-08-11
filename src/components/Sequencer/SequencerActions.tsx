@@ -4,12 +4,11 @@ import { MODAL } from "../Modal";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { handleShare } from "../Dashboard/Directory";
 import { TAGGER_FAST_TAG } from "./Tagger";
-import { usegs, sgs } from "../../utils/rxGlobal";
+import { usegs, sgs, ggs } from "../../utils/rxGlobal";
+import { PLAYLISTS, patchPlaylist } from "../../stores/playlists";
 
 export const SequencerActions = () => {
-  const [selectedSequences, setSelectedSequences] = usegs(
-    SELECTED_SEQUENCES
-  );
+  const [selectedSequences, setSelectedSequences] = usegs(SELECTED_SEQUENCES);
   const [quickTag, setQuickTag] = usegs(TAGGER_FAST_TAG);
 
   const disabled = useMemo(() => selectedSequences.length === 0, [
@@ -29,6 +28,21 @@ export const SequencerActions = () => {
       }),
     [selectedSequences]
   );
+
+  const handleAdd = useCallback(() => {
+    sgs(MODAL, {
+      component: "SELECT_PLAYLIST",
+      onClose: (id) => {
+        const playlist = ggs(PLAYLISTS).find((p) => p.id === id);
+        const addedItems = selectedSequences.map((id) => `SEQUENCE:${id}`);
+        patchPlaylist({
+          id,
+          ...playlist,
+          items: [...playlist.items, ...addedItems]
+        });
+      }
+    });
+  }, [selectedSequences]);
 
   const handleRemove = useCallback(() => {
     // check with backend if its deletable
@@ -56,6 +70,9 @@ export const SequencerActions = () => {
         </small>
       </button>
       <button onClick={handleSave} disabled={disabled}>
+        <i className="material-icons">playlist_add_check</i>
+      </button>
+      <button onClick={handleAdd} disabled={disabled}>
         <i className="material-icons">playlist_add</i>
       </button>
       <button onClick={handleRemove} disabled={selectedSequences.length !== 1}>

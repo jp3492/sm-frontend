@@ -1,4 +1,5 @@
-import { sgs, ggs, ugs } from './../utils/rxGlobal';
+import { getFolder } from "./folder";
+import { sgs, ggs, ugs } from "./../utils/rxGlobal";
 
 import { request } from "../utils/request";
 
@@ -20,17 +21,19 @@ export const moveSequences = async ({ folderId, ids, type }) => {
       method: "POST",
       body: JSON.stringify({ ids, type })
     });
-    ugs(SEQUENCES, sequences => sequences.map(({ folder, ...p }) => {
-      if (ids.includes(p.id)) {
-        const addFolder = folderId === "root" ? {} : { folder: folderId };
-        return {
-          ...p,
-          ...addFolder
-        };
-      } else {
-        return { ...p, folder };
-      }
-    }));
+    ugs(SEQUENCES, (sequences) =>
+      sequences.map(({ folder, ...p }) => {
+        if (ids.includes(p.id)) {
+          const addFolder = folderId === "root" ? {} : { folder: folderId };
+          return {
+            ...p,
+            ...addFolder
+          };
+        } else {
+          return { ...p, folder };
+        }
+      })
+    );
   } catch (error) {
     console.log(error);
   }
@@ -48,7 +51,7 @@ export const getSequences = async () => {
 
 export const postSequence = async (body) => {
   try {
-    ugs(SEQUENCES, sequences => ([...sequences, body]))
+    ugs(SEQUENCES, (sequences) => [...sequences, body]);
     const res = await request("sequences", "", {
       method: "POST",
       body: JSON.stringify({
@@ -57,13 +60,21 @@ export const postSequence = async (body) => {
         stop: Number(body.stop)
       })
     });
-    const id = await res.text();
-    ugs(SEQUENCES, sequences => sequences.map((i) => {
-      if (!i.id && JSON.stringify(i) === JSON.stringify(body)) {
-        return { ...i, id };
-      }
-      return i;
-    }));
+    const { sequenceId, newFolderId } = await res.json();
+    if (newFolderId) {
+      await getFolder(newFolderId);
+    }
+    ugs(SEQUENCES, (sequences) =>
+      sequences.map((i) => {
+        if (!i.id && JSON.stringify(i) === JSON.stringify(body)) {
+          // folderId still needs to be added
+          // the reason it shows up in the dashboard is because it makes a request to all sequences
+          // is better to check the getAll methods in Dashboard
+          return { ...i, id: sequenceId };
+        }
+        return i;
+      })
+    );
   } catch (error) {
     console.log(error);
   }
@@ -75,7 +86,9 @@ export const patchSequence = async ({ id, ...body }) => {
       method: "PATCH",
       body: JSON.stringify(body)
     });
-    ugs(SEQUENCES, sequences => sequences.map((s) => (s.id === id ? { ...body, id } : s)));
+    ugs(SEQUENCES, (sequences) =>
+      sequences.map((s) => (s.id === id ? { ...body, id } : s))
+    );
   } catch (error) {
     console.log(error);
   }
@@ -100,9 +113,11 @@ export const deleteSequences = async (targetId) => {
       method: "DELETE"
     });
     if (res.status != 403) {
-      ugs(SEQUENCES, sequences => sequences.filter(
-        (f) => f.id && JSON.stringify(f) !== JSON.stringify(body)
-      ))
+      ugs(SEQUENCES, (sequences) =>
+        sequences.filter(
+          (f) => f.id && JSON.stringify(f) !== JSON.stringify(body)
+        )
+      );
     } else {
       alert(
         "Sequences not deletable. At least one sequence is existing in at least one of your Playlist"

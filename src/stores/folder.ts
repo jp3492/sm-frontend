@@ -21,6 +21,16 @@ sgs(OPEN_FOLDERS, []);
 
 sgs(SELECTED_DIRECTORY, DIRECTORY_TYPES.PLAYLIST);
 
+export const getFolder = async (id) => {
+  try {
+    const res = await request("folders", `/${id}`);
+    const data = await res.json();
+    ugs(FOLDERS, (folders) => [...folders, data]);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getFolders: any = async () => {
   try {
     const res = await request("folders");
@@ -40,7 +50,7 @@ export const postFolder = async (body) => {
     const id = await res.text();
     // const folders = getGlobalState(FOLDERS);
     // setGlobalState(FOLDERS, [...folders, { ...body, id }]);
-    ugs(FOLDERS, folders => ([...folders, { ...body, id }]));
+    ugs(FOLDERS, (folders) => [...folders, { ...body, id }]);
   } catch (error) {
     console.log(error);
   }
@@ -52,14 +62,14 @@ export const patchFolder = async ({ id, ...body }) => {
       method: "PATCH",
       body: JSON.stringify(body)
     });
-    ugs(FOLDERS, folders => {
+    ugs(FOLDERS, (folders) => {
       let newFolder = { ...body, id, folder: body.folder };
       if (body.folder === "root") {
         delete newFolder.folder;
       }
       return folders.map(({ folder, ...f }) =>
         f.id === id ? { ...f, ...newFolder } : { ...f, folder }
-      )
+      );
     });
   } catch (error) {
     console.log(error);
@@ -69,7 +79,7 @@ export const patchFolder = async ({ id, ...body }) => {
 export const deleteFolder = async (id) => {
   try {
     await request("folders", "/" + id, { method: "DELETE" });
-    ugs(FOLDERS, folders => folders.filter((f) => f.id !== id));
+    ugs(FOLDERS, (folders) => folders.filter((f) => f.id !== id));
   } catch (error) {
     console.log(error);
   }

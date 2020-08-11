@@ -91,11 +91,24 @@ const playNext = () => {
   sgs(ACTIVE_ITEM_ID, items[currentIndex + 1].id);
 };
 
+const playPrev = () => {
+  const items = ggs(PV_ITEMS);
+
+  const currentIndex = items.findIndex(
+    (item) => item.id === ggs(ACTIVE_ITEM_ID)
+  );
+  if (currentIndex === 0) {
+    return sgs(PV_PLAYING, false);
+  }
+  sgs(ACTIVE_ITEM_ID, items[currentIndex - 1].id);
+};
+
 const handleSelect = (e) => sgs(ACTIVE_ITEM_ID, e.target.closest("li").id);
 
 export const PlaylistViewer = ({ videos, sequences, playlist }: any) => {
   const [items, setItems] = usegs(PV_ITEMS, []);
   const [search, setSearch] = useState("");
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     const newItems = playlist.items
@@ -139,7 +152,7 @@ export const PlaylistViewer = ({ videos, sequences, playlist }: any) => {
           <Video key={i} url={u} />
         ))}
       </div>
-      <div className="playlist_viewer-list grid grid-tr-mm1">
+      <div className="playlist_viewer-list grid grid-tr-mm1" data-open={open}>
         <h5>
           <i className="material-icons">playlist_play</i>
           {playlist.label}
@@ -156,7 +169,44 @@ export const PlaylistViewer = ({ videos, sequences, playlist }: any) => {
             <Item {...item} key={i} />
           ))}
         </ul>
+        <Panel open={open} setOpen={setOpen} />
       </div>
+    </div>
+  );
+};
+
+const Panel = ({ open, setOpen }) => {
+  const [playing, setPlaying] = usegs(PV_PLAYING);
+  const [index, setIndex] = useState();
+
+  const handleActiveItem = (id) => {
+    console.log(id);
+
+    const items = ggs(PV_ITEMS);
+    const currentIndex = items.findIndex((item) => item.id === id);
+    setIndex(currentIndex + 1);
+  };
+
+  useEffect(() => {
+    subgs(ACTIVE_ITEM_ID, handleActiveItem);
+    return () => unsgs(ACTIVE_ITEM_ID, handleActiveItem);
+  }, []);
+
+  return (
+    <div className="panel bg-grey">
+      <i className="material-icons pd-05" onClick={() => setOpen(!open)}>
+        {open ? "chevron_right" : "chevron_left"}
+      </i>
+      <i className="material-icons pd-05" onClick={() => setPlaying(!playing)}>
+        {playing ? "pause" : "play_arrow"}
+      </i>
+      <i className="material-icons pd-05" onClick={playPrev}>
+        expand_less
+      </i>
+      <span className="pd-05">{index}</span>
+      <i className="material-icons pd-05" onClick={playNext}>
+        expand_more
+      </i>
     </div>
   );
 };

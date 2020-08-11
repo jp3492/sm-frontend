@@ -11,24 +11,25 @@ import { usegs, ggs } from "../utils/rxGlobal";
 export const Folder = ({ onSubmit, closeModal, id, directory, ...values }) => {
   const [folders] = usegs(FOLDERS);
   const [folder] = useState(
-    id
-      ? values.folder
-      : ggs(`SELECTED_FOLDER_${DIRECTORY_TYPES[directory]}`)
+    id ? values.folder : ggs(`SELECTED_FOLDER_${DIRECTORY_TYPES[directory]}`)
   );
   const [label, setLabel] = useState(values.label || "");
+  const [loading, setLoading] = useState(false);
 
   const deletable = useMemo(() => {
-    const usedFolderIds = ggs(
-      DIRECTORY_TYPES[directory] + "S"
-    ).reduce((prev, curr) => {
-      return Array.from(new Set([...prev, curr.folder]));
-    }, []);
+    const usedFolderIds = ggs(DIRECTORY_TYPES[directory] + "S").reduce(
+      (prev, curr) => {
+        return Array.from(new Set([...prev, curr.folder]));
+      },
+      []
+    );
     return !usedFolderIds.includes(id);
   }, [id, directory]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const addFolder = !folder ? {} : { folder };
+    setLoading(true);
     if (id) {
       await patchFolder({ id, label, ...addFolder });
       closeModal();
@@ -36,6 +37,7 @@ export const Folder = ({ onSubmit, closeModal, id, directory, ...values }) => {
       await postFolder({ label, directory, ...addFolder });
       closeModal();
     }
+    setLoading(false);
   };
 
   const handleDelete = async () => {
@@ -78,7 +80,9 @@ export const Folder = ({ onSubmit, closeModal, id, directory, ...values }) => {
             onChange={({ target: { value } }) => setLabel(value)}
           />
         </label>
-        <button type="submit">Save</button>
+        <button disabled={loading} type="submit">
+          Save
+        </button>
       </div>
     </form>
   );

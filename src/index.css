@@ -171,6 +171,11 @@ i {
 	border-radius: 8px;
 }
 
+.flex-center {
+	display: flex;
+	align-items: center;
+}
+
 .grid {
   display: grid;
 }
@@ -259,6 +264,9 @@ i {
 }
 .gap-l {
 	gap: 2rem;
+}
+.rgap-s {
+	row-gap: 0.5rem;
 }
 @media screen and (min-width: 1024px) {
 	.l-gap-xs {

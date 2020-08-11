@@ -12,6 +12,7 @@ import { SequencerControls } from "../components/Sequencer/SequencerControls";
 import { SequencerActions } from "../components/Sequencer/SequencerActions";
 import { getFolders } from "../stores/folder";
 import { usegs, sgs } from "../utils/rxGlobal";
+import { getPlaylists } from "../stores/playlists";
 
 export const PLAYER_PROGRESS = "PLAYER_PROGRESS";
 export const SEQUENCER_VIDEO = "SEQUENCER_VIDEO";
@@ -50,7 +51,8 @@ export const Sequencer = ({
   const [sequences] = usegs(SEQUENCES);
 
   useEffect(() => {
-    getFolders()
+    getFolders();
+    getPlaylists();
   }, []);
 
   useEffect(() => {
@@ -87,9 +89,7 @@ export const Sequencer = ({
     return videos.find((v) => v.id === id);
   }, [videos, id]);
 
-  useEffect(() => sgs(SEQUENCER_VIDEO, selectedVideo), [
-    selectedVideo
-  ]);
+  useEffect(() => sgs(SEQUENCER_VIDEO, selectedVideo), [selectedVideo]);
 
   const videoSequences = useMemo(() => {
     if (selectedVideo) {

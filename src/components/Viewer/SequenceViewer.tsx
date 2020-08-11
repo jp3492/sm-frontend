@@ -12,6 +12,7 @@ import { platforms } from "../../views/Landing";
 export const SequenceViewer = ({ sequence }) => {
   const [playing, setPlaying] = useState(false);
   const [playerReady, setPlayerReady] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const player: any = useRef();
   const ref = (p) => (player.current = p);
@@ -50,31 +51,57 @@ export const SequenceViewer = ({ sequence }) => {
 
   return (
     <div className="sequence_viewer">
-      {!playing && (
-        <div className="info">
-          <div>
+      {open ? (
+        !playing && (
+          <div className="info">
             <div>
-              <img src={platform} height="20px" alt="platform" />
-              <h5>{sequence.videoLabel}</h5>
-            </div>
-            <p>"{sequence.label}"</p>
-            {playerReady && (
-              <button onClick={handleReplay}>
-                <i className="material-icons">replay</i>
-                Replay
-              </button>
-            )}
-            <button onClick={handlePlay}>
-              {!playerReady ? (
-                "Loading..."
-              ) : (
-                <>
-                  <i className="material-icons">play_arrow</i>
-                  Play
-                </>
+              <div>
+                <img src={platform} height="20px" alt="platform" />
+                <h5>{sequence.videoLabel}</h5>
+                <i className="material-icons" onClick={() => setOpen(false)}>
+                  chevron_right
+                </i>
+              </div>
+              <p>"{sequence.label}"</p>
+              {playerReady && (
+                <button onClick={handleReplay}>
+                  <i className="material-icons">replay</i>
+                  Replay
+                </button>
               )}
-            </button>
+              <button onClick={handlePlay}>
+                {!playerReady ? (
+                  "Loading..."
+                ) : (
+                  <>
+                    <i className="material-icons">play_arrow</i>
+                    Play
+                  </>
+                )}
+              </button>
+            </div>
           </div>
+        )
+      ) : (
+        <div className="panel bg-grey">
+          <i
+            className="material-icons pd-05"
+            onClick={() => {
+              setPlaying(false);
+              setOpen(true);
+            }}
+          >
+            chevron_left
+          </i>
+          <i
+            className="material-icons pd-05"
+            onClick={() => setPlaying(!playing)}
+          >
+            {playing ? "pause" : "play_arrow"}
+          </i>
+          <i className="material-icons pd-05" onClick={handleReplay}>
+            replay
+          </i>
         </div>
       )}
       <ReactPlayer

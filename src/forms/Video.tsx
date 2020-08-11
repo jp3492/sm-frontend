@@ -17,6 +17,7 @@ export const Video = ({ onSubmit, closeModal, id, ...values }) => {
   const [keywords, setKeywords] = useState(values.keywords || []);
   const [keyword, setKeyword] = useState("");
   const [folderName, setFolderName] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const folderId = ggs(SELECTED_FOLDER_VIDEO) || "root";
   const folder = ggs(FOLDERS).find((f) => f.id === folderId);
@@ -32,21 +33,15 @@ export const Video = ({ onSubmit, closeModal, id, ...values }) => {
   }, [values]);
 
   const deletable = useMemo(() => {
-    const usedPlaylistVideoIds = ggs(PLAYLISTS).reduce(
-      (prev, curr) => {
-        const videoIds = curr.items
-          .filter((i) => i.split(":")[0] === DIRECTORY_TYPES.VIDEO)
-          .map((i) => i.split(":")[1]);
-        return Array.from(new Set([...prev, ...videoIds]));
-      },
-      []
-    );
-    const usedSequenceVideoIds = ggs(SEQUENCES).reduce(
-      (prev, curr) => {
-        return Array.from(new Set([...prev, curr.videoId]));
-      },
-      []
-    );
+    const usedPlaylistVideoIds = ggs(PLAYLISTS).reduce((prev, curr) => {
+      const videoIds = curr.items
+        .filter((i) => i.split(":")[0] === DIRECTORY_TYPES.VIDEO)
+        .map((i) => i.split(":")[1]);
+      return Array.from(new Set([...prev, ...videoIds]));
+    }, []);
+    const usedSequenceVideoIds = ggs(SEQUENCES).reduce((prev, curr) => {
+      return Array.from(new Set([...prev, curr.videoId]));
+    }, []);
 
     const isUnused = !Array.from(
       new Set([...usedPlaylistVideoIds, ...usedSequenceVideoIds])
@@ -56,6 +51,7 @@ export const Video = ({ onSubmit, closeModal, id, ...values }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (id) {
       await patchVideo({ id, url, label, keywords });
       closeModal();
@@ -70,6 +66,7 @@ export const Video = ({ onSubmit, closeModal, id, ...values }) => {
       closeModal();
       sgs(VIDEO_DETECTED, false);
     }
+    setLoading(false);
   };
 
   const handleAddKeyword = (e) => {
@@ -163,7 +160,9 @@ export const Video = ({ onSubmit, closeModal, id, ...values }) => {
             </li>
           ))}
         </ul>
-        <button type="submit">Save</button>
+        <button disabled={loading} type="submit">
+          Save
+        </button>
       </div>
     </form>
   );

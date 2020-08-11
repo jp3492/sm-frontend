@@ -17,6 +17,7 @@ export const Playlist = ({ onSubmit, closeModal, id, ...values }) => {
   const [folderName, setFolderName] = useState("");
   const [videos] = usegs(VIDEOS);
   const [sequences] = usegs(SEQUENCES);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const folders = ggs(FOLDERS);
@@ -50,6 +51,7 @@ export const Playlist = ({ onSubmit, closeModal, id, ...values }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (id) {
       await patchPlaylist({
         id,
@@ -62,6 +64,7 @@ export const Playlist = ({ onSubmit, closeModal, id, ...values }) => {
       await postPlaylist({ items, label, keywords });
       closeModal();
     }
+    setLoading(false);
   };
 
   return (
@@ -137,7 +140,9 @@ export const Playlist = ({ onSubmit, closeModal, id, ...values }) => {
             </li>
           ))}
         </ul>
-        <button type="submit">Save</button>
+        <button disabled={loading} type="submit">
+          Save
+        </button>
       </div>
     </form>
   );

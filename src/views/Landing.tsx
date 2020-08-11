@@ -100,7 +100,6 @@ export const Landing = () => {
             via link.
           </span>
         </p>
-        <div></div>
       </section>
       <section id="use-cases" className="use-cases-section">
         <h4>Use Cases</h4>
