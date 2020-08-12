@@ -6,7 +6,8 @@ const APIS =
         playlists: "http://localhost:4002",
         sequences: "http://localhost:4004",
         viewer: "http://localhost:4005",
-        payments: "http://localhost:4006"
+        payments: "http://localhost:4006",
+        users: "http://localhost:4007"
       }
     : {
         folders:
@@ -20,7 +21,9 @@ const APIS =
         viewer:
           "https://us-central1-streaming-manager-dc49e.cloudfunctions.net/viewer",
         payment:
-          "https://us-central1-streaming-manager-dc49e.cloudfunctions.net/payment"
+          "https://us-central1-streaming-manager-dc49e.cloudfunctions.net/payment",
+        users:
+          "https://us-central1-streaming-manager-dc49e.cloudfunctions.net/user"
       };
 
 export const request = (api: string, path: string = "", options: any = {}) => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   OPEN_FOLDERS,
   SELECTED_DIRECTORY,
@@ -61,25 +61,29 @@ const handleDrop = async (e) => {
 };
 
 const handleOpenFolder = (id) =>
-  ugs(OPEN_FOLDERS, openFolders => {
+  ugs(OPEN_FOLDERS, (openFolders) => {
     if (openFolders.includes(id)) {
-      return openFolders.filter((f) => f !== id)
+      return openFolders.filter((f) => f !== id);
     }
     return [...openFolders, id];
   });
 
 export const MenuItem = ({ folders, directory }) => {
-  const [selectedDirectory, setSelectedDirectory] = usegs(
-    SELECTED_DIRECTORY
-  );
+  const [selectedDirectory, setSelectedDirectory] = usegs(SELECTED_DIRECTORY);
   const rootFolders = folders.filter(
     (f) => !f.folder && f.directory === directory
   );
+  const [open, setOpen] = useState(true);
 
   const handleSelect = () => {
     handleOpenFolder(null);
     handleSelectFolder(null, directory);
     setSelectedDirectory(DIRECTORY_TYPES[directory]);
+  };
+
+  const handleOpen = (e) => {
+    e.stopPropagation();
+    setOpen(!open);
   };
 
   return (
@@ -94,7 +98,7 @@ export const MenuItem = ({ folders, directory }) => {
           : ""
       }`}
     >
-      <div className="menu_item_header pd-01501 aligned-grid grid-tc-mm1 gap-m">
+      <div className="menu_item_header pd-01501 aligned-grid grid-tc-m1m gap-m">
         <i className="material-icons">
           {directory === DIRECTORY_TYPES.PLAYLIST
             ? "playlist_play"
@@ -105,23 +109,28 @@ export const MenuItem = ({ folders, directory }) => {
         <label>
           {DIRECTORY_TYPES[directory].toLowerCase().capitalize() + "s"}
         </label>
-        <MenuFolderCount type={DIRECTORY_TYPES[directory]} />
+        {/* <MenuFolderCount type={DIRECTORY_TYPES[directory]} /> */}
+        <i className="material-icons" onClick={handleOpen}>
+          {open ? "expand_less" : "expand_more"}
+        </i>
       </div>
-      <div className="folder_folders">
-        {rootFolders.map((f, i) => {
-          return (
-            <MenuFolder
-              {...f}
-              handleOpenFolder={handleOpenFolder}
-              handleSelectFolder={handleSelectFolder}
-              handleDrop={handleDrop}
-              key={i}
-              folders={folders}
-              directory={directory}
-            />
-          );
-        })}
-      </div>
+      {open && (
+        <div className="folder_folders">
+          {rootFolders.map((f, i) => {
+            return (
+              <MenuFolder
+                {...f}
+                handleOpenFolder={handleOpenFolder}
+                handleSelectFolder={handleSelectFolder}
+                handleDrop={handleDrop}
+                key={i}
+                folders={folders}
+                directory={directory}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

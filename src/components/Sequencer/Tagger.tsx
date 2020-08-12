@@ -6,7 +6,8 @@ import {
   postSequence
 } from "../../stores/sequences";
 import { secondsToTime } from "../../utils/secondsToTime";
-import { ggs, sgs, usegs } from "../../utils/rxGlobal";
+import { ggs, sgs, usegs, rgss } from "../../utils/rxGlobal";
+import { SEQUENCER_PLAYER } from "./SequencerVideo";
 
 export const TAGGER_ACTIVE_TIME = "TAGGER_ACTIVE_TIME";
 export const TAGGER_START = "TAGGER_START";
@@ -92,6 +93,7 @@ const handleSubmit = (fastTagging?: any) => {
       });
     }
   }
+  reset();
 };
 
 const handleStartClick = (e) => {
@@ -134,6 +136,9 @@ const resetTagger = (fastTagging?: boolean) => {
   sgs(TAGGER_STOP, undefined);
 };
 
+const reset = () =>
+  rgss([TAGGER_ACTIVE_TIME, TAGGER_LABEL, TAGGER_START, TAGGER_STOP]);
+
 export const Tagger = () => {
   const [activeTime, setActiveTime]: any = usegs(TAGGER_ACTIVE_TIME, "start");
   const [editingSequence] = usegs(EDITING_SEQUENCE);
@@ -153,7 +158,10 @@ export const Tagger = () => {
 
   useEffect(() => {
     document.addEventListener("controls", handleControls);
-    return () => document.removeEventListener("controls", handleControls);
+    return () => {
+      document.removeEventListener("controls", handleControls);
+      reset();
+    };
   }, []);
 
   useEffect(() => {
@@ -165,9 +173,16 @@ export const Tagger = () => {
     }
   }, [editingSequence, setStart, setStop, setLabel, setActiveTime]);
 
-  const activateStart = () =>
+  const activateStart = () => {
+    const { player } = ggs(SEQUENCER_PLAYER);
+    player.seekTo(start);
     setActiveTime(activeTime === "start" ? "" : "start");
-  const activateStop = () => setActiveTime(activeTime === "stop" ? "" : "stop");
+  };
+  const activateStop = () => {
+    const { player } = ggs(SEQUENCER_PLAYER);
+    player.seekTo(stop);
+    setActiveTime(activeTime === "stop" ? "" : "stop");
+  };
   const handleLabelChange = ({ target: { value } }) => setLabel(value);
 
   return (

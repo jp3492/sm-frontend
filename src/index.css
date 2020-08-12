@@ -1,4 +1,6 @@
 :root {
+	--cl-primary: #E91E63;
+
 	--cl-grey: #9E9E9E;
 	--cl-grey-dark: #616161;
 	--cl-grey-light: #f4f4f4;
@@ -106,7 +108,10 @@ input {
 }
 
 textarea {
-	border: none;
+	padding: 0.8rem 0.5rem;
+  border: 1px solid var(--cl-grey-light);
+	border-radius: 8px;
+	width: 100%;
 }
 
 textarea:focus, input:focus {
@@ -165,6 +170,9 @@ i {
 }
 .bg-grey-dark {
 	background-color: var(--cl-grey-dark);
+}
+.bg-primary {
+	background-color: var(--cl-primary);
 }
 
 .rounded {

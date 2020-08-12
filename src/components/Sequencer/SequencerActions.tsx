@@ -9,7 +9,7 @@ import { PLAYLISTS, patchPlaylist } from "../../stores/playlists";
 
 export const SequencerActions = () => {
   const [selectedSequences, setSelectedSequences] = usegs(SELECTED_SEQUENCES);
-  const [quickTag, setQuickTag] = usegs(TAGGER_FAST_TAG);
+  const [fastTagging, setFastTagging] = usegs(TAGGER_FAST_TAG, false);
 
   const disabled = useMemo(() => selectedSequences.length === 0, [
     selectedSequences
@@ -59,10 +59,10 @@ export const SequencerActions = () => {
     <div className="sequencer_actions stretched-grid grid-ac-1">
       <button
         className="centered-grid grid-tc-mm pd-01 gap-s"
-        onClick={() => setQuickTag(!quickTag)}
+        onClick={() => setFastTagging(!fastTagging)}
       >
         <i className="material-icons">
-          {quickTag ? "check_box" : "check_box_outline_blank"}
+          {fastTagging ? "check_box" : "check_box_outline_blank"}
         </i>
         <small>
           Fast <br />

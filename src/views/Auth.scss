@@ -53,5 +53,9 @@
         background-color: var(--cl-grey) !important;
       }
     }
+    > span {
+      text-align: center;
+      cursor: pointer;
+    }
   }
 }

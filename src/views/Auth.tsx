@@ -3,6 +3,8 @@ import "./Auth.scss";
 import { Link } from "react-router-dom";
 
 import { register, login } from "../services/auth";
+import { sgs } from "../utils/rxGlobal";
+import { MODAL } from "../components/Modal";
 
 export const Auth = ({
   match: {
@@ -42,6 +44,12 @@ export const Auth = ({
     //   }
     // }
   };
+
+  const handleAccess = () =>
+    sgs(MODAL, {
+      component: "REQUEST_ACCESS"
+    });
+
   return (
     <main className="auth">
       <Link to="/">
@@ -55,7 +63,6 @@ export const Auth = ({
         className="rounded grid gap-m pd-2 shadow-m"
         onSubmit={handleSubmit}
       >
-        {/* <h2>Login</h2> */}
         <label className="form-field">
           Email
           <input
@@ -89,6 +96,7 @@ export const Auth = ({
         {/* <Link to={type === "login" ? "/auth/register" : "/auth/login"}>
           {type === "login" ? "Register here" : "Login here"}
         </Link> */}
+        <span onClick={handleAccess}>Request access here</span>
       </form>
     </main>
   );

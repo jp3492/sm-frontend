@@ -83,14 +83,14 @@ export const Landing = () => {
           iFrame.
           <a
             target="_blank"
-            href="http://localhost:3000/viewer/playlist/oT89LOtv67j2EVYEag2P"
+            href="https://viden.pro/viewer/playlist/oT89LOtv67j2EVYEag2P"
           >
             Watch playlist in full here.
           </a>
         </p>
         <div>
           <iframe
-            src="http://localhost:3000/viewer/playlist/oT89LOtv67j2EVYEag2P"
+            src="https://viden.pro/viewer/playlist/oT89LOtv67j2EVYEag2P"
             title="embedded instruction playlist on how this here works!"
           />
         </div>
@@ -170,11 +170,6 @@ export const Landing = () => {
         <h4>
           Pricing <small>Coming soon</small>
         </h4>
-        {/* <p>
-          By default, a signed up user has <b>free</b> access to all
-          functionalities, but sharing capabilities will be restricted to a paid
-          user.
-        </p> */}
         <p>
           Our goal is to create a sustainable and productive workplace as well
           as service to our users. Creating a solid and representable community,
