@@ -22,6 +22,7 @@ const sports = require("../assets/sports.png");
 const media = require("../assets/media.svg");
 const social = require("../assets/social.svg");
 const code = require("../assets/code.svg");
+const network = require("../assets/network.svg");
 
 export const Landing = () => {
   const [auth] = usegs(AUTH);
@@ -29,7 +30,9 @@ export const Landing = () => {
   return (
     <div className="landing gap-l">
       <header className="centered-grid grid-tc-1mm l-gap-l pd-01 s-gap-l">
-        <h2 className="js-s">Viden</h2>
+        <h1 className="js-s">
+          Viden <small>Beta</small>
+        </h1>
         <nav className="centered-grid grid-ac-m grid-af-c l-gap-l s-gap-l">
           <a href="#how-to">How it works</a>
           <a href="#use-cases">Use cases</a>
@@ -42,64 +45,55 @@ export const Landing = () => {
         )}
       </header>
       <section className="intro-section">
-        <h4>
-          Viden is a platform that provides tools to work and interact with
-          streamed videos. Our goal is it to add a new dimension to online
-          streaming and help users to create and share content in new ways.
-        </h4>
-        <label>Supported platforms</label>
+        <h2>
+          A new Dimension <br />
+          for Online Streaming
+        </h2>
+        <h3>
+          Viden is a platform to work and interact with streamable videos
+          online. Our goal is it to help users, create and share content in new
+          ways.
+        </h3>
         <div>
-          <ul>
-            {Object.keys(platforms).map((key) => (
-              <li key={key}>
-                <img src={platforms[key]} alt={key} height="30px" />
-              </li>
-            ))}
-            {/* <li>... HLS and DASH are also supported.</li> */}
-          </ul>
+          <img src={network} height="100px" alt="online network icon" />
+          <h4>Barrier-free Support</h4>
+          <p>
+            You can use any video of the supported platforms as well as any HLS
+            or DASH supported streaming service.
+          </p>
         </div>
-        <span>
-          Want to use your own streaming service? HLS and DASH are also
-          supported.
-        </span>
+        <ul>
+          {Object.keys(platforms).map((key) => (
+            <li key={key}>
+              <img
+                src={platforms[key]}
+                alt={key}
+                height={key === "soundcloud" ? "40px" : "30px"}
+              />
+            </li>
+          ))}
+        </ul>
       </section>
       <section id="how-to" className="how-to-section">
         <h4>How it works?</h4>
         <p>
-          <label>1</label>
-          <span>
-            Copy any video link on the internet from any supported platform.
-          </span>
+          The example below is a playlist created with Viden. The playlist
+          contains multiple videos from several platforms as well as single
+          sequences of those videos. It is embedded on this website as normal
+          iFrame.
+          <a
+            target="_blank"
+            href="http://localhost:3000/viewer/playlist/oT89LOtv67j2EVYEag2P"
+          >
+            Watch playlist in full here.
+          </a>
         </p>
-        <p>
-          <label>2</label>
-          <span>Save that link in your dashboard.</span>
-        </p>
-        <p>
-          <label>3</label>
-          <span>Drag and drop videos into playlists.</span>
-        </p>
-        <p>
-          <label>4</label>
-          <span>Create folders and organize your content.</span>
-        </p>
-        <p>
-          <label>5</label>
-          <span>
-            You want only part of a video? No problem. Just extract the desired
-            sequence (it's like magic 🙂).
-            <br />
-            <br />
-            !Any sequence and video can be used in a playlist!
-          </span>
-        </p>
-        <p>
-          <label>6</label>
-          <span>
-            Share any playlist, video or sequence with your friends or collegues
-            via link.
-          </span>
-        </p>
+        <div>
+          <iframe
+            src="http://localhost:3000/viewer/playlist/oT89LOtv67j2EVYEag2P"
+            title="embedded instruction playlist on how this here works!"
+          />
+        </div>
       </section>
       <section id="use-cases" className="use-cases-section">
         <h4>Use Cases</h4>
@@ -133,14 +127,14 @@ export const Landing = () => {
             <img src={sports} height="80px" alt="sports" />
             <span>
               Viden provides a simple to use solution for time based video
-              analysis at very low cost. Tag sequences, create playlists and
-              highlights for your analysis and share them with your staff or
-              players. Live-streams can be used just like any other video!
+              analysis. Tag sequences, create playlists and highlights for your
+              analysis and share them with your staff or players. Live-streams
+              can be used just like any other video!
             </span>
           </p>
           <p>
             <h5>Media:</h5>
-            <img src={media} height="80px" alt="media" />
+            <img src={media} width="100%" alt="media" />
             <span>
               Collaborate with your team and use Viden to easily share video
               content back and forth. In the future we hope to integrate a
@@ -150,13 +144,12 @@ export const Landing = () => {
           </p>
           <p>
             <h5>Social:</h5>
-            <img src={social} height="60px" width="80px" alt="music" />
+            <img src={social} height="80px" alt="music" />
 
             <span>
               Want to share a small snippet of a video with your friends or a
-              playlists with funny moments or simply organize your favorite
-              online video content? Videns ultimate goal is it to manage, create
-              and share streaming content as easily and user friendly as
+              playlists with funny moments? Videns ultimate goal is it to
+              manage, create and share streaming content as user friendly as
               possible.
             </span>
           </p>
@@ -174,74 +167,28 @@ export const Landing = () => {
         </div>
       </section>
       <section id="pricing" className="pricing-section">
-        <h4>Pricing</h4>
+        <h4>
+          Pricing <small>Coming soon</small>
+        </h4>
+        {/* <p>
+          By default, a signed up user has <b>free</b> access to all
+          functionalities, but sharing capabilities will be restricted to a paid
+          user.
+        </p> */}
         <p>
           Our goal is to create a sustainable and productive workplace as well
-          as service to our users. Therefore we intend to have a good balance
-          between utility- and value based pricing. We believe in fair pricing
-          and transparent use of data.
+          as service to our users. Creating a solid and representable community,
+          should be a major focus for all new social media platforms. Therefore
+          we intend to eliminate the need for advertising through user data and
+          create a fair pricing model.
           <br />
           <br />
           By restricting sharing capabilities to a paid account, we intend to
-          ensure higher quality of our community. Free social media platforms
-          tend to run into issues the bigger the user base gets. We hope to
-          prevent some of these issues while attracting people with professional
+          ensure higher quality of our community. We hope to prevent some of the
+          commong social media issues while attracting people with professional
           purpose.
         </p>
-        <span>
-          By default, a signed up user has <b>free</b> access to all
-          functionalities, but sharing capabilities are restricted.
-        </span>
-        <div>
-          <div>
-            <h5>
-              <i className="material-icons">share</i>Social
-            </h5>
-            <div>
-              <p>Full access to all basic functionalities.</p>
-              <p>
-                Content (videos, sequences, playlists) is sharable online via
-                link.
-              </p>
-              <p>Content can be embedded on your website.</p>
-            </div>
-            <span>1€ / month</span>
-          </div>
-
-          <div>
-            <h5>
-              <i className="material-icons">people</i>Team/Enterprise
-            </h5>
-            <div>
-              {/* <p>Full access to all basic functionalities.</p>
-              <p>
-                Content (videos, sequences, playlists) is sharable online via
-                link.
-              </p>
-              <p>Content can be embedded on your website.</p> */}
-              <p>Privately share and edit content within your team.</p>
-              <p>Commenting functonality on all your content.</p>
-              <p>Integration with private video servers.</p>
-            </div>
-            <span>Coming in the future</span>
-          </div>
-
-          <div>
-            <h5>
-              <i className="material-icons">code</i>Developer
-            </h5>
-            <div>
-              <p>API access to all content related endpoints.</p>
-              <p>Extended embed functionalities and configuration.</p>
-              <p>
-                Drop-in UIs for frontend development. (JS, React, Vue, Angular,
-                Svelte)
-              </p>
-              <p>Create and manage accounts for your own users.</p>
-            </div>
-            <span>Coming in the future</span>
-          </div>
-        </div>
+        <div></div>
       </section>
       <footer>
         <div>

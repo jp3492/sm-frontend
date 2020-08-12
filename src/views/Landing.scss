@@ -1,8 +1,13 @@
 .landing {
   background: linear-gradient(to right, #757575, #BDBDBD);
   height: max-content;
+  overflow: hidden;
+  display: grid;
   * {
     color: white;
+  }
+  small {
+    font-size: small;
   }
   header {
     position: sticky;
@@ -13,114 +18,120 @@
     z-index: 1;
   }
   section {
-    max-width: 1024px;
     width: 100%;
-    margin: 0 auto;
     display: grid;
     grid-auto-rows: max-content;
-    gap: 1rem;
-    padding: 60px 0;
-    margin-bottom: 2em;
+    padding: 2rem 0;
+    padding: 0 4rem;
+    margin-bottom: 4rem;
     > h4 {
+      position: relative;
       font-size: 180%;
-      border-bottom: 1px solid white;
       padding: 1rem;
-      margin-bottom: 1rem;
+      width: max-content;
+      border-bottom: 2px solid white;
     }
     > p {
-      padding: 0 1rem;
-      // max-width: 700px;
+      padding: 2rem 1rem;
+      max-width: 800px;
+    }
+    &.intro-section, &.how-to-section {
+    height: calc(100vh - 60px);
     }
     &.intro-section {
-      height: calc(100vh - 60px);
       display: grid;
-      grid-template-rows: 1fr max-content max-content max-content;
-      > h4 {
-        place-self: center;
-        border: none;
-        font-size: 200%;
-        text-align: center;
+      grid-template-columns: max-content 1fr;
+      grid-template-rows: 1fr 1fr max-content;
+      gap: 2rem 4rem;
+      padding: 4rem;
+      > h2, > h3, > div {
+        grid-column: 2 / 3;
       }
-      label {
-        justify-self: center;
-        padding-bottom: 0.5rem;
-        margin-bottom: 0.3rem;
-        font-weight: 500;
+      > h2 {
         position: relative;
+        align-self: end;
+        font-size: 2.5rem;
+        width: max-content;
+        padding-bottom: 2rem;
         &:after {
           content: "";
           position: absolute;
           bottom: 0;
-          width: 130%;
-          left: 50%;
-          transform: translateX(-50%);
-          height: 1px;
+          left: 0;
+          width: 70%;
+          height: 2px;
           background-color: white;
         }
       }
-      div {
-        padding-bottom: 2em;
-        ul {
+      > h3 {
+        max-width: 600px;
+        font-weight: 500;
+      }
+      > div {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        gap: 0 2rem;
+        padding: 1rem;
+        > img {
+          grid-column: 1 / 2;
+          grid-row: 1 / 3;
+        }
+        > h4 {
+          font-size: 1.4rem;
+          width: max-content;
+        }
+        > p {
+          max-width: 600px;
+          font-weight: 400;
           display: flex;
-          flex-wrap: wrap;
-          column-gap: 2em;
-          row-gap: 1em;
-          justify-content: center;
-          li:last-of-type {
-            align-self: flex-end;
-            padding-bottom: 5px;
-          }
+          align-items: center;
         }
       }
-      span {
-        text-align: center;
-        font-weight: 500;
-        font-size: 80%;
+      > ul {
+        display: grid;
+        justify-items: end;
+        align-content: space-between;
+        align-self: end;
+        padding: 2rem 4rem;
+        grid-column: 1 / 2;
+        grid-row: 1 / 4;
+        border-right: 2px solid white;
+        height: 100%;
+        li:last-of-type {
+          align-self: flex-end;
+          padding-bottom: 5px;
+        }
       }
     }
     &.how-to-section {
-      > h4 {
-        // grid-column: 1 / 3;
-        margin-bottom: 2rem;
-      }
-      > p {
-        // grid-column: 1 / 2;
-        display: grid;
-        gap: 1em;
-        grid-template-columns: max-content 1fr;
-        label {
-          font-size: 150%;
-          height: max-content;
-          text-align: center;
-          border-radius: 50%;
-          border: 2px solid white;
-          width: 35px;
-          height: 35px;
-          line-height: 35px;
-          display: grid;
-          place-content: center;
+      > div {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%;
+        > iframe {
+          position: absolute;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          max-height: calc(100vh - 200px);
+          border: none;
         }
       }
-      // > div {
-      //   grid-column: 2 / 3;
-      //   grid-row: 2 / 7;
-      //   background-color: var(--cl-grey-dark);
-      // }
     }
     &.use-cases-section {
       > div {
-        padding: 2rem;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: 3rem;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 2rem 4rem;
         justify-content: space-around;
         > p {
           display: grid;
-          grid-template-columns: max-content 1fr;
+          grid-template-columns: 80px 1fr;
           grid-auto-rows: max-content;
           gap: 1rem;
           align-items: center;
           column-gap: 2rem;
+          padding: 2rem;
           > h5 {
             font-size: 120%;
             grid-column: 2 / 3;
@@ -133,33 +144,15 @@
           }
           > span {
             grid-column: 2 / 3;
-            padding-top: 1rem;
-            border-top: 2px solid white;
           }
         }
       }
 
     }
     &.pricing-section {
-      > p {
-        border: 2px solid var(--cl-orange);
-        padding: 1rem;
-        place-self: center;
-        margin: 0 1rem;
-        max-width: 800px;
-        margin-bottom: 1rem;
-        text-align: center;
-        margin-top: 2rem;
-      }
-      > span {
-        font-size: 120%;
-        padding: 1rem;
-        place-self: center;
-        max-width: 500px;
-        // text-decoration: underline;
-        text-align: center;
-        margin-bottom: 1rem;
-      }
+
+      height: max-content;
+      min-height: max-content;
       > div {
         display: flex;
         flex-wrap: wrap;
@@ -227,9 +220,6 @@
     box-shadow: var(--shadow-xl);
     padding: 2rem 1rem;
     > div {
-      max-width: 1024px;
-      width: 100%;
-      margin: 0 auto;
       display: flex;
       gap: 1rem;
     }
