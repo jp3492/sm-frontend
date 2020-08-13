@@ -8,6 +8,7 @@ import React, {
 import ReactPlayer from "react-player";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { sgs, subgs, unsgs, usegs, ggs, ugs } from "../../utils/rxGlobal";
+import { handleShare } from "../Dashboard/Directory";
 
 const PV_ITEMS = "PV_ITEMS";
 const PV_PLAYING = "PLAYING";
@@ -22,19 +23,37 @@ sgs(PV_PLAYERS, {});
 
 let nextStop: any = null;
 
+let previousItemId;
+
 subgs(ACTIVE_ITEM_ID, (id) => {
-  const item = ggs(PV_ITEMS).find((i) => i.id === id);
+  const items = ggs(PV_ITEMS);
 
-  if (item) sgs(ACTIVE_URL, item.url);
+  const previousItem = items.find((i) => i.id === previousItemId);
+  const item = items.find((i) => i.id === id);
 
-  const player = ggs(PV_PLAYERS)[item.url].player;
+  // sets url only if the current url is different from the last one
+  // and only if there has been a previous item
+  if (
+    item &&
+    ((previousItem && previousItem.url !== item.url) || !previousItem)
+  ) {
+    sgs(ACTIVE_URL, item.url);
+  }
+
+  const skipSeek = !!previousItem && previousItem.stop === item.start;
+
+  console.log("SKIP SEEK", skipSeek);
 
   nextStop = item.type === DIRECTORY_TYPES.SEQUENCE ? item.stop : null;
-  player.seekTo(
-    item.type === DIRECTORY_TYPES.SEQUENCE ? item.start : 0,
-    "seconds"
-  );
+  if (!skipSeek) {
+    const player = ggs(PV_PLAYERS)[item.url].player;
+    player.seekTo(
+      item.type === DIRECTORY_TYPES.SEQUENCE ? item.start : 0,
+      "seconds"
+    );
+  }
 
+  previousItemId = id;
   if (!ggs(PV_PLAYING)) sgs(PV_PLAYING, true);
 });
 
@@ -105,7 +124,7 @@ const playPrev = () => {
 
 const handleSelect = (e) => sgs(ACTIVE_ITEM_ID, e.target.closest("li").id);
 
-export const PlaylistViewer = ({ videos, sequences, playlist }: any) => {
+export const PlaylistViewer = ({ videos, sequences, playlist, query }: any) => {
   const [items, setItems] = usegs(PV_ITEMS, []);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(true);
@@ -146,17 +165,17 @@ export const PlaylistViewer = ({ videos, sequences, playlist }: any) => {
   );
 
   return (
-    <div className="playlist_viewer grid grid-tc-1m bg-black">
+    <div className="playlist_viewer grid bg-black" data-align={query.alignList}>
       <div className="players">
         {urls.map((u, i) => (
           <Video key={i} url={u} />
         ))}
       </div>
       <div className="playlist_viewer-list grid grid-tr-mm1" data-open={open}>
-        <h5>
+        <h2>
           <i className="material-icons">playlist_play</i>
           {playlist.label}
-        </h5>
+        </h2>
         <input
           className="bg-grey-dark"
           type="text"
@@ -180,8 +199,6 @@ const Panel = ({ open, setOpen }) => {
   const [index, setIndex] = useState();
 
   const handleActiveItem = (id) => {
-    console.log(id);
-
     const items = ggs(PV_ITEMS);
     const currentIndex = items.findIndex((item) => item.id === id);
     setIndex(currentIndex + 1);
@@ -264,7 +281,7 @@ const Video = ({ url }) => {
   );
 };
 
-const Item = ({ id, label }) => {
+const Item = ({ id, label, type }) => {
   const [active, setActive] = useState(false);
 
   const handleActive = useCallback(
@@ -279,12 +296,18 @@ const Item = ({ id, label }) => {
 
   return (
     <li
-      className="bg-grey-dark pd-051051"
+      className="bg-grey-dark row-1m pd-051051"
       data-active={active}
       onClick={handleSelect}
       id={id}
     >
       {label}
+      <i
+        onClick={() => handleShare(DIRECTORY_TYPES[type], id, label)}
+        className="material-icons cl-white"
+      >
+        share
+      </i>
     </li>
   );
 };

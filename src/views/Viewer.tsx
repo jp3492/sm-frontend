@@ -1,17 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./Viewer.scss";
 
 import { PlaylistViewer } from "../components/Viewer/PlaylistViewer";
 import { SequenceViewer } from "../components/Viewer/SequenceViewer";
 import { request } from "../utils/request";
 import { DIRECTORY_TYPES } from "../stores/folder";
+import { searchToQuery } from "../utils/searchToQuery";
 
 export const Viewer = ({
   match: {
     params: { type, id }
-  }
+  },
+  location: { search }
 }) => {
   const [item, setItem] = useState();
+  const [loading, setLoading] = useState(false);
+
+  useMemo(() => setLoading(true), [type, id]);
+
+  const query = useMemo(() => (search ? searchToQuery(search) : {}), [search]);
 
   const getItem = async () => {
     if (type === "playlist") {
@@ -21,6 +28,7 @@ export const Viewer = ({
       const sequence = await getSequence(id);
       setItem(sequence);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -38,12 +46,12 @@ export const Viewer = ({
 
   return (
     <div className="viewer grid overflow-h">
-      {!item ? (
+      {!item || loading ? (
         <div className="centered-grid bg-grey-dark cl-white">{loadingText}</div>
       ) : type === "playlist" ? (
-        <PlaylistViewer {...item} />
+        <PlaylistViewer {...item} query={query} />
       ) : (
-        <SequenceViewer sequence={item} />
+        <SequenceViewer sequence={item} query={query} />
       )}
     </div>
   );

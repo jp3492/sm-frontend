@@ -9,7 +9,7 @@ import ReactPlayer from "react-player";
 
 import { platforms } from "../../views/Landing";
 
-export const SequenceViewer = ({ sequence }) => {
+export const SequenceViewer = ({ sequence, query }) => {
   const [playing, setPlaying] = useState(false);
   const [playerReady, setPlayerReady] = useState(false);
   const [open, setOpen] = useState(true);

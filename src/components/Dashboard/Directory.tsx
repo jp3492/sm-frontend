@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import "./Directory.scss";
 import { Path } from "./Path";
 import { VIDEOS } from "../../stores/videos";
@@ -13,15 +13,19 @@ import { SEQUENCES } from "../../stores/sequences";
 import { DirectoryItem } from "./DirectoryItem";
 import { usegs, sgs } from "../../utils/rxGlobal";
 
+export const DIRECTORY_SORTED_SEQUENCES = "DIRECTORY_SORTED_SEQUENCES";
+
+sgs(DIRECTORY_SORTED_SEQUENCES, []);
+
 const onDragOver = (e) => {
   e.stopPropagation();
   e.preventDefault();
 };
 
-export const handleShare = (type, id) => {
+export const handleShare = (type, id, label?) => {
   sgs(MODAL, {
     component: "share",
-    props: { type, id }
+    props: { type, id, label }
   });
 };
 
@@ -45,6 +49,8 @@ export const Directory = () => {
     PLAYLIST: null
   });
 
+  const [timeSort, setTimeSort] = useState("asc");
+
   const items = useMemo(() => {
     if (selectedDirectory === DIRECTORY_TYPES.VIDEO) {
       return videos.filter((v) =>
@@ -60,20 +66,6 @@ export const Directory = () => {
       );
     }
   }, [selectedDirectory, videos, playlists, selectedFolder, sequences]);
-
-  const onDragStart = (e) => {
-    const type = DIRECTORY_TYPES[e.target.closest("li").classList[0]];
-    const itemId = e.target.closest("li").id;
-    const ids =
-      type === DIRECTORY_TYPES.VIDEO
-        ? [...selectedVideos, itemId]
-        : type === DIRECTORY_TYPES.PLAYLIST
-        ? [...selectedPlaylists, itemId]
-        : [...selectedSequences, itemId];
-
-    e.dataTransfer.setData("text/plain", JSON.stringify({ ids, type }));
-    // Now this will break every drop event
-  };
 
   const handleDrop = (e) => {
     const id = e.target.closest("li").id;
@@ -151,13 +143,13 @@ export const Directory = () => {
     });
   };
 
+  const handleTimeSort = () => setTimeSort(timeSort === "asc" ? "desc" : "asc");
+
   const sortedItems = useMemo(() => {
-    const copy = [...items];
+    let copy = [...items];
     const sort = labelSort[selectedDirectory];
-    if (!sort) {
-      return copy;
-    } else if (sort === "asc") {
-      return copy.sort((a, b) => {
+    if (sort === "asc") {
+      copy = copy.sort((a, b) => {
         var nameA = a.label.toUpperCase(); // ignore upper and lowercase
         var nameB = b.label.toUpperCase(); // ignore upper and lowercase
         if (nameA < nameB) {
@@ -171,7 +163,7 @@ export const Directory = () => {
         return 0;
       });
     } else {
-      return copy.sort((a, b) => {
+      copy = copy.sort((a, b) => {
         var nameA = a.label.toUpperCase(); // ignore upper and lowercase
         var nameB = b.label.toUpperCase(); // ignore upper and lowercase
         if (nameA > nameB) {
@@ -184,7 +176,38 @@ export const Directory = () => {
         return 0;
       });
     }
-  }, [labelSort, items, selectedDirectory]);
+    if (timeSort === "asc") {
+      copy = copy.sort((a, b) => a.start - b.start);
+    } else {
+      copy = copy.sort((a, b) => b.start - a.start);
+    }
+    sgs(DIRECTORY_SORTED_SEQUENCES, copy);
+    return copy;
+  }, [labelSort, timeSort, items, selectedDirectory]);
+
+  const onDragStart = (e) => {
+    const type = DIRECTORY_TYPES[e.target.closest("li").classList[0]];
+    const itemId = e.target.closest("li").id;
+    const ids =
+      type === DIRECTORY_TYPES.VIDEO
+        ? [...selectedVideos, itemId]
+        : type === DIRECTORY_TYPES.PLAYLIST
+        ? [...selectedPlaylists, itemId]
+        : [...selectedSequences, itemId];
+    console.log(ids);
+    console.log(sortedItems);
+
+    const sortedIds = sortedItems
+      .filter((item) => ids.includes(item.id))
+      .map((item) => item.id);
+    console.log(sortedIds);
+
+    e.dataTransfer.setData(
+      "text/plain",
+      JSON.stringify({ ids: sortedIds, type })
+    );
+    // Now this will break every drop event
+  };
 
   const searchedItems = useMemo(() => {
     if (!search) {
@@ -249,7 +272,7 @@ export const Directory = () => {
           <i className="material-icons">add</i>
           Folder
         </button>
-        <div className="grid cgap-m pd-01">
+        <div className="grid aligned-grid grid-af-c cgap-m pd-01">
           <label>Sort by:</label>
           <span className="grid gap-s" onClick={handleSort}>
             Label
@@ -261,6 +284,14 @@ export const Directory = () => {
                 : "expand_more"}
             </i>
           </span>
+          {selectedDirectory === DIRECTORY_TYPES.SEQUENCE && (
+            <span className="grid gap-s" onClick={handleTimeSort}>
+              Time
+              <i className="material-icons">
+                {timeSort === "asc" ? "expand_less" : "expand_more"}
+              </i>
+            </span>
+          )}
         </div>
         <div>
           <input
@@ -270,7 +301,7 @@ export const Directory = () => {
             placeholder="Search files.."
           />
         </div>
-        <div className="grid gap-m">
+        <div className="grid grid-tc-mm gap-m">
           <label>Select all:</label>
           <i className="material-icons" onClick={handleSelectAll}>
             {allSelected ? "check_box" : "check_box_outline_blank"}

@@ -17,13 +17,11 @@ import { getPlaylists } from "../stores/playlists";
 export const PLAYER_PROGRESS = "PLAYER_PROGRESS";
 export const SEQUENCER_VIDEO = "SEQUENCER_VIDEO";
 
-const KEY_EVENTS = {
+const CTRL_EVENTS = {
   0: "play",
   10: "tag",
   127: "tagback",
-  37: "rewind",
   38: "back",
-  39: "forward",
   40: "next",
   81: "fasttagging",
   67: "close",
@@ -31,12 +29,22 @@ const KEY_EVENTS = {
   88: "playback"
 };
 
+const CTRL_ALT_EVENTS = {
+  37: "rewind",
+  39: "forward"
+};
+
 const handleKeyPress = (e) => {
   const key = e.keyCode;
   const ctrl = e.ctrlKey;
+  const alt = e.altKey;
+  // console.log(key, ctrl, alt);
 
-  if (ctrl && KEY_EVENTS[key]) {
-    const event = new CustomEvent("controls", { detail: KEY_EVENTS[key] });
+  if (ctrl && CTRL_EVENTS[key]) {
+    const event = new CustomEvent("controls", { detail: CTRL_EVENTS[key] });
+    document.dispatchEvent(event);
+  } else if (ctrl && alt && CTRL_ALT_EVENTS[key]) {
+    const event = new CustomEvent("controls", { detail: CTRL_ALT_EVENTS[key] });
     document.dispatchEvent(event);
   }
 };
@@ -85,9 +93,10 @@ export const Sequencer = ({
       .find((_, i) => i === 0);
   }, [search]);
 
-  const selectedVideo = useMemo(() => {
-    return videos.find((v) => v.id === id);
-  }, [videos, id]);
+  const selectedVideo = useMemo(() => videos.find((v) => v.id === id), [
+    videos,
+    id
+  ]);
 
   useEffect(() => sgs(SEQUENCER_VIDEO, selectedVideo), [selectedVideo]);
 

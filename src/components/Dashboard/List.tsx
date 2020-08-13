@@ -15,7 +15,8 @@ import { ListList } from "./ListList";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { SEQUENCES } from "../../stores/sequences";
 import { itemsToPlaylistItems } from "../../utils/itemsToPlaylistItems";
-import { usegs, sgs } from "../../utils/rxGlobal";
+import { usegs, sgs, ggs } from "../../utils/rxGlobal";
+import { DIRECTORY_SORTED_SEQUENCES } from "./Directory";
 
 export const SELECTED_LIST_ITEMS = "SELECTED_LIST_ITEMS";
 
@@ -25,10 +26,7 @@ export const Playlist = () => {
   const [videos] = usegs(VIDEOS);
   const [sequences] = usegs(SEQUENCES);
   const [playlists] = usegs(PLAYLISTS);
-  const [selectedItems, setSelectedItems] = usegs(
-    SELECTED_LIST_ITEMS,
-    []
-  );
+  const [selectedItems, setSelectedItems] = usegs(SELECTED_LIST_ITEMS, []);
   const [activePlaylist, setActivePlaylist] = usegs(ACTIVE_PLAYLIST);
   const [search, setSearch] = useState("");
 
@@ -62,7 +60,8 @@ export const Playlist = () => {
 
   const addSequences = useCallback(
     (ids) => {
-      const newSeqs = sequences
+      const sortedSequences = ggs(DIRECTORY_SORTED_SEQUENCES);
+      const newSeqs = sortedSequences
         .filter((s) => ids.includes(s.id))
         .filter((s) => !items.find((i) => i.id === s.id));
       if (newSeqs.length === 0) {
@@ -184,8 +183,8 @@ export const Playlist = () => {
       const sequenceIds = items
         .filter((i) => i.type === DIRECTORY_TYPES.SEQUENCE)
         .map((i) => i.id);
-
-      const newSequences = sequences
+      const sortedSequences = ggs(DIRECTORY_SORTED_SEQUENCES);
+      const newSequences = sortedSequences
         .filter((s) => ids.includes(s.id) && !sequenceIds.includes(s.id))
         .map((s) => `SEQUENCE:${s.id}`);
 

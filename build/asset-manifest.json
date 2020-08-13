@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/static/css/main.96dc5cde.chunk.css",
-    "main.js": "/static/js/main.4a66fed6.chunk.js",
-    "main.js.map": "/static/js/main.4a66fed6.chunk.js.map",
+    "main.css": "/static/css/main.dddfefcf.chunk.css",
+    "main.js": "/static/js/main.aafdf73b.chunk.js",
+    "main.js.map": "/static/js/main.aafdf73b.chunk.js.map",
     "reactPlayerDailyMotion.js": "/static/js/reactPlayerDailyMotion.901a94a3.chunk.js",
     "reactPlayerDailyMotion.js.map": "/static/js/reactPlayerDailyMotion.901a94a3.chunk.js.map",
     "reactPlayerFacebook.js": "/static/js/reactPlayerFacebook.7fb258c3.chunk.js",
@@ -27,15 +27,15 @@
     "reactPlayerYouTube.js.map": "/static/js/reactPlayerYouTube.6db63d2a.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.acd7dff0.js",
     "runtime-main.js.map": "/static/js/runtime-main.acd7dff0.js.map",
-    "static/js/13.f303262e.chunk.js": "/static/js/13.f303262e.chunk.js",
-    "static/js/13.f303262e.chunk.js.map": "/static/js/13.f303262e.chunk.js.map",
+    "static/js/13.959bffbe.chunk.js": "/static/js/13.959bffbe.chunk.js",
+    "static/js/13.959bffbe.chunk.js.map": "/static/js/13.959bffbe.chunk.js.map",
     "static/js/14.1d21b7cf.chunk.js": "/static/js/14.1d21b7cf.chunk.js",
     "static/js/14.1d21b7cf.chunk.js.map": "/static/js/14.1d21b7cf.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.aba96b95d6001e36926776e7f1066a20.js": "/precache-manifest.aba96b95d6001e36926776e7f1066a20.js",
+    "precache-manifest.e15ef00951053a41450123341019b43a.js": "/precache-manifest.e15ef00951053a41450123341019b43a.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.96dc5cde.chunk.css.map": "/static/css/main.96dc5cde.chunk.css.map",
-    "static/js/13.f303262e.chunk.js.LICENSE.txt": "/static/js/13.f303262e.chunk.js.LICENSE.txt",
+    "static/css/main.dddfefcf.chunk.css.map": "/static/css/main.dddfefcf.chunk.css.map",
+    "static/js/13.959bffbe.chunk.js.LICENSE.txt": "/static/js/13.959bffbe.chunk.js.LICENSE.txt",
     "static/media/code.svg": "/static/media/code.5c621d6a.svg",
     "static/media/dailymotion.svg": "/static/media/dailymotion.d3059d87.svg",
     "static/media/dropbox.png": "/static/media/dropbox.bf6dfc1d.png",
@@ -54,8 +54,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.acd7dff0.js",
-    "static/js/13.f303262e.chunk.js",
-    "static/css/main.96dc5cde.chunk.css",
-    "static/js/main.4a66fed6.chunk.js"
+    "static/js/13.959bffbe.chunk.js",
+    "static/css/main.dddfefcf.chunk.css",
+    "static/js/main.aafdf73b.chunk.js"
   ]
 }

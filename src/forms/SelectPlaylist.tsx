@@ -24,17 +24,24 @@ export const SelectPlaylist = ({ closeModal }) => {
   }, [playlists, search]);
 
   return (
-    <div>
+    <div className="select-playlist">
+      <h2>Select Playlist</h2>
       <input
         type="text"
         name="search"
         alt="search palylists"
+        placeholder="Search playlists"
         value={search}
         onChange={({ target: { value } }) => setSearch(value)}
       />
       <ul>
         {searchedPlaylists.map((p, i) => (
-          <li id={p.id} key={i} onClick={handleSelect}>
+          <li
+            className="centered-grid"
+            id={p.id}
+            key={i}
+            onClick={handleSelect}
+          >
             <i className="material-icons">
               {selected === p.id ? "check_box" : "check_box_outline_blank"}
             </i>
@@ -42,7 +49,12 @@ export const SelectPlaylist = ({ closeModal }) => {
           </li>
         ))}
       </ul>
-      <button onClick={handleSubmit}>Select</button>
+      <button
+        className="pd-051 bg-grey cl-white rounded"
+        onClick={handleSubmit}
+      >
+        Select
+      </button>
     </div>
   );
 };

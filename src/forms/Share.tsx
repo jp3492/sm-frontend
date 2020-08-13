@@ -6,7 +6,9 @@ import { PLAYLISTS } from "../stores/playlists";
 import { Link } from "react-router-dom";
 import { ggs } from "../utils/rxGlobal";
 
-export const Share = ({ type, id, closeModal }) => {
+export const Share = ({ type, id, label, closeModal }) => {
+  console.log(type, id);
+
   const item = useMemo(() => {
     if (type === DIRECTORY_TYPES.VIDEO) {
       return ggs(VIDEOS).find((v) => v.id === id);
@@ -29,7 +31,9 @@ export const Share = ({ type, id, closeModal }) => {
 
   return (
     <form className="share">
-      <h2>{`Share ${type.toLowerCase().capitalize()}: ${item.label}`}</h2>
+      <h2>{`Share ${type.toLowerCase().capitalize()}: ${
+        label || item.label
+      }`}</h2>
       <div>
         <small>Share this Link with someone :)</small>
         <p>{link}</p>
@@ -37,10 +41,10 @@ export const Share = ({ type, id, closeModal }) => {
           content_copy
         </i>
       </div>
-      <Link to={path} onClick={closeModal}>
+      <a href={path} target="_blank" onClick={closeModal}>
         Open Link
         <i className="material-icons">open_in_new</i>
-      </Link>
+      </a>
     </form>
   );
 };

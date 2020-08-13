@@ -6,6 +6,8 @@
   background-color: var(--cl-grey-opace);
   > * {
     box-shadow: var(--shadow-l);
+    background-color: white;
+    border-radius: 8px;
   }
 }
 

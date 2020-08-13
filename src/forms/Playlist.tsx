@@ -93,30 +93,7 @@ export const Playlist = ({ onSubmit, closeModal, id, ...values }) => {
             onChange={({ target: { value } }) => setLabel(value)}
           />
         </label>
-        <ul className="links">
-          {items.length === 0 ? (
-            <li>No Videos selected</li>
-          ) : (
-            items.map((item, i) => {
-              const [type, id] = item.split(":");
-              const { label } =
-                type === DIRECTORY_TYPES.VIDEO
-                  ? videos.find((v) => v.id === id)
-                  : sequences.find((s) => s.id === id);
-              return (
-                <li id={i}>
-                  {label}
-                  <i
-                    onClick={() => removeItem(item)}
-                    className="material-icons"
-                  >
-                    close
-                  </i>
-                </li>
-              );
-            })
-          )}
-        </ul>
+        <p>{`${items.length} Items selected`}</p>
         <label className="keywords">
           Keywords
           <input

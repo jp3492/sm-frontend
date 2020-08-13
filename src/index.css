@@ -78,6 +78,12 @@ button:disabled > i {
 	pointer-events: none;
 }
 
+.button-icon {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -400,4 +406,14 @@ i {
 	color: var(--cl-red);
 	font-weight: 500;
 	padding-left: 0.5em;
+}
+
+/* Flex utility classes */
+.row-1m {
+	display: grid;
+	grid-template-columns: 1fr max-content;
+	align-items: center;
+}
+.row > * + * {
+	padding-right: 0.5rem;
 }

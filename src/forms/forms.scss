@@ -174,3 +174,19 @@ form {
   gap: 2em;
   }
 }
+
+.select-playlist {
+  display: grid;
+  input {
+    background-color: var(--cl-grey-light);
+  }
+  ul {
+    padding: 0.5rem;
+    li {
+      display: flex;
+      align-items: center;
+
+    }
+  }
+
+}

@@ -16,13 +16,64 @@ export const platforms = {
   vidyard: require("../assets/vidyard.svg")
 };
 
-const tutorial = require("../assets/tutorial.png");
-const music = require("../assets/music.svg");
-const sports = require("../assets/sports.png");
-const media = require("../assets/media.svg");
-const social = require("../assets/social.svg");
-const code = require("../assets/code.svg");
 const network = require("../assets/network.svg");
+
+const useCases = [
+  {
+    title: "Tutorials and instructions",
+    image: require("../assets/tutorial.png"),
+    height: "80px",
+    alt: "tutorials and instructions",
+    content:
+      "Create playlists with videos and sequences for any step-by-step tutorial. Cooking videos, how-to guides or educational playlists can easily be created and shared online. We also enable an embed functionality for anything you have created on Viden.",
+    exampleUrl: "http://viden.pro/viewer/playlist/9xZoPlkWuoeAyBYjUB3V"
+  },
+  {
+    title: "Music",
+    image: require("../assets/music.svg"),
+    height: "80px",
+    alt: "music",
+    content:
+      "Create music playlists with videos from multiple platforms for personal use or to share online. In case you want to add certain songs from a concert or a set, you can simply disect it as a sequence and use it in your playlist.",
+    exampleUrl: ""
+  },
+  {
+    title: "(e)Sports",
+    image: require("../assets/sports.png"),
+    height: "80px",
+    alt: "sports and esports",
+    content:
+      "Viden provides a simple to use solution for time based video analysis. Tag sequences, create playlists and highlights for your analysis and share them with your staff or players. Live-streams can be used just like any other video!",
+    exampleUrl: ""
+  },
+  {
+    title: "Media",
+    image: require("../assets/media.svg"),
+    height: "80px",
+    alt: "media",
+    content:
+      "Collaborate with your team and use Viden to easily share video content back and forth. In the future we hope to integrate a collborative team functionality, which enables teams and enterprises to enhance their communication and content creation.",
+    exampleUrl: ""
+  },
+  {
+    title: "Social",
+    image: require("../assets/social.svg"),
+    height: "80px",
+    alt: "social",
+    content:
+      "Want to share a small snippet of a video with your friends or a playlists with funny moments? Videns ultimate goal is it to manage, create and share streaming content as user friendly as possible.",
+    exampleUrl: ""
+  },
+  {
+    title: "Development*",
+    image: require("../assets/code.svg"),
+    height: "80px",
+    alt: "development",
+    content:
+      "*Coming in the future. We want to open up out api and platform for developers. Providing a simple API and UI, we hope to enable developers to create time-based video software and elevate this platform to the next level.",
+    exampleUrl: ""
+  }
+];
 
 export const Landing = () => {
   const [auth] = usegs(AUTH);
@@ -97,74 +148,7 @@ export const Landing = () => {
       </section>
       <section id="use-cases" className="use-cases-section">
         <h4>Use Cases</h4>
-        <div>
-          <p>
-            <h5>Tutorials and instructions:</h5>
-            <img
-              src={tutorial}
-              alt="tutorials and instructions"
-              height="80px"
-            />
-            <span>
-              Create playlists with videos and sequences for any step-by-step
-              tutorial. Cooking videos, how-to guides or educational playlists
-              can easily be created and shared online. We also enable an embed
-              functionality for anything you have created on Viden.
-            </span>
-          </p>
-          <p>
-            <h5>Music:</h5>
-            <img src={music} height="80px" alt="music" />
-            <span>
-              Create music playlists with videos from multiple platforms for
-              personal use or to share online. In case you want to add certain
-              songs from a concert or a set, you can simply disect it as a
-              sequence and use it in your playlist.
-            </span>
-          </p>
-          <p>
-            <h5>(e)Sports:</h5>
-            <img src={sports} height="80px" alt="sports" />
-            <span>
-              Viden provides a simple to use solution for time based video
-              analysis. Tag sequences, create playlists and highlights for your
-              analysis and share them with your staff or players. Live-streams
-              can be used just like any other video!
-            </span>
-          </p>
-          <p>
-            <h5>Media:</h5>
-            <img src={media} width="100%" alt="media" />
-            <span>
-              Collaborate with your team and use Viden to easily share video
-              content back and forth. In the future we hope to integrate a
-              collborative team functionality, which enables teams and
-              enterprises to enhance their communication and content creation.
-            </span>
-          </p>
-          <p>
-            <h5>Social:</h5>
-            <img src={social} height="80px" alt="music" />
-
-            <span>
-              Want to share a small snippet of a video with your friends or a
-              playlists with funny moments? Videns ultimate goal is it to
-              manage, create and share streaming content as user friendly as
-              possible.
-            </span>
-          </p>
-
-          <p>
-            <h5>Development*:</h5>
-            <img src={code} height="80px" alt="music" />
-            <span>
-              *Coming in the future. We want to open up out api and platform for
-              developers. Providing a simple API and UI, we hope to enable
-              developers to create time-based video software and elevate this
-              platform to the next level.
-            </span>
-          </p>
-        </div>
+        <div>{useCases.map(UseCase)}</div>
       </section>
       <section id="pricing" className="pricing-section">
         <h4>
@@ -195,3 +179,15 @@ export const Landing = () => {
     </div>
   );
 };
+
+const UseCase = ({ title, image, height, alt, content, exampleUrl }) => (
+  <p className="use-case">
+    <h5>{title}</h5>
+    <img src={image} height={height} alt={alt} />
+    <span>{content}</span>
+    <a className="pd-051 rounded button-icon" href={exampleUrl} target="_blank">
+      <span>View Example</span>
+      <i className="material-icons">open_in_new</i>
+    </a>
+  </p>
+);
