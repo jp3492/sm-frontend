@@ -1,11 +1,22 @@
 .menu {
   width: 0;
   grid-template-rows: 45px repeat(3, max-content);
+  overflow-y: auto;
+  position: relative;
   > * { background-color: white;}
   > .selected > div > i { color: var(--cl-orange);}
   h3 {
     align-self: center;
     height: 45px;
+    position: sticky;
+    top: 0;
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      height: 2px;
+      background-color: var(--cl-grey-light);
+    }
   }
   &.open {
     width: 300px;

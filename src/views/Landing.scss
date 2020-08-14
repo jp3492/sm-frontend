@@ -102,26 +102,65 @@
           padding-bottom: 5px;
         }
       }
-    }
-    &.how-to-section {
-      > div {
-        position: relative;
-        width: 100%;
-        padding-top: 56.25%;
-        > iframe {
-          position: absolute;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          max-height: calc(100vh - 200px);
+      @media screen and (max-width: 720px) {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr max-content max-content;
+        > h2, > h3, > div, > ul {
+          grid-column: 1 / 2;
+        }
+        > ul {
+          grid-row: 4 / 5;
+          display: flex;
+          flex-wrap: wrap;
+          place-content: center;
           border: none;
+          gap: 1rem;
+          border-top: 2px solid white;
         }
       }
+    }
+    &.how-to-section {
+      height: max-content;
+      gap: 2rem;
+      > div {
+        display: grid;
+        place-content: start;
+        // grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        > div {
+          border: 2px solid white;
+          padding: 1rem;
+          // background-color: white;
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          i {
+            font-size: 340%;
+          }
+          * {
+            // color: var(--cl-grey-dark);
+          }
+
+        }
+      }
+      // > div {
+      //   position: relative;
+      //   width: 100%;
+      //   padding-top: 56.25%;
+      //   > iframe {
+      //     position: absolute;
+      //     top: 0;
+      //     width: 100%;
+      //     height: 100%;
+      //     max-height: calc(100vh - 200px);
+      //     border: none;
+      //   }
+      // }
     }
     &.use-cases-section {
       > div {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
         gap: 2rem 4rem;
         justify-content: space-around;
         > .use-case {
@@ -217,6 +256,32 @@
             background-color: #0097A7;
           }
         }
+      }
+    }
+    &.whats-next {
+      span  {
+        display: grid;
+        padding: 1rem;
+        > b {
+          padding: 1rem;
+        }
+      }
+      p {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        padding-left: 2rem;
+        max-width: 600px;
+      }
+      a {
+        padding-left: 2rem;
+        text-decoration: underline;
+        color: var(--cl-orange);
+      }
+      h5 {
+        font-size: 1.2rem;
+        // padding: 0 1rem;
       }
     }
   }

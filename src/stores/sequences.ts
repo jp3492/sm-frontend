@@ -8,12 +8,14 @@ export const FILTERED_SEQUENCES = "FILTERED_SEQUENCES";
 export const SELECTED_SEQUENCES = "SELECTED_SEQUENCES";
 export const SEQUENCER_TARGET = "SEQUENCER_TARGET";
 export const EDITING_SEQUENCE = "EDITING_SEQUENCE";
+export const ADDED_SEQUENCE_ID = "ADDED_SEQUENCE_ID";
 
 sgs(SEQUENCES, []);
 sgs(FILTERED_SEQUENCES, []);
 sgs(SELECTED_SEQUENCES, []);
 sgs(SEQUENCER_TARGET, null);
 sgs(EDITING_SEQUENCE, null);
+sgs(ADDED_SEQUENCE_ID, null);
 
 export const moveSequences = async ({ folderId, ids, type }) => {
   try {
@@ -75,6 +77,7 @@ export const postSequence = async (body) => {
         return i;
       })
     );
+    sgs(ADDED_SEQUENCE_ID, sequenceId);
   } catch (error) {
     console.log(error);
   }

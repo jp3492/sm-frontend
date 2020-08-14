@@ -35,7 +35,7 @@ const useCases = [
     alt: "music",
     content:
       "Create music playlists with videos from multiple platforms for personal use or to share online. In case you want to add certain songs from a concert or a set, you can simply disect it as a sequence and use it in your playlist.",
-    exampleUrl: ""
+    exampleUrl: "http://viden.pro/viewer/playlist/QyPnXoXJBmofOW8fy3O3"
   },
   {
     title: "(e)Sports",
@@ -44,7 +44,7 @@ const useCases = [
     alt: "sports and esports",
     content:
       "Viden provides a simple to use solution for time based video analysis. Tag sequences, create playlists and highlights for your analysis and share them with your staff or players. Live-streams can be used just like any other video!",
-    exampleUrl: ""
+    exampleUrl: "http://viden.pro/viewer/playlist/5nwBbxBXsSkEFzCPV194"
   },
   {
     title: "Media",
@@ -87,7 +87,8 @@ export const Landing = () => {
         <nav className="centered-grid grid-ac-m grid-af-c l-gap-l s-gap-l">
           <a href="#how-to">How it works</a>
           <a href="#use-cases">Use cases</a>
-          <a href="#pricing">Pricing</a>
+          {/* <a href="#pricing">Pricing</a> */}
+          <a href="#whats-next">Whats next?</a>
         </nav>
         {auth ? (
           <Link to="/dashboard">Dashboard</Link>
@@ -127,30 +128,38 @@ export const Landing = () => {
       </section>
       <section id="how-to" className="how-to-section">
         <h4>How it works?</h4>
-        <p>
-          The example below is a playlist created with Viden. The playlist
-          contains multiple videos from several platforms as well as single
-          sequences of those videos. It is embedded on this website as normal
-          iFrame.
-          <a
-            target="_blank"
-            href="https://viden.pro/viewer/playlist/oT89LOtv67j2EVYEag2P"
-          >
-            Watch playlist in full here.
-          </a>
-        </p>
         <div>
-          <iframe
-            src="https://viden.pro/viewer/playlist/oT89LOtv67j2EVYEag2P"
-            title="embedded instruction playlist on how this here works!"
-          />
+          <div className="take-links rounded pd-1">
+            <i className="material-icons">play_circle_outline</i>
+            <p>Copy link/url of supported videos.</p>
+          </div>
+          <div className="rounded pd-1">
+            <i className="material-icons">folder</i>
+            <p>Organize with a simple drag & drop file/folder system.</p>
+          </div>
+          <div className="rounded pd-1">
+            <i className="material-icons sequence-icon">open_in_full</i>
+            <p>Set time based tags and disect videos into sequences.</p>
+          </div>
+          <div className="rounded pd-1">
+            <i className="material-icons">playlist_play</i>
+            <p>Create playlists with videos and/or sequences.</p>
+          </div>
+          <div className="rounded pd-1">
+            <i className="material-icons">share</i>
+            <p>Share any video, sequence or playlist via link</p>
+          </div>
+          <div className="rounded pd-1">
+            <i className="material-icons">code</i>
+            <p>Embed playlist- and sequence viewer into your website</p>
+          </div>
         </div>
       </section>
       <section id="use-cases" className="use-cases-section">
         <h4>Use Cases</h4>
         <div>{useCases.map(UseCase)}</div>
       </section>
-      <section id="pricing" className="pricing-section">
+      {/* <section id="pricing" className="pricing-section">
         <h4>
           Pricing <small>Coming soon</small>
         </h4>
@@ -168,12 +177,49 @@ export const Landing = () => {
           purpose.
         </p>
         <div></div>
+      </section> */}
+      <section id="whats-next" className="whats-next">
+        <h4>Our Plans</h4>
+        <span>
+          <h5>'Add a new dimension to online streaming'</h5>
+          <p>
+            Our ultimate goal is it to make every video thats streamable online
+            as interactive and useable as possible and support content creation
+            in general.
+          </p>
+        </span>
+        <span>
+          <h5>Therefore we have following stepstones in mind:</h5>
+          <p>
+            <i className="material-icons">check_box</i>
+            Create basic functionalities for users to organize, create and share
+            content.
+          </p>
+          <p>
+            <i className="material-icons">check_box_outline_blank</i>
+            Develop a cloud for professionals and teams to collaborate on
+            content creation and effectively work with streamable media.
+          </p>
+          <p>
+            <i className="material-icons">check_box_outline_blank</i>
+            Open up our API for developers to build time-based video software.
+            Examples: 'Sports analysis', 'Video based AI learning', 'Educational
+            video platforms', 'Video surveilance', ...
+          </p>
+        </span>
+        <span>
+          <h5>Interested in supporting this project?</h5>
+          <p>
+            Please reach out to me personally for cooperation or potential jobs:{" "}
+          </p>
+          <a href="mailto:contact@jpmarks.dev">Send me an Email.</a>
+        </span>
       </section>
       <footer>
         <div>
           <h2>Viden</h2>
-          <Link to="/impressum">Imprint</Link>
-          <Link to="/datenschutz">Data & Privacy</Link>
+          {/* <Link to="/impressum">Imprint</Link>
+          <Link to="/datenschutz">Data & Privacy</Link> */}
         </div>
       </footer>
     </div>
@@ -185,9 +231,15 @@ const UseCase = ({ title, image, height, alt, content, exampleUrl }) => (
     <h5>{title}</h5>
     <img src={image} height={height} alt={alt} />
     <span>{content}</span>
-    <a className="pd-051 rounded button-icon" href={exampleUrl} target="_blank">
-      <span>View Example</span>
-      <i className="material-icons">open_in_new</i>
-    </a>
+    {!!exampleUrl && (
+      <a
+        className="pd-051 rounded button-icon"
+        href={exampleUrl}
+        target="_blank"
+      >
+        <span>View Example</span>
+        <i className="material-icons">open_in_new</i>
+      </a>
+    )}
   </p>
 );

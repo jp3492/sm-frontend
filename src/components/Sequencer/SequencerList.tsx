@@ -2,7 +2,8 @@ import React, { useMemo, useState, useEffect, useCallback } from "react";
 import {
   FILTERED_SEQUENCES,
   SELECTED_SEQUENCES,
-  EDITING_SEQUENCE
+  EDITING_SEQUENCE,
+  ADDED_SEQUENCE_ID
 } from "../../stores/sequences";
 import {
   SEQUENCER_PLAYER,
@@ -10,23 +11,29 @@ import {
   SEQUENCER_PLAYING_SEQUENCES
 } from "./SequencerVideo";
 import { secondsToTime } from "../../utils/secondsToTime";
-import { usegs, ggs, sgs } from "../../utils/rxGlobal";
+import { usegs, ggs, sgs, subgs } from "../../utils/rxGlobal";
 
 let timeout;
 let lastSort;
+let addedId;
 
-export const SequencerList = ({ sequences: seqs, sequenceId }) => {
-  const [selectedSequences, setSelectedSequences] = usegs(
-    SELECTED_SEQUENCES
-  );
+subgs(ADDED_SEQUENCE_ID, (id) => (addedId = id));
+
+export const SequencerList = ({ sequenceId }: any) => {
+  const [selectedSequences, setSelectedSequences] = usegs(SELECTED_SEQUENCES);
   const [sequences] = usegs(FILTERED_SEQUENCES);
   const [activeSequenceId, setActiveSequenceId] = useState(sequenceId);
   const [playingSequenceIds] = usegs(SEQUENCER_PLAYING_SEQUENCES);
-  const [editingSequence, setEditingSequence] = usegs(
-    EDITING_SEQUENCE
-  );
+  const [editingSequence, setEditingSequence] = usegs(EDITING_SEQUENCE);
   const [sortTime, setSortTime]: any = useState("asc");
   const [sortLabel, setSortLabel]: any = useState();
+
+  useEffect(() => {
+    const el = document.getElementById(addedId);
+    if (el) {
+      el.scrollIntoView();
+    }
+  }, [sequences]);
 
   useEffect(() => {
     lastSort = "time";

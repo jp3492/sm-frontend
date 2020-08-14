@@ -6,13 +6,18 @@ class Store {
   value: any = "";
   initialValue: any;
   setters: Array<any> = [];
+  observers: Array<Function> = [];
   setInitialValue = (value: any) => {
     this.initialValue = value;
     this.setValue(value);
   };
   setValue = (value: any) => {
+    const oldValues = this.value;
     this.value = value;
     this.setters.forEach((setter: any) => setter(this.value));
+    this.observers.forEach((observer: Function) =>
+      observer(oldValues, this.value)
+    );
   };
   addSetter = (setter: any) => {
     this.setters = [...this.setters, setter];
@@ -20,6 +25,12 @@ class Store {
   unsubscribe = (setter: any) => {
     this.setters = this.setters.filter((s) => s !== setter);
     return this.setters.length;
+  };
+  addObserver = (observer: Function) => {
+    this.observers = [...this.observers, observer];
+  };
+  removeObserver = (observer: Function) => {
+    this.observers = this.observers.filter((o) => o !== observer);
   };
 }
 
@@ -80,6 +91,16 @@ export const resetGlobalStates = (ids: string[]) => {
   });
 };
 export const rgss = resetGlobalStates;
+
+export const observeGlobalState = (id: string, cb: Function) => {
+  stores[id].addObserver(cb);
+};
+export const ogs = observeGlobalState;
+
+export const ignoreGlobalState = (id: string, cb: Function) => {
+  stores[id].removeObserver(cb);
+};
+export const igs = (id: string, cb: Function) => ignoreGlobalState;
 
 export const useGlobalState = (
   id: string,

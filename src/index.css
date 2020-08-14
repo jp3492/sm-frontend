@@ -417,3 +417,8 @@ i {
 .row > * + * {
 	padding-right: 0.5rem;
 }
+
+.sequence-icon {
+	transform: rotate(45deg);
+	position: relative;
+}
