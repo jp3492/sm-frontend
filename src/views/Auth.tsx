@@ -51,21 +51,22 @@ export const Auth = ({
     });
 
   return (
-    <main className="auth">
+    <main className="auth || grid content-center">
       <Link to="/">
-        <i className="material-icons">home</i>
+        <i className="material-icons || cl-text-icon size-18">home</i>
       </Link>
-      <header>
+      <header className="flow-1 || text-align-c cl-text-icon || pd-2">
         <h1>Welcome to Viden</h1>
         <h2>{type.capitalize()}</h2>
       </header>
       <form
-        className="rounded grid gap-m pd-2 shadow-m"
+        className="bg-acc-d || rounded || grid gap-m || pd-2 || shadow-m"
         onSubmit={handleSubmit}
       >
-        <label className="form-field">
+        <label className="form-field || bg-white || cl-text-sec">
           Email
           <input
+            className="bg-white"
             type="email"
             value={values.email}
             onChange={handleChange}
@@ -74,7 +75,7 @@ export const Auth = ({
             alt="enter your email"
           />
         </label>
-        <label className="form-field">
+        <label className="form-field || bg-white || cl-text-sec">
           Password
           <input
             type="password"
@@ -87,7 +88,7 @@ export const Auth = ({
         </label>
         {error && <p className="error">{error}</p>}
         <button
-          className="rounded bg-grey-light pd-1010"
+          className="rounded || bg-pri || pd-1010 || cl-text-icon"
           disabled={loading}
           type="submit"
         >
@@ -96,7 +97,9 @@ export const Auth = ({
         {/* <Link to={type === "login" ? "/auth/register" : "/auth/login"}>
           {type === "login" ? "Register here" : "Login here"}
         </Link> */}
-        <span onClick={handleAccess}>Request access here</span>
+        <span className="cl-text-icon text-align-c" onClick={handleAccess}>
+          Request access here
+        </span>
       </form>
     </main>
   );

@@ -1,7 +1,13 @@
-import { sgs, ugs } from './../utils/rxGlobal';
+import { sgs, ugs } from "./../utils/rxGlobal";
 import { VIDEOS } from "./videos";
 import { showHint } from "./../components/Hint";
 import { request } from "../utils/request";
+
+export const STATUS_TYPES = {
+  PRIVATE: "PRIVATE",
+  PUBLIC: "PUBLIC",
+  FEATURED: "FEATURED"
+};
 
 export const PLAYLISTS = "PLAYLISTS";
 export const PLAYLIST_OPEN = "PLAYLIST_OPEN";
@@ -17,16 +23,18 @@ export const movePlaylists = async ({ folderId, ids, type }) => {
       method: "POST",
       body: JSON.stringify({ ids, type })
     });
-    ugs(PLAYLISTS, playlists => playlists.map(({ folder, ...p }) => {
-      if (ids.includes(p.id)) {
-        const addFolder = folderId === "root" ? {} : { folder: folderId };
-        return {
-          ...p,
-          ...addFolder
-        };
-      }
-      return { ...p, folder };
-    }));
+    ugs(PLAYLISTS, (playlists) =>
+      playlists.map(({ folder, ...p }) => {
+        if (ids.includes(p.id)) {
+          const addFolder = folderId === "root" ? {} : { folder: folderId };
+          return {
+            ...p,
+            ...addFolder
+          };
+        }
+        return { ...p, folder };
+      })
+    );
     showHint(`Successfully moved playlists.`);
   } catch (error) {
     console.log(error);
@@ -64,7 +72,7 @@ export const postPlaylist = async (values) => {
       body: JSON.stringify(values)
     });
     const id = await res.text();
-    ugs(PLAYLISTS, playlists => ([...playlists, { id, ...values }]));
+    ugs(PLAYLISTS, (playlists) => [...playlists, { id, ...values }]);
     sgs(ACTIVE_PLAYLIST, id);
     showHint(`Created new playlist "${values.label}".`);
   } catch (error) {
@@ -78,7 +86,9 @@ export const patchPlaylist = async ({ id, ...values }) => {
       method: "PATCH",
       body: JSON.stringify(values)
     });
-    ugs(PLAYLISTS, playlists => playlists.map((v) => (v.id === id ? { id, ...v, ...values } : v)))
+    ugs(PLAYLISTS, (playlists) =>
+      playlists.map((v) => (v.id === id ? { id, ...v, ...values } : v))
+    );
     showHint(`Playlist "${values.label}" updated successfully.`);
   } catch (error) {
     console.log(error);
@@ -88,7 +98,7 @@ export const patchPlaylist = async ({ id, ...values }) => {
 export const deletePlaylist = async (id) => {
   try {
     await request("playlists", "/" + id, { method: "DELETE" });
-    ugs(PLAYLISTS, playlists => playlists.filter((f) => f.id !== id));
+    ugs(PLAYLISTS, (playlists) => playlists.filter((f) => f.id !== id));
     showHint(`Playlist deleted successfully.`);
   } catch (error) {
     console.log(error);

@@ -4,19 +4,15 @@ import {
   postPlaylist,
   deletePlaylist
 } from "../stores/playlists";
-import { FOLDERS, DIRECTORY_TYPES } from "../stores/folder";
-import { VIDEOS } from "../stores/videos";
-import { SEQUENCES } from "../stores/sequences";
-import { ggs, usegs } from "../utils/rxGlobal";
+import { FOLDERS } from "../stores/folder";
+import { ggs } from "../utils/rxGlobal";
 
 export const Playlist = ({ onSubmit, closeModal, id, ...values }) => {
   const [label, setLabel] = useState(values.label || "");
-  const [items, setItems] = useState(values.items || []);
+  const [items] = useState(values.items || []);
   const [keywords, setKeywords] = useState(values.keywords || []);
   const [keyword, setKeyword] = useState("");
   const [folderName, setFolderName] = useState("");
-  const [videos] = usegs(VIDEOS);
-  const [sequences] = usegs(SEQUENCES);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -45,9 +41,6 @@ export const Playlist = ({ onSubmit, closeModal, id, ...values }) => {
 
   const handleRemove = (word) =>
     setKeywords(keywords.filter((w) => w !== word));
-
-  const removeItem = (id) =>
-    setItems(items.filter((i) => i.split(":")[0] !== id));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,7 +86,6 @@ export const Playlist = ({ onSubmit, closeModal, id, ...values }) => {
             onChange={({ target: { value } }) => setLabel(value)}
           />
         </label>
-        <p>{`${items.length} Items selected`}</p>
         <label className="keywords">
           Keywords
           <input

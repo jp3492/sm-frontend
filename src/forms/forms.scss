@@ -3,6 +3,7 @@ form {
   background-color: white;
   border-radius: 8px;
   overflow: hidden;
+  min-width: 350px;
   .form-header {
     border-bottom: 2px solid var(--cl-grey-light);
     padding: 1em 1em 0.5em 1em;

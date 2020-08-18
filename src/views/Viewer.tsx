@@ -1,11 +1,18 @@
 import React, { useState, useEffect, useMemo } from "react";
 import "./Viewer.scss";
 
-import { PlaylistViewer } from "../components/Viewer/PlaylistViewer";
+import { PlaylistViewer, PV_ITEMS } from "../components/Viewer/PlaylistViewer";
 import { SequenceViewer } from "../components/Viewer/SequenceViewer";
 import { request } from "../utils/request";
 import { DIRECTORY_TYPES } from "../stores/folder";
 import { searchToQuery } from "../utils/searchToQuery";
+import { rgss } from "../utils/rxGlobal";
+import {
+  PV_PLAYERS,
+  ACTIVE_ITEM_ID,
+  ACTIVE_URL,
+  PV_PLAYING
+} from "../components/Viewer/PlaylistViewer";
 
 export const Viewer = ({
   match: {
@@ -14,9 +21,13 @@ export const Viewer = ({
   location: { search }
 }) => {
   const [item, setItem] = useState();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  useMemo(() => setLoading(true), [type, id]);
+  useEffect(() => {
+    return () => {
+      rgss([PV_PLAYERS, ACTIVE_ITEM_ID, ACTIVE_URL, PV_PLAYING, PV_ITEMS]);
+    };
+  }, []);
 
   const query = useMemo(() => (search ? searchToQuery(search) : {}), [search]);
 

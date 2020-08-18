@@ -106,7 +106,7 @@ export const useGlobalState = (
   id: string,
   initialValue: any = ""
 ): [any, Function] => {
-  const [_, set] = useState("");
+  const set = useState("")[1];
 
   if (!stores.hasOwnProperty(id)) {
     initializeState(id, initialValue);
@@ -125,7 +125,7 @@ export const useGlobalState = (
         delete stores[id];
       }
     },
-    []
+    [unsubscribe, set, id]
   );
 
   return [value, setValue];

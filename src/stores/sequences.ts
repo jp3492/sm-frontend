@@ -115,7 +115,7 @@ export const deleteSequences = async (targetId) => {
     const res = await request("sequences", "/" + targetId, {
       method: "DELETE"
     });
-    if (res.status != 403) {
+    if (res.status !== 403) {
       ugs(SEQUENCES, (sequences) =>
         sequences.filter(
           (f) => f.id && JSON.stringify(f) !== JSON.stringify(body)

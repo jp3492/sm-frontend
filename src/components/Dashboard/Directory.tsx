@@ -22,10 +22,10 @@ const onDragOver = (e) => {
   e.preventDefault();
 };
 
-export const handleShare = (type, id, label?) => {
+export const handleShare = (type, id, label?, videoUrl?) => {
   sgs(MODAL, {
     component: "share",
-    props: { type, id, label }
+    props: { type, id, label, videoUrl }
   });
 };
 
@@ -194,13 +194,10 @@ export const Directory = () => {
         : type === DIRECTORY_TYPES.PLAYLIST
         ? [...selectedPlaylists, itemId]
         : [...selectedSequences, itemId];
-    console.log(ids);
-    console.log(sortedItems);
 
     const sortedIds = sortedItems
       .filter((item) => ids.includes(item.id))
       .map((item) => item.id);
-    console.log(sortedIds);
 
     e.dataTransfer.setData(
       "text/plain",

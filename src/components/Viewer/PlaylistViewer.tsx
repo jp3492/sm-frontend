@@ -8,42 +8,44 @@ import React, {
 import ReactPlayer from "react-player";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { sgs, subgs, unsgs, usegs, ggs, ugs } from "../../utils/rxGlobal";
-import { handleShare } from "../Dashboard/Directory";
+import { MODAL } from "../Modal";
 
-const PV_ITEMS = "PV_ITEMS";
-const PV_PLAYING = "PLAYING";
-const ACTIVE_ITEM_ID = "ACTIVE_ITEM_ID";
-const ACTIVE_URL = "ACTIVE_URL";
-const PV_PLAYERS = "PLAYERS";
+export const PV_ITEMS = "PV_ITEMS";
+export const PV_PLAYING = "PLAYING";
+export const ACTIVE_ITEM_ID = "ACTIVE_ITEM_ID";
+export const ACTIVE_URL = "ACTIVE_URL";
+export const PV_PLAYERS = "PLAYERS";
 
 sgs(PV_PLAYING, false);
 sgs(ACTIVE_ITEM_ID, null);
 sgs(ACTIVE_URL, "");
 sgs(PV_PLAYERS, {});
 
+const handleShare = (type, id, label, videoUrl?) =>
+  sgs(MODAL, {
+    component: "share",
+    props: { type, id, label, videoUrl }
+  });
+
 let nextStop: any = null;
 
 let previousItemId;
 
 subgs(ACTIVE_ITEM_ID, (id) => {
+  if (id === null) {
+    sgs(ACTIVE_URL, "");
+    return;
+  }
   const items = ggs(PV_ITEMS);
-
   const previousItem = items.find((i) => i.id === previousItemId);
   const item = items.find((i) => i.id === id);
-
-  // sets url only if the current url is different from the last one
-  // and only if there has been a previous item
   if (
     item &&
     ((previousItem && previousItem.url !== item.url) || !previousItem)
   ) {
     sgs(ACTIVE_URL, item.url);
   }
-
   const skipSeek = !!previousItem && previousItem.stop === item.start;
-
-  console.log("SKIP SEEK", skipSeek);
-
   nextStop = item.type === DIRECTORY_TYPES.SEQUENCE ? item.stop : null;
   if (!skipSeek) {
     const player = ggs(PV_PLAYERS)[item.url].player;
@@ -52,12 +54,14 @@ subgs(ACTIVE_ITEM_ID, (id) => {
       "seconds"
     );
   }
-
   previousItemId = id;
   if (!ggs(PV_PLAYING)) sgs(PV_PLAYING, true);
 });
 
 subgs(PV_PLAYERS, (players) => {
+  if (Object.keys(players).length === 0) {
+    return;
+  }
   const allReady = Object.keys(players).every((url) => players[url].ready);
   if (allReady) {
     sgs(ACTIVE_ITEM_ID, ggs(PV_ITEMS)[0].id);
@@ -65,8 +69,16 @@ subgs(PV_PLAYERS, (players) => {
   }
 });
 
-const handleRef = (player, url) =>
+const handleRef = (player, url) => {
+  if (player === null) {
+    return;
+  }
   ugs(PV_PLAYERS, (players) => {
+    // console.log("URL", url);
+
+    // console.log("PLAYER", player);
+    // console.log("PLAYERS", players);
+
     return {
       ...players,
       [url]: {
@@ -75,6 +87,7 @@ const handleRef = (player, url) =>
       }
     };
   });
+};
 
 const handleReady = (url) =>
   ugs(PV_PLAYERS, (players) => {
@@ -206,7 +219,9 @@ const Panel = ({ open, setOpen }) => {
 
   useEffect(() => {
     subgs(ACTIVE_ITEM_ID, handleActiveItem);
-    return () => unsgs(ACTIVE_ITEM_ID, handleActiveItem);
+    return () => {
+      unsgs(ACTIVE_ITEM_ID, handleActiveItem);
+    };
   }, []);
 
   return (
@@ -281,7 +296,7 @@ const Video = ({ url }) => {
   );
 };
 
-const Item = ({ id, label, type }) => {
+const Item = ({ id, label, type, url }) => {
   const [active, setActive] = useState(false);
 
   const handleActive = useCallback(
@@ -303,8 +318,8 @@ const Item = ({ id, label, type }) => {
     >
       {label}
       <i
-        onClick={() => handleShare(DIRECTORY_TYPES[type], id, label)}
-        className="material-icons cl-white"
+        onClick={() => handleShare(DIRECTORY_TYPES[type], id, label, url)}
+        className="material-icons cl-text-icon"
       >
         share
       </i>

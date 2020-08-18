@@ -7,7 +7,8 @@ const APIS =
         sequences: "http://localhost:4004",
         viewer: "http://localhost:4005",
         payments: "http://localhost:4006",
-        users: "http://localhost:4007"
+        users: "http://localhost:4007",
+        landingPage: "http://localhost:4008"
       }
     : {
         folders:
@@ -23,14 +24,13 @@ const APIS =
         payment:
           "https://us-central1-streaming-manager-dc49e.cloudfunctions.net/payment",
         users:
+          "https://us-central1-streaming-manager-dc49e.cloudfunctions.net/user",
+        landingPage:
           "https://us-central1-streaming-manager-dc49e.cloudfunctions.net/user"
       };
 
 export const request = (api: string, path: string = "", options: any = {}) => {
   const url = APIS[api];
-  // use
-  // const user = getUser();
-  // console.log(user);
 
   return fetch(`${url}${path}`, {
     ...options,

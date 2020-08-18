@@ -8,6 +8,7 @@ import React, {
 import ReactPlayer from "react-player";
 
 import { platforms } from "../../views/Landing";
+import { getPlatformFromUrl } from "../../utils/getPlatformFromUrl";
 
 export const SequenceViewer = ({ sequence, query }) => {
   const [playing, setPlaying] = useState(false);
@@ -45,7 +46,7 @@ export const SequenceViewer = ({ sequence, query }) => {
 
   const handlePause = useCallback(() => setPlaying(false), []);
 
-  const platform = useMemo(() => platforms[sequence.url.split(".")[1]], [
+  const platform = useMemo(() => platforms[getPlatformFromUrl(sequence.url)], [
     sequence
   ]);
 

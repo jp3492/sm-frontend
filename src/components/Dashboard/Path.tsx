@@ -52,7 +52,13 @@ export const Path = () => {
     <div className="path aligned-grid grid-tc-1m gap-m bg-white">
       <div className="aligned-grid gap-m pd-051">
         <div className="grid gap-s" onClick={handleDirClick}>
-          <i className="material-icons">
+          <i
+            className={`material-icons ${
+              selectedDirectory === DIRECTORY_TYPES.SEQUENCE
+                ? "sequence-icon"
+                : ""
+            }`}
+          >
             {selectedDirectory === DIRECTORY_TYPES.PLAYLIST
               ? "playlist_play"
               : selectedDirectory === DIRECTORY_TYPES.VIDEO

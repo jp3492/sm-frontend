@@ -28,11 +28,11 @@ export const Dashboard = ({ history: { push } }) => {
   const [initialized] = usegs(INITIALIZED, false);
 
   useEffect(() => {
-    getUserData()
+    getUserData();
   }, []);
 
   return initialized ? (
-    <div className="dashboard grid grid-tr-m1 grid-tc-m1m bg-grey-light gap-s overflow-h">
+    <div className="dashboard grid grid-tr-m1 grid-tc-m1m bg-grey-light gap-s overflow-h cl-content-sec">
       <Header push={push} />
       <Menu />
       <Directory />

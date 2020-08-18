@@ -59,26 +59,20 @@ export const Header = ({ push }) => {
     await logout();
     push("/auth/login");
   };
-    // sgs(MODAL, {
-    //   component: "profile",
-    //   onClose: () => {
-    //     push("/auth/login");
-    //   }
-    // });
 
   const handleClearSearch = () => setUrl("");
 
   return (
-    <header className="dashboard-header centered-grid grid-tc-mm11m bg-grey shadow-s z1">
+    <header className="dashboard-header || grid grid-tc-mm11m align-i-c || bg-grey || shadow-s z1">
       <div
         onClick={() => setMenuOpen(!menuOpen)}
         className={`header_menu ${menuOpen ? "open" : ""}`}
       >
         <i className="material-icons">{menuOpen ? "menu_open" : "menu"}</i>
       </div>
-      <div className="pd-01 header_logo">
+      <div className="header_logo || pd-01 || cl-content-icon">
         <Link to="/">
-          <h2 className="cl-white">Viden</h2>
+          <h2>Viden</h2>
         </Link>
       </div>
       {/* <Add /> */}

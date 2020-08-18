@@ -15,6 +15,7 @@ import { ErrorPage404 } from "./views/404";
 import { ErrorPage403 } from "./views/403";
 import { Impressum } from "./views/Impressum";
 import { Datenschutz } from "./views/Datenschutz";
+import { Roadmap } from "./views/Roadmap";
 
 const App = () => {
   const [auth] = usegs(AUTH, "pending");
@@ -24,6 +25,7 @@ const App = () => {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Landing} />
+          <Route exact path="/roadmap" component={Roadmap} />
           <Route exact path="/viewer/:type/:id" component={Viewer} />
           {/* <Route exact path="/auth/:type" component={Auth} /> */}
           <Route exact path="/auth" component={Auth} />

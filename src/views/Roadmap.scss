@@ -1,0 +1,49 @@
+.roadmap {
+  min-height: 100vh;
+  > section > h2 {
+    padding-top: 2rem;
+  }
+  .steps {
+    margin-top: 2rem;
+    padding-left: 7rem;
+    > .step {
+      display: grid;
+      position: relative;
+      padding: 0 1rem 1rem 2rem;
+      border-left: 2px solid white;
+      max-width: 600px;
+      h3 {
+        position: relative;
+        display: list-item;
+        list-style-type: disc;
+        align-items: center;
+        // text-decoration: underline;
+        list-style-position: inside;
+        margin-bottom: 1rem;
+      }
+      p {
+        padding-left: 1.5rem;
+      }
+      &:before {
+        content: attr(data-time);
+        position: absolute;
+        transform: translateX(calc(-100% - 2rem));
+      }
+      &:after {
+        content: "";
+        position: absolute;
+        height: 20px;
+        width: 20px;
+        background-color: white;
+        border-radius: 50%;
+        left: -11px;
+      }
+    }
+  }
+  section > button {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    width: max-content;
+    place-self: center;
+  }
+}

@@ -1,23 +1,12 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
-import { FOLDERS } from "../../stores/folder";
 import { MODAL } from "../Modal";
-import { usegs, sgs } from "../../utils/rxGlobal";
+import { sgs } from "../../utils/rxGlobal";
 
 export const SEQUENCER_TARGET_FOLDER = "SEQUENCER_TARGET_FOLDER";
 
 export const SequencerHeader = ({ selectedVideo }) => {
-  const [targetFolderId, setTargetFolderId] = usegs(
-    SEQUENCER_TARGET_FOLDER,
-    null
-  );
-  const [folders] = usegs(FOLDERS);
-
-  const targetFolder = useMemo(() => {
-    return folders.find((f) => f.id === targetFolderId);
-  }, [targetFolderId, folders]);
-
   const handleEdit = () => {
     sgs(MODAL, {
       component: "video",

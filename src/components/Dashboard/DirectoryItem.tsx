@@ -3,6 +3,7 @@ import { DIRECTORY_TYPES } from "../../stores/folder";
 import { Link } from "react-router-dom";
 import { SEQUENCES } from "../../stores/sequences";
 import { ggs } from "../../utils/rxGlobal";
+import { PLAYLISTS, patchPlaylist, STATUS_TYPES } from "../../stores/playlists";
 
 const getSequenceCount = (videoId) => {
   return ggs(SEQUENCES).filter((s) => s.videoId === videoId).length;
@@ -24,7 +25,7 @@ export const DirectoryItem = ({
   onShare,
   ...item
 }) => {
-  const handleShare = () => onShare(DIRECTORY_TYPES[type], id);
+  const handleShare = () => onShare(DIRECTORY_TYPES[type], id, label, item.url);
 
   if (type === DIRECTORY_TYPES.PLAYLIST) {
     return (
@@ -40,6 +41,7 @@ export const DirectoryItem = ({
         items={items}
         handleEdit={handleEdit}
         handleShare={handleShare}
+        status={item.status}
       />
     );
   } else if (type === DIRECTORY_TYPES.VIDEO) {
@@ -197,8 +199,13 @@ const PlaylistItem = ({
   keywords,
   items,
   handleShare,
-  handleEdit
+  handleEdit,
+  status
 }) => {
+  const handleStatusChange = ({ target: { value } }) => {
+    const playlist = ggs(PLAYLISTS).find((p) => p.id === id);
+    patchPlaylist({ ...playlist, status: value });
+  };
   return (
     <li
       id={id}
@@ -229,6 +236,20 @@ const PlaylistItem = ({
         <span>{items.length}</span>
         <i className="material-icons">playlist_play</i>
       </div>
+      <select onChange={handleStatusChange}>
+        <option
+          value="PRIVATE"
+          selected={!status || status === STATUS_TYPES.PUBLIC}
+        >
+          Private (default)
+        </option>
+        <option selected={status === STATUS_TYPES.PUBLIC} value="PUBLIC">
+          Public
+        </option>
+        <option selected={status === STATUS_TYPES.FEATURED} value="FEATURED">
+          Featured
+        </option>
+      </select>
       <div className="directory_item-footer aligned-grid gap-l">
         <i onClick={handleShare} className="material-icons">
           share
