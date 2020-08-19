@@ -20,7 +20,7 @@ const steps = [
     time: "Q1 2021",
     bullets: [
       {
-        label: "Launche Open Beta",
+        label: "Launch Open Beta",
         content:
           "Add open signup for limited amount of users and improve system for scalability."
       },
@@ -56,9 +56,10 @@ export const Roadmap = () => {
     sgs(MODAL, {
       component: "REQUEST_SUPPORT"
     });
+
   return (
     <div className="roadmap grid grid-tr-m1mm">
-      <LandingHeader />
+      <LandingHeader isLanding={false} />
       <section className="public-content || cl-content-icon || grid">
         <h2 className="pd-1">Roadmap</h2>
         <div className="steps grid ">

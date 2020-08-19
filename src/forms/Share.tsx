@@ -1,13 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { DIRECTORY_TYPES } from "../stores/folder";
 
-export const Share = ({ type, id, label, videoUrl, closeModal }) => {
+export const Share = ({
+  type,
+  id,
+  label,
+  videoUrl,
+  originId,
+  originLabel,
+  closeModal
+}) => {
+  const [linkPlaylist, setLinkPlaylist]: any = useState(!!originId);
+
   const url =
     process.env.NODE_ENV === "development"
       ? `http://localhost:3000`
       : "https://viden.pro";
 
-  const path = `/viewer/${type.toLowerCase()}/${id}`;
+  const path = `/viewer/${type.toLowerCase()}/${id}${
+    linkPlaylist ? `?originId=${originId}&originLabel=` + originLabel : ""
+  }`;
   const link = url + path;
 
   const handleCopy = () => navigator.clipboard.writeText(link);
@@ -15,7 +27,18 @@ export const Share = ({ type, id, label, videoUrl, closeModal }) => {
   return (
     <form className="share">
       <h2>{`Share ${type.toLowerCase().capitalize()}: ${label}`}</h2>
-      <div>
+      {type === DIRECTORY_TYPES.PLAYLIST && originId && (
+        <div
+          onClick={() => setLinkPlaylist(!linkPlaylist)}
+          className="grid grid-tc-m1 gap-s pd-005"
+        >
+          <i className="material-icons">
+            {linkPlaylist ? "check_box" : "check_box_outline_blank"}
+          </i>
+          <label>Link playlist</label>
+        </div>
+      )}
+      <div className="share_link">
         <small>Share this Link with someone :)</small>
         <p>{type === DIRECTORY_TYPES.VIDEO ? videoUrl : link}</p>
         <i onClick={handleCopy} className="material-icons">

@@ -106,7 +106,7 @@ export const LandingFooter = () => (
   </footer>
 );
 
-export const LandingHeader = () => {
+export const LandingHeader = ({ isLanding = true }: any) => {
   const [auth] = usegs(AUTH);
   const [open, setOpen] = useState(false);
 
@@ -129,7 +129,7 @@ export const LandingHeader = () => {
         className="grid grid-ac-m grid-af-c gap-l"
         onClick={handleClick}
       >
-        <a href="#featured">Featured</a>
+        {!!isLanding && <a href="#featured">Featured</a>}
         <Link to="/roadmap">Roadmap</Link>
         {auth ? (
           <Link to="/dashboard">Dashboard</Link>

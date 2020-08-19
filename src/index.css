@@ -266,6 +266,9 @@ i {
 .grid-af-c {
 	grid-auto-flow: column;
 }
+.grid-ac-m {
+	grid-auto-columns: max-content;
+}
 .content-center {
 	place-content: center;
 }
@@ -498,6 +501,9 @@ i {
 .pd-01501 {
 	padding: 0 1.5rem 0 1rem;
 }
+.pd-0505051 {
+	padding: 0.5rem 0.5rem 0.5rem 1rem;
+}
 .pd-051051 {
 	padding: 0.5rem 1rem;
 }
@@ -547,4 +553,8 @@ i {
 .public-content {
 	max-width: 992px;
 	margin: 0 auto;
+}
+
+i[data-icon-active="true"] {
+	color: var(--cl-orange);
 }

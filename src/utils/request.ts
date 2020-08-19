@@ -26,7 +26,7 @@ const APIS =
         users:
           "https://us-central1-streaming-manager-dc49e.cloudfunctions.net/user",
         landingPage:
-          "https://us-central1-streaming-manager-dc49e.cloudfunctions.net/user"
+          "https://us-central1-streaming-manager-dc49e.cloudfunctions.net/landingPage"
       };
 
 export const request = (api: string, path: string = "", options: any = {}) => {

@@ -15,6 +15,15 @@ export const SequenceViewer = ({ sequence, query }) => {
   const [playerReady, setPlayerReady] = useState(false);
   const [open, setOpen] = useState(true);
 
+  const { originId, originLabel } = query;
+
+  const originLink =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000/viewer/playlist/" + originId
+      : "https://viden.pro/viewer/playlist/" + originId;
+
+  console.log({ originId, originLink });
+
   const player: any = useRef();
   const ref = (p) => (player.current = p);
 
@@ -64,6 +73,18 @@ export const SequenceViewer = ({ sequence, query }) => {
                 </i>
               </div>
               <p>"{sequence.label}"</p>
+              {originId && (
+                <div>
+                  <label>
+                    {`Shared from playlist: "${originLabel
+                      .split("%20")
+                      .join(" ")}"`}
+                  </label>
+                  <a target="_blank" href={originLink}>
+                    <i className="material-icons">open_in_new</i>
+                  </a>
+                </div>
+              )}
               {playerReady && (
                 <button onClick={handleReplay}>
                   <i className="material-icons">replay</i>

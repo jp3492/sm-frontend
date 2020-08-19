@@ -219,7 +219,7 @@ const PlaylistItem = ({
     >
       <div className="directory_item-header aligned-grid grid-tc-1mm cgap-m">
         <h4>{label}</h4>
-        <ul className="directory_item-keywords aligned-grid cgap-s">
+        {/* <ul className="directory_item-keywords aligned-grid cgap-s">
           <li>
             <small>#</small>
           </li>
@@ -230,7 +230,7 @@ const PlaylistItem = ({
           ) : (
             keywords.map((k, i) => <li key={i}>{k}</li>)
           )}
-        </ul>
+        </ul> */}
       </div>
       <div className="directory_item-videos aligned-grid gap-s">
         <span>{items.length}</span>

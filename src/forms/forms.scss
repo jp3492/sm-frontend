@@ -136,7 +136,7 @@ form {
 .share {
   padding: 2em;
   gap: 1em;
-  > div {
+  > .share_link {
     border-radius: 8px;
     background-color: var(--cl-grey-light);
     padding: 0.5em 1em;

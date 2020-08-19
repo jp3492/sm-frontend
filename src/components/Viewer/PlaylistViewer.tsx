@@ -9,22 +9,39 @@ import ReactPlayer from "react-player";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { sgs, subgs, unsgs, usegs, ggs, ugs } from "../../utils/rxGlobal";
 import { MODAL } from "../Modal";
+import { incrementView } from "../../views/Viewer";
 
 export const PV_ITEMS = "PV_ITEMS";
 export const PV_PLAYING = "PLAYING";
 export const ACTIVE_ITEM_ID = "ACTIVE_ITEM_ID";
 export const ACTIVE_URL = "ACTIVE_URL";
 export const PV_PLAYERS = "PLAYERS";
+export const PV_REPEATING_ITEM_ID = "PV_REPEATING_ITEM_ID";
 
 sgs(PV_PLAYING, false);
 sgs(ACTIVE_ITEM_ID, null);
 sgs(ACTIVE_URL, "");
 sgs(PV_PLAYERS, {});
+sgs(PV_REPEATING_ITEM_ID, null);
 
-const handleShare = (type, id, label, videoUrl?) =>
+const handleShare = ({
+  type,
+  id,
+  label,
+  videoUrl,
+  originId,
+  originLabel
+}: {
+  type: string;
+  id: string;
+  label: string;
+  videoUrl?: string;
+  originId?: string;
+  originLabel?: string;
+}) =>
   sgs(MODAL, {
     component: "share",
-    props: { type, id, label, videoUrl }
+    props: { type, id, label, videoUrl, originId, originLabel }
   });
 
 let nextStop: any = null;
@@ -36,19 +53,26 @@ subgs(ACTIVE_ITEM_ID, (id) => {
     sgs(ACTIVE_URL, "");
     return;
   }
+
   const items = ggs(PV_ITEMS);
   const previousItem = items.find((i) => i.id === previousItemId);
   const item = items.find((i) => i.id === id);
+  incrementView(item.type.toLowerCase(), item.id);
   if (
     item &&
     ((previousItem && previousItem.url !== item.url) || !previousItem)
   ) {
     sgs(ACTIVE_URL, item.url);
   }
-  const skipSeek = !!previousItem && previousItem.stop === item.start;
+  const player = ggs(PV_PLAYERS)[item.url].player;
+  const currentTime = player.getCurrentTime().toFixed(2);
+
+  const skipSeek =
+    !!previousItem &&
+    previousItem.stop === currentTime &&
+    previousItem.stop === item.start;
   nextStop = item.type === DIRECTORY_TYPES.SEQUENCE ? item.stop : null;
   if (!skipSeek) {
-    const player = ggs(PV_PLAYERS)[item.url].player;
     player.seekTo(
       item.type === DIRECTORY_TYPES.SEQUENCE ? item.start : 0,
       "seconds"
@@ -113,6 +137,11 @@ const handleProgress = (progress) => {
 
 const playNext = () => {
   const items = ggs(PV_ITEMS);
+  const repeatingItemId = ggs(PV_REPEATING_ITEM_ID);
+
+  if (!!repeatingItemId) {
+    return sgs(ACTIVE_ITEM_ID, repeatingItemId);
+  }
 
   const currentIndex = items.findIndex(
     (item) => item.id === ggs(ACTIVE_ITEM_ID)
@@ -177,6 +206,17 @@ export const PlaylistViewer = ({ videos, sequences, playlist, query }: any) => {
     []
   );
 
+  const handleShareItem = (type, id, label, videoUrl) => {
+    handleShare({
+      type,
+      id,
+      label,
+      videoUrl,
+      originId: playlist.id,
+      originLabel: playlist.label
+    });
+  };
+
   return (
     <div className="playlist_viewer grid bg-black" data-align={query.alignList}>
       <div className="players">
@@ -185,9 +225,20 @@ export const PlaylistViewer = ({ videos, sequences, playlist, query }: any) => {
         ))}
       </div>
       <div className="playlist_viewer-list grid grid-tr-mm1" data-open={open}>
-        <h2>
-          <i className="material-icons">playlist_play</i>
+        <h2 className="grid grid-tc-1m align-i-c">
           {playlist.label}
+          <i
+            onClick={() =>
+              handleShare({
+                type: DIRECTORY_TYPES.PLAYLIST,
+                id: playlist.id,
+                label: playlist.label
+              })
+            }
+            className="material-icons"
+          >
+            share
+          </i>
         </h2>
         <input
           className="bg-grey-dark"
@@ -196,9 +247,9 @@ export const PlaylistViewer = ({ videos, sequences, playlist, query }: any) => {
           value={search}
           onChange={handleSearch}
         />
-        <ul className="grid gap-xs">
+        <ul id="playlist-viewer-list" className="grid gap-xs">
           {searchedItems.map((item, i) => (
-            <Item {...item} key={i} />
+            <Item {...item} handleShareItem={handleShareItem} key={i} />
           ))}
         </ul>
         <Panel open={open} setOpen={setOpen} />
@@ -296,8 +347,10 @@ const Video = ({ url }) => {
   );
 };
 
-const Item = ({ id, label, type, url }) => {
+const Item = ({ id, label, type, url, views, handleShareItem }) => {
   const [active, setActive] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [repeating, setRepeating] = useState(false);
 
   const handleActive = useCallback(
     (activeItemId) => setActive(activeItemId === id),
@@ -305,24 +358,83 @@ const Item = ({ id, label, type, url }) => {
   );
 
   useEffect(() => {
+    setOpen(active);
+    return () => {
+      setRepeating(false);
+      sgs(PV_REPEATING_ITEM_ID, null);
+    };
+  }, [active]);
+
+  useEffect(() => {
+    if (open && active) {
+      if (active) {
+        const ul: any = document.getElementById("playlist-viewer-list");
+        const li: any = document.getElementById(id);
+
+        ul.scrollTo({
+          top: li.offsetTop,
+          behavior: "smooth"
+        });
+      }
+    }
+  }, [open, active]);
+
+  useEffect(() => {
     subgs(ACTIVE_ITEM_ID, handleActive);
     return () => unsgs(ACTIVE_ITEM_ID, handleActive);
   }, []);
 
+  const handleRepeat = (e) => {
+    e.stopPropagation();
+    ugs(PV_REPEATING_ITEM_ID, (setId) => {
+      if (setId === id) {
+        setRepeating(false);
+        return null;
+      }
+      setRepeating(true);
+      return id;
+    });
+  };
+
+  const handleOpen = (e) => {
+    e.stopPropagation();
+    setOpen(!open);
+  };
+
   return (
     <li
-      className="bg-grey-dark row-1m pd-051051"
+      className="bg-grey-dark grid-tr-1m"
       data-active={active}
       onClick={handleSelect}
       id={id}
     >
-      {label}
-      <i
-        onClick={() => handleShare(DIRECTORY_TYPES[type], id, label, url)}
-        className="material-icons cl-text-icon"
-      >
-        share
-      </i>
+      <div className="grid row-1m pd-0505051">
+        <label>{label}</label>
+        <i onClick={handleOpen} className="material-icons cl-text-icon">
+          {open ? "keyboard_arrow_up" : "more_vert"}
+        </i>
+      </div>
+
+      {open && (
+        <div className="grid align-i-c grid-af-c grid-ac-m pd-051 gap-s">
+          <small>{`${views || 0} views`}</small>
+          <i
+            data-icon-active={repeating}
+            onClick={handleRepeat}
+            className="material-icons cl-text-icon"
+          >
+            repeat_one
+          </i>
+          <i
+            onClick={() =>
+              handleShareItem(DIRECTORY_TYPES[type], id, label, url)
+            }
+            className="material-icons cl-text-icon"
+          >
+            share
+          </i>
+        </div>
+      )}
     </li>
   );
 };

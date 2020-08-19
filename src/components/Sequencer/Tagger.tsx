@@ -34,7 +34,7 @@ const handleControls = (e) => {
         setStart();
       }
     } else {
-      if (!activeTime && !start) {
+      if (!activeTime && !start && start !== 0) {
         console.log("starting START");
         sgs(TAGGER_ACTIVE_TIME, "start");
       } else if (activeTime === "start") {
@@ -185,6 +185,8 @@ export const Tagger = () => {
   };
   const handleLabelChange = ({ target: { value } }) => setLabel(value);
 
+  console.log({ start, stop, label });
+
   return (
     <div className="sequencer_list-tagger shadow-l grid">
       <div className="sequencer_list-tagger-times grid bg-grey-light gap-xs">
@@ -236,7 +238,7 @@ export const Tagger = () => {
             </button>
             <button
               className="bg-white pd-1"
-              disabled={!start || !label}
+              disabled={(!start && start !== 0) || !label}
               onClick={handleSubmit}
             >
               Submit

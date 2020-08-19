@@ -6,7 +6,7 @@ import { SequenceViewer } from "../components/Viewer/SequenceViewer";
 import { request } from "../utils/request";
 import { DIRECTORY_TYPES } from "../stores/folder";
 import { searchToQuery } from "../utils/searchToQuery";
-import { rgss } from "../utils/rxGlobal";
+import { rgss, ugs } from "../utils/rxGlobal";
 import {
   PV_PLAYERS,
   ACTIVE_ITEM_ID,
@@ -24,6 +24,7 @@ export const Viewer = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    incrementView(type, id);
     return () => {
       rgss([PV_PLAYERS, ACTIVE_ITEM_ID, ACTIVE_URL, PV_PLAYING, PV_ITEMS]);
     };
@@ -66,6 +67,19 @@ export const Viewer = ({
       )}
     </div>
   );
+};
+
+export const incrementView = async (type, id) => {
+  try {
+    await request("viewer", `/count/${type.toLowerCase()}/${id}`, {
+      method: "PATCH"
+    });
+    ugs(PV_ITEMS, (items) =>
+      items.map((i) => (i.id === id ? { ...i, views: (i.views || 0) + 1 } : i))
+    );
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const getPlaylist = async (id) => {
