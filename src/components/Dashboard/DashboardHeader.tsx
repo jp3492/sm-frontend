@@ -56,8 +56,11 @@ export const Header = ({ push }) => {
   };
 
   const handleProfileClick = async () => {
-    await logout();
-    push("/auth/login");
+    // await logout();
+    // push("/auth/login");
+    sgs(MODAL, {
+      component: "PROFILE"
+    });
   };
 
   const handleClearSearch = () => setUrl("");

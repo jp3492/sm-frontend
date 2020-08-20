@@ -68,7 +68,9 @@ subgs(ACTIVE_ITEM_ID, (id) => {
     sgs(ACTIVE_URL, item.url);
   }
   const player = ggs(PV_PLAYERS)[item.url].player;
-  const currentTime = player.getCurrentTime().toFixed(2);
+  // this is triggered at least one time before the player is ready
+  // should check and improve this in the future!
+  const currentTime = (player.getCurrentTime() || 0).toFixed(2);
 
   const skipSeek =
     !!previousItem &&

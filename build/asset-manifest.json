@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/static/css/main.8cf9a442.chunk.css",
-    "main.js": "/static/js/main.ba763535.chunk.js",
-    "main.js.map": "/static/js/main.ba763535.chunk.js.map",
+    "main.css": "/static/css/main.8fc6fd09.chunk.css",
+    "main.js": "/static/js/main.b7a80f53.chunk.js",
+    "main.js.map": "/static/js/main.b7a80f53.chunk.js.map",
     "reactPlayerDailyMotion.js": "/static/js/reactPlayerDailyMotion.ceeda889.chunk.js",
     "reactPlayerDailyMotion.js.map": "/static/js/reactPlayerDailyMotion.ceeda889.chunk.js.map",
     "reactPlayerFacebook.js": "/static/js/reactPlayerFacebook.eda3847d.chunk.js",
@@ -27,15 +27,15 @@
     "reactPlayerYouTube.js.map": "/static/js/reactPlayerYouTube.319f27c6.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.210ed3f5.js",
     "runtime-main.js.map": "/static/js/runtime-main.210ed3f5.js.map",
-    "static/js/13.5de6b1b1.chunk.js": "/static/js/13.5de6b1b1.chunk.js",
-    "static/js/13.5de6b1b1.chunk.js.map": "/static/js/13.5de6b1b1.chunk.js.map",
+    "static/js/13.060fb288.chunk.js": "/static/js/13.060fb288.chunk.js",
+    "static/js/13.060fb288.chunk.js.map": "/static/js/13.060fb288.chunk.js.map",
     "static/js/14.2135950c.chunk.js": "/static/js/14.2135950c.chunk.js",
     "static/js/14.2135950c.chunk.js.map": "/static/js/14.2135950c.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.fcabbd20177be147d1ca7c57f31a08cc.js": "/precache-manifest.fcabbd20177be147d1ca7c57f31a08cc.js",
+    "precache-manifest.3efe8c5eee76bcab0d1b7525a52ae4b1.js": "/precache-manifest.3efe8c5eee76bcab0d1b7525a52ae4b1.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.8cf9a442.chunk.css.map": "/static/css/main.8cf9a442.chunk.css.map",
-    "static/js/13.5de6b1b1.chunk.js.LICENSE.txt": "/static/js/13.5de6b1b1.chunk.js.LICENSE.txt",
+    "static/css/main.8fc6fd09.chunk.css.map": "/static/css/main.8fc6fd09.chunk.css.map",
+    "static/js/13.060fb288.chunk.js.LICENSE.txt": "/static/js/13.060fb288.chunk.js.LICENSE.txt",
     "static/media/dailymotion.svg": "/static/media/dailymotion.d3059d87.svg",
     "static/media/dropbox.png": "/static/media/dropbox.bf6dfc1d.png",
     "static/media/network.svg": "/static/media/network.ce504b56.svg",
@@ -48,8 +48,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.210ed3f5.js",
-    "static/js/13.5de6b1b1.chunk.js",
-    "static/css/main.8cf9a442.chunk.css",
-    "static/js/main.ba763535.chunk.js"
+    "static/js/13.060fb288.chunk.js",
+    "static/css/main.8fc6fd09.chunk.css",
+    "static/js/main.b7a80f53.chunk.js"
   ]
 }

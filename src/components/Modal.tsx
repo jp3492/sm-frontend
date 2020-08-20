@@ -11,6 +11,7 @@ import { usegs, sgs } from "../utils/rxGlobal";
 import { SelectPlaylist } from "../forms/SelectPlaylist";
 import { RequestAccess } from "../forms/RequestAccess";
 import { RequestSupport } from "../forms/RequestSupport";
+import { Profile } from "../forms/Profile";
 
 export const MODAL = "MODAL";
 
@@ -29,7 +30,8 @@ const COMPONENTS = {
   REPLAY: Replay,
   SELECT_PLAYLIST: SelectPlaylist,
   REQUEST_ACCESS: RequestAccess,
-  REQUEST_SUPPORT: RequestSupport
+  REQUEST_SUPPORT: RequestSupport,
+  PROFILE: Profile
 };
 
 export const Modal = () => {

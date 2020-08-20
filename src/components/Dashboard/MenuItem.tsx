@@ -73,7 +73,7 @@ export const MenuItem = ({ folders, directory }) => {
   const rootFolders = folders.filter(
     (f) => !f.folder && f.directory === directory
   );
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(directory === DIRECTORY_TYPES.PLAYLIST);
 
   const handleSelect = () => {
     handleOpenFolder(null);
@@ -99,7 +99,11 @@ export const MenuItem = ({ folders, directory }) => {
       }`}
     >
       <div className="menu_item_header pd-01501 aligned-grid grid-tc-m1m gap-m">
-        <i className="material-icons">
+        <i
+          className={`material-icons ${
+            directory === DIRECTORY_TYPES.SEQUENCE ? "sequence-icon" : ""
+          }`}
+        >
           {directory === DIRECTORY_TYPES.PLAYLIST
             ? "playlist_play"
             : directory === DIRECTORY_TYPES.VIDEO

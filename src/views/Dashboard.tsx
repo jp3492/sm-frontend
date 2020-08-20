@@ -11,6 +11,7 @@ import { getPlaylists } from "../stores/playlists";
 import { Hint } from "../components/Hint";
 import { getSequences } from "../stores/sequences";
 import { sgs, usegs } from "../utils/rxGlobal";
+import { getProfile } from "../stores/profile";
 
 export const INITIALIZED = "INITIALIZED";
 
@@ -29,6 +30,7 @@ export const Dashboard = ({ history: { push } }) => {
 
   useEffect(() => {
     getUserData();
+    getProfile();
   }, []);
 
   return initialized ? (
