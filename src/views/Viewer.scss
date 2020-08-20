@@ -150,6 +150,11 @@
             a {
               text-decoration: underline;
             }
+            .comment  {
+              > small {
+                text-decoration: underline;
+              }
+            }
           }
         }
       }

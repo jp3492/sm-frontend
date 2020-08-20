@@ -546,9 +546,10 @@ const Item = ({
                 <li
                   key={i}
                   id={c.id}
-                  className="rounded pd-05 bg-acc-l cl-text-sec"
+                  className="comment rounded pd-05 bg-acc-l cl-content-sec grid gap-s"
                 >
-                  {c.content}
+                  <small>{c.userName}</small>
+                  <p>{c.content}</p>
                 </li>
               ))
             )}
