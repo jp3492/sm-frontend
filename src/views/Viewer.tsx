@@ -59,7 +59,9 @@ export const Viewer = ({
   return (
     <div className="viewer grid overflow-h">
       {!item || loading ? (
-        <div className="centered-grid bg-grey-dark cl-white">{loadingText}</div>
+        <div className="loading-viewer centered-grid bg-grey-dark cl-white">
+          {loadingText}
+        </div>
       ) : type === "playlist" ? (
         <PlaylistViewer {...item} query={query} />
       ) : (

@@ -35,16 +35,12 @@ const handleControls = (e) => {
       }
     } else {
       if (!activeTime && !start && start !== 0) {
-        console.log("starting START");
         sgs(TAGGER_ACTIVE_TIME, "start");
       } else if (activeTime === "start") {
-        console.log("SETTING START");
         setStart();
       } else if (activeTime === "stop") {
-        console.log("SETTING STOP");
         setStop();
       } else {
-        console.log("SBMITTING");
         handleSubmit();
       }
     }
@@ -52,6 +48,7 @@ const handleControls = (e) => {
     const activeTime = ggs(TAGGER_ACTIVE_TIME);
     const start = ggs(TAGGER_START);
     // only when start has a value
+
     if (activeTime === "start") {
       resetTagger();
     } else if (activeTime === "stop") {
@@ -184,8 +181,6 @@ export const Tagger = () => {
     setActiveTime(activeTime === "stop" ? "" : "stop");
   };
   const handleLabelChange = ({ target: { value } }) => setLabel(value);
-
-  console.log({ start, stop, label });
 
   return (
     <div className="sequencer_list-tagger shadow-l grid">

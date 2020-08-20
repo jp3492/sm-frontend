@@ -1,7 +1,12 @@
 .roadmap {
   min-height: 100vh;
+  height: auto;
   > section > h2 {
     padding-top: 2rem;
+  }
+  section > p {
+
+    max-width: 600px;
   }
   .steps {
     margin-top: 2rem;

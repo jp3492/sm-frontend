@@ -278,6 +278,9 @@ i {
 .align-i-c {
 	align-items: center;
 }
+.align-i-e {
+	align-items: end;
+}
 .justify-s {
 	justify-self: start;
 }
@@ -553,6 +556,7 @@ i {
 .public-content {
 	max-width: 992px;
 	margin: 0 auto;
+	width: 100%;
 }
 
 i[data-icon-active="true"] {

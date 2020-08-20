@@ -102,6 +102,9 @@ export const ignoreGlobalState = (id: string, cb: Function) => {
 };
 export const igs = (id: string, cb: Function) => ignoreGlobalState;
 
+export const clearGlobalState = (id: string) => delete stores[id];
+export const cgs = clearGlobalState;
+
 export const useGlobalState = (
   id: string,
   initialValue: any = ""

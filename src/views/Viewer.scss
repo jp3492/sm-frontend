@@ -1,4 +1,7 @@
 .viewer {
+  .loading-viewer  {
+    height: 100vh;
+  }
   .sequence_viewer {
     .info {
       top: 0;
@@ -88,7 +91,7 @@
     }
     .playlist_viewer-list {
       grid-area: list;
-      width: 300px;
+      width: 350px;
       height: 100vh;
       &[data-open="false"] {
         width: 0;
@@ -120,12 +123,18 @@
         }
         margin-bottom: 5px;
       }
-      ul {
+      > ul {
         position: relative;
         background-color: black;
         grid-auto-rows: max-content;
         overflow: auto;
-        li {
+        > li {
+          &[data-comments-open="true"] {
+            position: fixed;
+            height: 100%;
+            width: 350px;
+            z-index: 2;
+          }
           color: white;
           &[data-active="true"] {
             background-color: var(--cl-grey);
@@ -136,6 +145,11 @@
           }
           > * + * {
             background-color: var(--cl-grey-opace);
+          }
+          .comment-section {
+            a {
+              text-decoration: underline;
+            }
           }
         }
       }

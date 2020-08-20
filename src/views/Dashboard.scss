@@ -2,4 +2,8 @@
   grid-template-areas:
     "header header header"
     "menu directory playlist";
+  height: 100%;
+}
+.dashboard-loading {
+  height: 100%;
 }

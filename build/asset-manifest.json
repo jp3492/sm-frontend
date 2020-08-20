@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/static/css/main.3166e7f5.chunk.css",
-    "main.js": "/static/js/main.32ed5144.chunk.js",
-    "main.js.map": "/static/js/main.32ed5144.chunk.js.map",
+    "main.css": "/static/css/main.8cf9a442.chunk.css",
+    "main.js": "/static/js/main.ba763535.chunk.js",
+    "main.js.map": "/static/js/main.ba763535.chunk.js.map",
     "reactPlayerDailyMotion.js": "/static/js/reactPlayerDailyMotion.ceeda889.chunk.js",
     "reactPlayerDailyMotion.js.map": "/static/js/reactPlayerDailyMotion.ceeda889.chunk.js.map",
     "reactPlayerFacebook.js": "/static/js/reactPlayerFacebook.eda3847d.chunk.js",
@@ -32,9 +32,9 @@
     "static/js/14.2135950c.chunk.js": "/static/js/14.2135950c.chunk.js",
     "static/js/14.2135950c.chunk.js.map": "/static/js/14.2135950c.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.d54920738fc6625b9a6fc73fb93bd9ac.js": "/precache-manifest.d54920738fc6625b9a6fc73fb93bd9ac.js",
+    "precache-manifest.fcabbd20177be147d1ca7c57f31a08cc.js": "/precache-manifest.fcabbd20177be147d1ca7c57f31a08cc.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.3166e7f5.chunk.css.map": "/static/css/main.3166e7f5.chunk.css.map",
+    "static/css/main.8cf9a442.chunk.css.map": "/static/css/main.8cf9a442.chunk.css.map",
     "static/js/13.5de6b1b1.chunk.js.LICENSE.txt": "/static/js/13.5de6b1b1.chunk.js.LICENSE.txt",
     "static/media/dailymotion.svg": "/static/media/dailymotion.d3059d87.svg",
     "static/media/dropbox.png": "/static/media/dropbox.bf6dfc1d.png",
@@ -49,7 +49,7 @@
   "entrypoints": [
     "static/js/runtime-main.210ed3f5.js",
     "static/js/13.5de6b1b1.chunk.js",
-    "static/css/main.3166e7f5.chunk.css",
-    "static/js/main.32ed5144.chunk.js"
+    "static/css/main.8cf9a442.chunk.css",
+    "static/js/main.ba763535.chunk.js"
   ]
 }

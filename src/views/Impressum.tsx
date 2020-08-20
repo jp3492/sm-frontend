@@ -2,12 +2,12 @@ import React from "react";
 
 export const Impressum = () => {
   return (
-    <div className="impressum">
+    <div className="public-content || pd-1">
       <h1>Impressum</h1>
       <p>Angaben gemäß § 5 TMG</p>
       <p>
         Jan-Philipp Marks <br />
-        34%2C Ella-Kay-Straße
+        Ella-Kay-Straße 34
         <br />
         10405 Berlin <br />
       </p>
@@ -18,9 +18,8 @@ export const Impressum = () => {
         <br />
       </p>
       <p>
-        <strong>Kontakt:</strong>
-        <br />
-        Telefon: %2B49-015780270862
+        <strong>Kontakt:</strong> <br />
+        Telefon: +49 15780270862
         <br />
         E-Mail: <a href="mailto:contact@jpmarks.dev">contact@jpmarks.dev</a>
         <br />
@@ -102,8 +101,13 @@ export const Impressum = () => {
         <br />
       </p>
       <br />
-      Website Impressum von{" "}
-      <a href="https://www.impressum-generator.de">impressum-generator.de</a>
+      Impressum vom{" "}
+      <a href="https://www.impressum-generator.de">
+        Impressum Generator
+      </a> der{" "}
+      <a href="https://www.kanzlei-hasselbach.de/">
+        Kanzlei Hasselbach, Rechtsanwälte für Arbeitsrecht und Familienrecht
+      </a>
     </div>
   );
 };

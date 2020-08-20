@@ -7,9 +7,12 @@ import React, {
 } from "react";
 import ReactPlayer from "react-player";
 import { DIRECTORY_TYPES } from "../../stores/folder";
-import { sgs, subgs, unsgs, usegs, ggs, ugs } from "../../utils/rxGlobal";
+import { sgs, subgs, unsgs, usegs, ggs, ugs, cgs } from "../../utils/rxGlobal";
 import { MODAL } from "../Modal";
 import { incrementView } from "../../views/Viewer";
+import { postComment, getComments } from "../../stores/comment";
+import { AUTH } from "../../services/auth";
+import { Link } from "react-router-dom";
 
 export const PV_ITEMS = "PV_ITEMS";
 export const PV_PLAYING = "PLAYING";
@@ -170,6 +173,7 @@ export const PlaylistViewer = ({ videos, sequences, playlist, query }: any) => {
   const [items, setItems] = usegs(PV_ITEMS, []);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(true);
+  const [auth] = usegs(AUTH);
 
   useEffect(() => {
     const newItems = playlist.items
@@ -217,6 +221,15 @@ export const PlaylistViewer = ({ videos, sequences, playlist, query }: any) => {
     });
   };
 
+  const handleSubmitComment = async (targetType, targetId, content) =>
+    await postComment({
+      type: "playlist",
+      typeId: playlist.id,
+      targetType,
+      targetId,
+      content
+    });
+
   return (
     <div className="playlist_viewer grid bg-black" data-align={query.alignList}>
       <div className="players">
@@ -249,7 +262,14 @@ export const PlaylistViewer = ({ videos, sequences, playlist, query }: any) => {
         />
         <ul id="playlist-viewer-list" className="grid gap-xs">
           {searchedItems.map((item, i) => (
-            <Item {...item} handleShareItem={handleShareItem} key={i} />
+            <Item
+              {...item}
+              handleShareItem={handleShareItem}
+              handleSubmitComment={handleSubmitComment}
+              playlistId={playlist.id}
+              auth={auth}
+              key={i}
+            />
           ))}
         </ul>
         <Panel open={open} setOpen={setOpen} />
@@ -347,18 +367,47 @@ const Video = ({ url }) => {
   );
 };
 
-const Item = ({ id, label, type, url, views, handleShareItem }) => {
+const Item = ({
+  id,
+  label,
+  type,
+  url,
+  views,
+  playlistId,
+  handleShareItem,
+  handleSubmitComment,
+  auth,
+  stateId = `COMMENTS_${id}`
+}) => {
   const [active, setActive] = useState(false);
   const [open, setOpen] = useState(false);
   const [repeating, setRepeating] = useState(false);
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  const [comment, setComment] = useState("");
+  const [comments] = usegs(stateId, []);
 
-  const handleActive = useCallback(
-    (activeItemId) => setActive(activeItemId === id),
-    [id]
-  );
+  // Do i need to remove the state for comments?
+  // it might add too much if someone is watching a bunch of playlists
+  useEffect(() => {
+    return () => {
+      cgs(stateId);
+    };
+  }, []);
 
   useEffect(() => {
-    setOpen(active);
+    if (commentsOpen) {
+      getComments({
+        type: "playlist",
+        typeId: playlistId,
+        targetType: type,
+        targetId: id
+      });
+    }
+  }, [commentsOpen]);
+
+  useEffect(() => {
+    setOpen(commentsOpen ? true : active);
+
     return () => {
       setRepeating(false);
       sgs(PV_REPEATING_ITEM_ID, null);
@@ -378,6 +427,11 @@ const Item = ({ id, label, type, url, views, handleShareItem }) => {
       }
     }
   }, [open, active]);
+
+  const handleActive = useCallback(
+    (activeItemId) => setActive(activeItemId === id),
+    [id]
+  );
 
   useEffect(() => {
     subgs(ACTIVE_ITEM_ID, handleActive);
@@ -401,22 +455,40 @@ const Item = ({ id, label, type, url, views, handleShareItem }) => {
     setOpen(!open);
   };
 
+  const handleComments = () => setCommentsOpen(!commentsOpen);
+
+  const handleSubmit = async () => {
+    handleSubmitComment(type.toLowerCase(), id, comment);
+    setComment("");
+  };
+  const handleClose = (e) => {
+    e.stopPropagation();
+    setOpen(active);
+    setCommentsOpen(false);
+  };
+
   return (
     <li
       className="bg-grey-dark grid-tr-1m"
-      data-active={active}
-      onClick={handleSelect}
+      data-comments-open={commentsOpen}
+      data-active={active || commentsOpen}
       id={id}
     >
-      <div className="grid row-1m pd-0505051">
+      <div onClick={handleSelect} className="grid row-1m pd-0505051">
         <label>{label}</label>
-        <i onClick={handleOpen} className="material-icons cl-text-icon">
-          {open ? "keyboard_arrow_up" : "more_vert"}
-        </i>
+        {commentsOpen ? (
+          <i onClick={handleClose} className="material-icons cl-text-icon">
+            clear
+          </i>
+        ) : (
+          <i onClick={handleOpen} className="material-icons cl-text-icon">
+            {open ? "keyboard_arrow_up" : "more_vert"}
+          </i>
+        )}
       </div>
 
       {open && (
-        <div className="grid align-i-c grid-af-c grid-ac-m pd-051 gap-s">
+        <div className="grid align-i-c grid-af-c grid-tc-mm1m pd-051 gap-s">
           <small>{`${views || 0} views`}</small>
           <i
             data-icon-active={repeating}
@@ -433,6 +505,52 @@ const Item = ({ id, label, type, url, views, handleShareItem }) => {
           >
             share
           </i>
+          {!commentsOpen && (
+            <i
+              data-icon-active={commentsOpen}
+              onClick={handleComments}
+              className="material-icons cl-text-icon"
+            >
+              comment
+            </i>
+          )}
+        </div>
+      )}
+      {commentsOpen && (
+        <div className="comment-section">
+          {auth ? (
+            <div className="pd-05 grid gap-s grid-tc-1m">
+              <textarea
+                placeholder="Write a comment.."
+                value={comment}
+                onChange={({ target: { value } }) => setComment(value)}
+              ></textarea>
+              <button onClick={handleSubmit} className="align-e">
+                <i className="material-icons cl-text-icon">send</i>
+              </button>
+            </div>
+          ) : (
+            <div className="text-align-c">
+              <Link to="/auth" className="cl-text-pri">
+                <b>Login to comment.</b>
+              </Link>
+            </div>
+          )}
+          <ul className="pd-05 grid gap-s">
+            {comments.length === 0 ? (
+              <li className="pd-05 text-align-c">Be the first to comment!</li>
+            ) : (
+              comments.map((c, i) => (
+                <li
+                  key={i}
+                  id={c.id}
+                  className="rounded pd-05 bg-acc-l cl-text-sec"
+                >
+                  {c.content}
+                </li>
+              ))
+            )}
+          </ul>
         </div>
       )}
     </li>

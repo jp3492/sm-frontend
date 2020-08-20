@@ -61,6 +61,15 @@ export const Roadmap = () => {
     <div className="roadmap grid grid-tr-m1mm">
       <LandingHeader isLanding={false} />
       <section className="public-content || cl-content-icon || grid">
+        <h2 className="pd-1">Mission</h2>
+        <p className="pd-1">
+          "Streamable content has changed the way we learn, entertain ourselves
+          and interact with others online. Our mission is to connect every
+          streamable content online and give people new and advanced ways to
+          search, create and share content."
+        </p>
+      </section>
+      <section className="public-content || cl-content-icon || grid">
         <h2 className="pd-1">Roadmap</h2>
         <div className="steps grid ">
           {steps.map((step, i) => (

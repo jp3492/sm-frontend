@@ -20,8 +20,6 @@ export const getUser = () => firebase.auth().currentUser;
 
 export const setAuthObserver = () => {
   firebase.auth().onAuthStateChanged(async (user) => {
-    console.log(user);
-
     if (user) {
       user.getIdToken().then(async (idToken) => {
         localStorage.setItem("ID_TOKEN", idToken);

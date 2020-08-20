@@ -2,7 +2,7 @@ import React from "react";
 
 export const Datenschutz = () => {
   return (
-    <div>
+    <div className="public-content || pd-1">
       <h1>Datenschutzerklärung</h1>
       <p>
         Verantwortlicher im Sinne der Datenschutzgesetze, insbesondere der

@@ -20,10 +20,8 @@ export const SEQUENCER_VIDEO = "SEQUENCER_VIDEO";
 const CTRL_EVENTS = {
   0: "play",
   10: "tag",
-  127: "tagback",
   38: "back",
   40: "next",
-  81: "fasttagging",
   67: "close",
   66: "edit",
   88: "playback"
@@ -31,21 +29,28 @@ const CTRL_EVENTS = {
 
 const CTRL_ALT_EVENTS = {
   37: "rewind",
-  39: "forward"
+  39: "forward",
+  65: "fasttagging",
+  8: "tagback"
 };
 
 const handleKeyPress = (e) => {
-  const key = e.keyCode;
-  const ctrl = e.ctrlKey;
-  const alt = e.altKey;
-  // console.log(key, ctrl, alt);
+  const isMac = navigator.platform.includes("Mac");
+  if (isMac) {
+  } else {
+    const key = e.keyCode;
+    const ctrl = e.ctrlKey;
+    const alt = e.altKey;
 
-  if (ctrl && CTRL_EVENTS[key]) {
-    const event = new CustomEvent("controls", { detail: CTRL_EVENTS[key] });
-    document.dispatchEvent(event);
-  } else if (ctrl && alt && CTRL_ALT_EVENTS[key]) {
-    const event = new CustomEvent("controls", { detail: CTRL_ALT_EVENTS[key] });
-    document.dispatchEvent(event);
+    if (ctrl && CTRL_EVENTS[key]) {
+      const event = new CustomEvent("controls", { detail: CTRL_EVENTS[key] });
+      document.dispatchEvent(event);
+    } else if (ctrl && alt && CTRL_ALT_EVENTS[key]) {
+      const event = new CustomEvent("controls", {
+        detail: CTRL_ALT_EVENTS[key]
+      });
+      document.dispatchEvent(event);
+    }
   }
 };
 
@@ -108,7 +113,7 @@ export const Sequencer = ({
   }, [sequences, selectedVideo]);
 
   return (
-    <div className="sequencer overflow-h grid grid-tc-1m grid-tr-m1 bg-grey-light">
+    <div className="dashboard-loading sequencer overflow-h grid grid-tc-1m grid-tr-m1 bg-grey-light">
       <SequencerHeader selectedVideo={selectedVideo} />
       <SequencerVideo
         sequences={videoSequences}

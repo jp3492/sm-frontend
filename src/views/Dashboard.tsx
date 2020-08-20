@@ -32,7 +32,9 @@ export const Dashboard = ({ history: { push } }) => {
   }, []);
 
   return initialized ? (
-    <div className="dashboard grid grid-tr-m1 grid-tc-m1m bg-grey-light gap-s overflow-h cl-content-sec">
+    <div
+      className={`dashboard grid grid-tr-m1 grid-tc-m1m bg-grey-light gap-s overflow-h cl-content-sec`}
+    >
       <Header push={push} />
       <Menu />
       <Directory />
@@ -40,7 +42,7 @@ export const Dashboard = ({ history: { push } }) => {
       <Hint />
     </div>
   ) : (
-    <div className="centered-grid">
+    <div className="dashboard-loading centered-grid || cl-content-sec">
       <b>Loading User Data...</b>
     </div>
   );

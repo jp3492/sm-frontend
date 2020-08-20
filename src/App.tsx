@@ -32,7 +32,7 @@ const App = () => {
           <Route exact path="/impressum" component={Impressum} />
           <Route exact path="/datenschutz" component={Datenschutz} />
           {auth === "pending" ? (
-            <div className="centered-grid">
+            <div className="centered-grid dashboard-loading cl-content-sec">
               <h3>Loading App...</h3>
             </div>
           ) : (

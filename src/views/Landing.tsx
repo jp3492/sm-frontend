@@ -98,10 +98,10 @@ const FeaturedPlaylists = ({ items, label, id, preview }) => {
 
 export const LandingFooter = () => (
   <footer className="bg-acc-d || shadow-xl || pd-21 || cl-content-icon">
-    <div>
+    <div className="grid grid-af-c align-i-c grid-ac-m gap-1">
       <h2>Viden</h2>
-      {/* <Link to="/impressum">Imprint</Link>
-    <Link to="/datenschutz">Data & Privacy</Link> */}
+      <Link to="/impressum">Imprint</Link>
+      <Link to="/datenschutz">Data & Privacy</Link>
     </div>
   </footer>
 );
