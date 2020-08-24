@@ -1,79 +1,73 @@
 .viewer {
+  height: 100%;
   .loading-viewer  {
     height: 100vh;
   }
-  .sequence_viewer {
-    .info {
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      position: fixed;
-      display: grid;
-      place-content: center;
-      background-color: var(--cl-grey-opace);
-      > div {
-        background-color: var(--cl-grey);
-        border-radius: 4px;
-        * { color: white;}
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        box-shadow: var(--shadow-l);
-        > div {
-          padding: 0.5rem 1rem;
-          grid-column: 1 / 3;
-          border-bottom: 1px solid white;
-          display: grid;
-          gap: 1rem;
-          align-items: center;
-          grid-template-columns: max-content 1fr max-content;
-          h5 {
-            font-size: 100%;
-            font-weight: 500;
+  .playlist_viewer, .sequence_viewer {
+    height: 100vh;
+    display: grid;
+    position: relative;
+    grid-template-columns: 1fr max-content;
+    grid-template-areas: "players list";
+    > .players {
+      grid-area: players;
+    }
+    > .viewer_list {
+      position: relative;
+      width: 20rem;
+      max-height: 100vh;
+      &[data-open="false"] {
+        width: 0;
+      }
+      grid-area: list;
+      background-color: var(--cl-acc-d);
+      > .viewer_list-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.5rem;
+        background-color: var(--cl-acc-d);
+        > h3 {
+          flex-grow: 1;
+          color: var(--cl-acc-l);
+        }
+      }
+      > .viewer_list-sequence {
+        background-color: var(--cl-acc);
+        box-shadow: var(--shadow-s);
+      }
+      > ul {
+        position: relative;
+        background-color: var(--cl-acc-d);
+        overflow: auto;
+        > li {
+          > * {
+            color: var(--cl-text-icon);
           }
-        }
-        > p {
-          padding: 1rem;
-          grid-column: 1 / 3;
-        }
-        > button:first-of-type {
-          justify-self: start;
-          grid-column: 1 / 2;
-          margin: 0.5rem;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-        > button:last-of-type {
-          grid-column: 2 / 3;
-          justify-self: end;
-          padding: 0.3rem 1.5rem;
-          background-color: var(--cl-grey);
-          border: 1px solid white;
-          margin: 0.5rem;
-          gap: 0.5rem;
-          border-radius: 4px;
-          display: flex;
-          align-items: center;
+          &[data-active="true"] {
+            background-color: var(--cl-acc-l);
+            color: var(--cl-text-sec);
+            > * > * {
+              color: var(--cl-text-sec);
+            }
+          }
         }
       }
     }
-    .panel {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      border-top-left-radius: 8px;
-      border-bottom-left-radius: 8px;
+  }
+  .sequence_viewer {
+    > .viewer_list {
       display: grid;
-      > i {
-        color: white;
+      grid-template-rows: max-content max-content 1fr max-content;
+      > .viewer_list-sequence {
+        background-color: var(--cl-acc-l);
+        * {
+          color: var(--cl-text-sec);
+        }
       }
     }
   }
   .playlist_viewer {
-    grid-template-columns: 1fr max-content;
-    grid-template-areas: "players list";
     > .players {
       grid-area: players;
       position: relative;
@@ -89,105 +83,102 @@
         }
       }
     }
-    .playlist_viewer-list {
-      grid-area: list;
-      width: 350px;
-      height: 100vh;
-      &[data-open="false"] {
-        width: 0;
-      }
-      position: relative;
-      h2 {
-        position: sticky;
-        top: 0;
-        font-size: 140%;
-        font-weight: 500;
-        color: white;
-        padding: 0.5rem;
-        gap: 0.5rem;
-        background-color: black;
-        i {
-          color: white;
-        }
+    > .viewer_list {
+      > .viewer_list-sequence {
+        z-index: 1;
+        box-shadow: var(--shadow-s);
       }
       > input {
         border-radius: 0;
-        color: white;
         border: none;
-        font-weight: 200;
-        font-size: 100%;
-        padding: 0.5rem 1rem;
-        font-size: small;
+        background-color: var(--cl-acc);
+        color: white;
+        border-bottom: 0.3rem solid var(--cl-acc-d);
         &::placeholder {
           color: white;
         }
-        margin-bottom: 5px;
       }
       > ul {
-        position: relative;
-        background-color: black;
+        display: grid;
         grid-auto-rows: max-content;
-        overflow: auto;
         > li {
+          background-color: var(--cl-acc);
           &[data-comments-open="true"] {
-            position: fixed;
+            position: absolute;
             height: 100%;
-            width: 350px;
+            width: 100%;
+            top: 0;
             z-index: 2;
           }
-          color: white;
-          &[data-active="true"] {
-            background-color: var(--cl-grey);
-          }
-          cursor: pointer;
-          * {
-            cursor: pointer;
-          }
-          > * + * {
-            background-color: var(--cl-grey-opace);
-          }
-          .comment-section {
-            a {
-              text-decoration: underline;
-            }
-            .comment  {
-              > small {
-                text-decoration: underline;
-              }
-            }
-          }
-        }
-      }
-      .panel {
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateX(-100%) translateY(-50%);
-        z-index: 1;
-        border-top-left-radius: 8px;
-        border-bottom-left-radius: 8px;
-        display: grid;
-        i {
-          color: white;
-        }
-        justify-items: center;
-        span {
-          color: white;
         }
       }
     }
-    &[data-align="left"] {
-      grid-template-columns: max-content 1fr;
-      grid-template-areas: "list players";
-      .panel {
-        left: 100%;
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
-        transform: translateY(-50%);
-        > i:first-of-type {
-          transform: rotate(180deg);
+  }
+  .comment-section {
+    background-color: var(--cl-acc-l);
+    > * {
+      color: var(--cl-text-sec);
+    }
+    textarea {
+      border: 1px solid var(--cl-acc);
+    }
+    > ul {
+      > .comment {
+        color: var(--cl-acc-l);
+        background-color: var(--cl-acc);
+        > small {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+  .panel {
+    display: flex;
+    align-items: center;
+    background-color: var(--cl-acc-d);
+    box-shadow: var(--shadow-l);
+    padding: 1rem 0.5rem;
+    * {
+      text-align: center;
+      color: var(--cl-text-icon)
+    }
+    > * {
+      flex-grow: 1;
+    }
+  }
+  [data-open="false"] > .panel {
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(-100%, -50%);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  @media screen and (max-width: 768px) and (min-height: 400px) {
+    .playlist_viewer, .sequence_viewer {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr max-content;
+      grid-template-areas: "players" "list";
+      > .viewer_list {
+        width: 100%;
+        height: 50vh;
+        &[data-open="false"] {
+          height: 0;
+          width: 100%;
+          > .panel {
+            z-index: 1;
+            position: fixed;
+            right: 0;
+            left: auto;
+            top: 50%;
+            transform: translateY(-50%);
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            gap: 1rem;
+          }
         }
       }
     }

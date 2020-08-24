@@ -1,33 +1,31 @@
-import { sgs, ugs } from "./../utils/rxGlobal";
+import { PROFILE } from "./profile";
+import { sgs, ugs, ggs } from "./../utils/rxGlobal";
 import { request } from "./../utils/request";
 
-export const getComments = async ({ type, typeId, targetType, targetId }) => {
+export const getComments = async ({ targetType, targetId, playlistId }) => {
   try {
-    const path =
-      type === "playlist"
-        ? `/comment/${type}/${typeId}/${targetType.toLowerCase()}/${targetId}`
-        : `/comment/${type}/${typeId}`;
+    const path = playlistId
+      ? `/comment/${targetType}/${targetId}/${playlistId}`
+      : `/comment/${targetType}/${targetId}`;
     const res = await request("viewer", path);
-    const data = await res.json();
-    const stateId = `COMMENTS_${type === "playlist" ? targetId : typeId}`;
-    sgs(stateId, data);
+    const { comments } = await res.json();
+    const stateId = `COMMENTS_${targetId}`;
+    sgs(stateId, comments);
   } catch (error) {
     console.log(error);
   }
 };
 
 export const postComment = async ({
-  type,
-  typeId,
   targetType,
   targetId,
+  playlistId,
   content
 }) => {
   try {
-    const path =
-      type === "playlist"
-        ? `/comment/${type}/${typeId}/${targetType}/${targetId}`
-        : `/comment/${type}/${typeId}`;
+    const path = playlistId
+      ? `/comment/${targetType}/${targetId}/${playlistId}`
+      : `/comment/${targetType}/${targetId}`;
     const res = await request("viewer", path, {
       method: "POST",
       body: JSON.stringify({
@@ -35,9 +33,16 @@ export const postComment = async ({
       })
     });
     const id = await res.text();
-    const stateId = `COMMENTS_${type === "playlist" ? targetId : typeId}`;
+    const stateId = `COMMENTS_${targetId}`;
     ugs(stateId, (comments) => [
-      { type, typeId, targetType, targetId, content, id },
+      {
+        targetType,
+        targetId,
+        playlistId,
+        content,
+        id,
+        userName: ggs(PROFILE).name
+      },
       ...comments
     ]);
   } catch (error) {

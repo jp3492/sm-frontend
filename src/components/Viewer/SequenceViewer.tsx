@@ -9,6 +9,7 @@ import ReactPlayer from "react-player";
 
 import { platforms } from "../../views/Landing";
 import { getPlatformFromUrl } from "../../utils/getPlatformFromUrl";
+import { CommentSection } from "./CommentSection";
 
 export const SequenceViewer = ({ sequence, query }) => {
   const [playing, setPlaying] = useState(false);
@@ -21,8 +22,6 @@ export const SequenceViewer = ({ sequence, query }) => {
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000/viewer/playlist/" + originId
       : "https://viden.pro/viewer/playlist/" + originId;
-
-  console.log({ originId, originLink });
 
   const player: any = useRef();
   const ref = (p) => (player.current = p);
@@ -61,82 +60,56 @@ export const SequenceViewer = ({ sequence, query }) => {
 
   return (
     <div className="sequence_viewer">
-      {open ? (
-        !playing && (
-          <div className="info">
-            <div>
-              <div>
-                <img src={platform} height="20px" alt="platform" />
-                <h5>{sequence.videoLabel}</h5>
-                <i className="material-icons" onClick={() => setOpen(false)}>
-                  chevron_right
-                </i>
-              </div>
-              <p>"{sequence.label}"</p>
-              {originId && (
-                <div>
-                  <label>
-                    {`Shared from playlist: "${originLabel
-                      .split("%20")
-                      .join(" ")}"`}
-                  </label>
-                  <a target="_blank" href={originLink}>
-                    <i className="material-icons">open_in_new</i>
-                  </a>
-                </div>
-              )}
-              {playerReady && (
-                <button onClick={handleReplay}>
-                  <i className="material-icons">replay</i>
-                  Replay
-                </button>
-              )}
-              <button onClick={handlePlay}>
-                {!playerReady ? (
-                  "Loading..."
-                ) : (
-                  <>
-                    <i className="material-icons">play_arrow</i>
-                    Play
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        )
-      ) : (
-        <div className="panel bg-grey">
+      <div className="players">
+        <ReactPlayer
+          className={"player_viewer"}
+          height="100%"
+          width="100%"
+          playing={playing}
+          ref={ref}
+          url={sequence.url}
+          onPause={handlePause}
+          onReady={handleReady}
+          onProgress={handleProgress}
+        />
+      </div>
+      <div className="viewer_list" data-open={open}>
+        <div className="viewer_list-header">
+          <img src={platform} height="20px" alt="platform" />
+          <h3>{sequence.videoLabel}</h3>
+        </div>
+        <div className="viewer_list-sequence grid grid-tc-m1 c-gap-m pd-05 align-i-c">
+          <i className="material-icons sequence-icon">open_in_full</i>
+          <b>{sequence.label}</b>
+          <i className="material-icons">access_time</i>
+          <small>{`${sequence.start} - ${sequence.stop}`}</small>
+        </div>
+
+        <CommentSection
+          playlistId={originId}
+          targetType="sequence"
+          targetId={sequence.id}
+        />
+        <div className="panel">
           <i
-            className="material-icons pd-05"
+            className="material-icons"
             onClick={() => {
               setPlaying(false);
-              setOpen(true);
+              setOpen(!open);
             }}
           >
-            chevron_left
+            {open ? "chevron_right" : "chevron_left"}
           </i>
-          <i
-            className="material-icons pd-05"
-            onClick={() => setPlaying(!playing)}
-          >
-            {playing ? "pause" : "play_arrow"}
-          </i>
-          <i className="material-icons pd-05" onClick={handleReplay}>
+          <i className="material-icons">{playing ? "pause" : "play_arrow"}</i>
+
+          <i className="material-icons" onClick={handleReplay}>
             replay
           </i>
+          <i className="material-icons">repeat_one</i>
+          <i className="material-icons">open_in_new</i>
+          <i className="material-icons">share</i>
         </div>
-      )}
-      <ReactPlayer
-        className={"player_viewer"}
-        height="100%"
-        width="100%"
-        playing={playing}
-        ref={ref}
-        url={sequence.url}
-        onPause={handlePause}
-        onReady={handleReady}
-        onProgress={handleProgress}
-      />
+      </div>
     </div>
   );
 };

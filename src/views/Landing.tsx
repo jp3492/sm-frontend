@@ -2,12 +2,13 @@ import React, { useState, useMemo } from "react";
 import "./Landing.scss";
 import { AUTH } from "../services/auth";
 import { Link } from "react-router-dom";
-import { usegs } from "../utils/rxGlobal";
+import { usegs, sgs } from "../utils/rxGlobal";
 import {
   getFeaturedPlaylists,
   FEATURED_PLAYLISTS
 } from "../stores/landingPage";
 import ReactPlayer from "react-player";
+import { MODAL } from "../components/Modal";
 
 export const platforms = {
   youtube: require("../assets/youtube.svg"),
@@ -23,15 +24,15 @@ export const platforms = {
 
 const network = require("../assets/network.svg");
 
-export const Landing = () => {
+const Landing = ({ history: { push } }) => {
   const [featuredPlaylists] = usegs(FEATURED_PLAYLISTS);
   useMemo(() => {
     getFeaturedPlaylists();
   }, []);
 
   return (
-    <div className="landing || gap-l || flow-2">
-      <LandingHeader />
+    <div className="landing || flow-2">
+      <LandingHeader push={push} />
       <section className="public-content || intro-section || pd-2 || grid grid-tc-m1 grid-tr-11m gap-24 || cl-content-icon">
         <h2 className="align-e || size-25 || pd-0020">
           A new Dimension <br />
@@ -106,13 +107,19 @@ export const LandingFooter = () => (
   </footer>
 );
 
-export const LandingHeader = ({ isLanding = true }: any) => {
+export const LandingHeader = ({ isLanding = true, push }: any) => {
   const [auth] = usegs(AUTH);
   const [open, setOpen] = useState(false);
 
   const handleClick = () => {
     setOpen(false);
   };
+
+  const handleLogin = () =>
+    sgs(MODAL, {
+      component: "AUTH",
+      props: { push, type: "login" }
+    });
 
   return (
     <header className="grid align-i-c grid-tc-1m gap-l || pd-01 || bg-pri || shadow-s || cl-content-icon ">
@@ -134,9 +141,11 @@ export const LandingHeader = ({ isLanding = true }: any) => {
         {auth ? (
           <Link to="/dashboard">Dashboard</Link>
         ) : (
-          <Link to="/auth">Login</Link>
+          <button onClick={handleLogin}>Login</button>
         )}
       </nav>
     </header>
   );
 };
+
+export default Landing;

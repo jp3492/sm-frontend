@@ -14,7 +14,7 @@ import {
   PV_PLAYING
 } from "../components/Viewer/PlaylistViewer";
 
-export const Viewer = ({
+const Viewer = ({
   match: {
     params: { type, id }
   },
@@ -105,3 +105,5 @@ const getSequence = async (id) => {
     return error;
   }
 };
+
+export default Viewer;

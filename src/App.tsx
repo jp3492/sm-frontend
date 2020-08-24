@@ -1,55 +1,61 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import "./App.scss";
 import "./forms/forms.scss";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { usegs } from "./utils/rxGlobal";
 
-import { Auth } from "./views/Auth";
-import { Dashboard } from "./views/Dashboard";
-import { Modal } from "./components/Modal";
-import { Sequencer } from "./views/Sequencer";
-import { Landing } from "./views/Landing";
-import { Viewer } from "./views/Viewer";
 import { AUTH } from "./services/auth";
+
 import { ErrorPage404 } from "./views/404";
 import { ErrorPage403 } from "./views/403";
-import { Impressum } from "./views/Impressum";
-import { Datenschutz } from "./views/Datenschutz";
-import { Roadmap } from "./views/Roadmap";
+import { Modal } from "./components/Modal";
+
+// lazy load all pages
+const Dashboard = lazy(() => import("./views/Dashboard"));
+const Sequencer = lazy(() => import("./views/Sequencer"));
+const Landing = lazy(() => import("./views/Landing"));
+const Viewer = lazy(() => import("./views/Viewer"));
+const Impressum = lazy(() => import("./views/Impressum"));
+const Datenschutz = lazy(() => import("./views/Datenschutz"));
+const Roadmap = lazy(() => import("./views/Roadmap"));
 
 const App = () => {
   const [auth] = usegs(AUTH, "pending");
 
   return (
     <div className="app">
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/roadmap" component={Roadmap} />
-          <Route exact path="/viewer/:type/:id" component={Viewer} />
-          {/* <Route exact path="/auth/:type" component={Auth} /> */}
-          <Route exact path="/auth" component={Auth} />
-          <Route exact path="/impressum" component={Impressum} />
-          <Route exact path="/datenschutz" component={Datenschutz} />
-          {auth === "pending" ? (
-            <div className="centered-grid dashboard-loading cl-content-sec">
-              <h3>Loading App...</h3>
-            </div>
-          ) : (
-            auth === true && (
-              <>
-                <Route exact path="/dashboard" component={Dashboard} />
-                <Route exact path="/sequencer/:id" component={Sequencer} />
-              </>
-            )
-          )}{" "}
-          <Route exact path="/403" component={ErrorPage403} />
-          <Route path={["*", "/404"]} component={ErrorPage404} />
-        </Switch>
-        <Modal />
-      </BrowserRouter>
+      <Suspense fallback={LoadingPage}>
+        <BrowserRouter>
+          <Switch>
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/roadmap" component={Roadmap} />
+            <Route exact path="/viewer/:type/:id" component={Viewer} />
+            <Route exact path="/impressum" component={Impressum} />
+            <Route exact path="/datenschutz" component={Datenschutz} />
+            {auth === "pending" ? (
+              <div className="centered-grid dashboard-loading cl-content-sec">
+                <h3>Loading App...</h3>
+              </div>
+            ) : (
+              auth === true && (
+                <>
+                  <Route exact path="/dashboard" component={Dashboard} />
+                  <Route exact path="/sequencer/:id" component={Sequencer} />
+                </>
+              )
+            )}
+            <Route exact path="/403" component={ErrorPage403} />
+            <Route path={["*", "/404"]} component={ErrorPage404} />
+          </Switch>
+          <Modal />
+        </BrowserRouter>
+      </Suspense>
     </div>
   );
+};
+
+const LoadingPage = () => {
+  return <div className="centered-grid">Loading Page</div>;
 };
 
 export default App;

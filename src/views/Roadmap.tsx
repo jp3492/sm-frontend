@@ -51,7 +51,7 @@ const steps = [
   }
 ];
 
-export const Roadmap = () => {
+const Roadmap = () => {
   const handleSupport = () =>
     sgs(MODAL, {
       component: "REQUEST_SUPPORT"
@@ -96,3 +96,5 @@ export const Roadmap = () => {
     </div>
   );
 };
+
+export default Roadmap;

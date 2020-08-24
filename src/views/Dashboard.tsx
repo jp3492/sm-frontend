@@ -25,7 +25,7 @@ const getUserData: any = async () => {
   sgs(INITIALIZED, true);
 };
 
-export const Dashboard = ({ history: { push } }) => {
+const Dashboard = ({ history: { push } }) => {
   const [initialized] = usegs(INITIALIZED, false);
 
   useEffect(() => {
@@ -49,3 +49,5 @@ export const Dashboard = ({ history: { push } }) => {
     </div>
   );
 };
+
+export default Dashboard;

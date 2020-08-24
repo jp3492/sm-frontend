@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Impressum = () => {
+const Impressum = () => {
   return (
     <div className="public-content || pd-1">
       <h1>Impressum</h1>
@@ -111,3 +111,5 @@ export const Impressum = () => {
     </div>
   );
 };
+
+export default Impressum;

@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Datenschutz = () => {
+const Datenschutz = () => {
   return (
     <div className="public-content || pd-1">
       <h1>Datenschutzerklärung</h1>
@@ -357,3 +357,5 @@ export const Datenschutz = () => {
     </div>
   );
 };
+
+export default Datenschutz;

@@ -1,3 +1,4 @@
+import { getProfile } from "./../stores/profile";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 
@@ -21,6 +22,7 @@ export const getUser = () => firebase.auth().currentUser;
 export const setAuthObserver = () => {
   firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
+      getProfile();
       user.getIdToken().then(async (idToken) => {
         localStorage.setItem("ID_TOKEN", idToken);
         sgs(AUTH, true);

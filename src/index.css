@@ -378,8 +378,14 @@ i {
 .gap-s {
   gap: 0.5rem;
 }
+.c-gap-s {
+	column-gap: 0.5rem;
+}
 .gap-m {
 	gap: 1rem;
+}
+.c-gap-m {
+	column-gap: 1rem;
 }
 .cgap-m {
 	column-gap: 1rem;
@@ -389,50 +395,6 @@ i {
 }
 .rgap-s {
 	row-gap: 0.5rem;
-}
-@media screen and (min-width: 1024px) {
-	.l-gap-xs {
-		gap: 2px;
-	}
-	.l-gap-s {
-		gap: 0.5rem;
-	}
-	.l-gap-m {
-		gap: 1rem;
-	}
-	.l-gap-l {
-		gap: 2rem;
-	}
-}
-
-@media screen and (max-width: 1024px) and (min-width: 800px) {
-	.m-gap-xs {
-		gap: 2px;
-	}
-	.m-gap-s {
-		gap: 0.4rem;
-	}
-	.m-gap-m {
-		gap: 0.8rem;
-	}
-	.m-gap-l {
-		gap: 1.5rem;
-	}
-}
-
-@media screen and (max-width: 800px) {
-	.s-gap-xs {
-		gap: 1px;
-	}
-	.s-gap-s {
-		gap: 0.3rem;
-	}
-	.s-gap-m {
-		gap: 0.5rem;
-	}
-	.s-gap-l {
-		gap: 1rem;
-	}
 }
 
 .overflow-h {

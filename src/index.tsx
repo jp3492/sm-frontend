@@ -19,4 +19,4 @@ Array.prototype.move = function (from, to) {
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
-serviceWorker.unregister();
+serviceWorker.register();

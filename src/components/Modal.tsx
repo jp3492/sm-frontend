@@ -12,6 +12,7 @@ import { SelectPlaylist } from "../forms/SelectPlaylist";
 import { RequestAccess } from "../forms/RequestAccess";
 import { RequestSupport } from "../forms/RequestSupport";
 import { Profile } from "../forms/Profile";
+import { Auth } from "../forms/Auth";
 
 export const MODAL = "MODAL";
 
@@ -31,7 +32,8 @@ const COMPONENTS = {
   SELECT_PLAYLIST: SelectPlaylist,
   REQUEST_ACCESS: RequestAccess,
   REQUEST_SUPPORT: RequestSupport,
-  PROFILE: Profile
+  PROFILE: Profile,
+  AUTH: Auth
 };
 
 export const Modal = () => {

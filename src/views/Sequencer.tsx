@@ -54,7 +54,7 @@ const handleKeyPress = (e) => {
   }
 };
 
-export const Sequencer = ({
+const Sequencer = ({
   match: {
     params: { id }
   },
@@ -129,3 +129,5 @@ export const Sequencer = ({
     </div>
   );
 };
+
+export default Sequencer;
