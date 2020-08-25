@@ -2,6 +2,15 @@ import { PROFILE } from "./profile";
 import { sgs, ugs, ggs } from "./../utils/rxGlobal";
 import { request } from "./../utils/request";
 
+export const deleteComment = async (id, stateId) => {
+  try {
+    await request("viewer", `/comment/${id}`, { method: "DELETE" });
+    ugs(stateId, (comments) => comments.filter((c) => c.id !== id));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getComments = async ({ targetType, targetId, playlistId }) => {
   try {
     const path = playlistId
@@ -41,6 +50,7 @@ export const postComment = async ({
         playlistId,
         content,
         id,
+        timestamp: Date.now(),
         userName: ggs(PROFILE).name
       },
       ...comments

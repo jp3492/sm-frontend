@@ -6,4 +6,5 @@
 }
 .dashboard-loading {
   height: 100vh;
+  grid-template-columns: minmax(0, 1fr) max-content;
 }

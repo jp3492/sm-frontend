@@ -28,22 +28,29 @@ export const Profile = ({ closeModal }) => {
   };
 
   return (
-    <div className="pd-1 grid gap-m">
-      <h2>Your Profile</h2>
-      <input
-        type="text"
-        alt="your name"
-        value={name}
-        onChange={({ target: { value } }) => setName(value)}
-        placeholder="Add you name"
-        name="name"
-      />
-      <button
-        onClick={handleLogout}
-        className="pd-051 bg-pri rounded cl-text-icon"
-      >
-        Logout
-      </button>
-    </div>
+    <form>
+      <div className="form-header">
+        <h2>Your Profile</h2>
+      </div>
+      <div className="form-body">
+        <label>
+          Name
+          <input
+            type="text"
+            alt="your name"
+            value={name}
+            onChange={({ target: { value } }) => setName(value)}
+            placeholder="Add you name"
+            name="name"
+          />
+        </label>
+        <button
+          onClick={handleLogout}
+          className="pd-051 bg-pri rounded cl-text-icon"
+        >
+          Logout
+        </button>
+      </div>
+    </form>
   );
 };

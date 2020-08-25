@@ -1,5 +1,7 @@
 import React from "react";
 import "./Modal.scss";
+
+// Consideration: lazy load all the modal content
 import { Folder } from "../forms/Folder";
 import { Video } from "../forms/Video";
 import { Playlist } from "../forms/Playlist";

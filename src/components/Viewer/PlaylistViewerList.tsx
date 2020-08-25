@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { sgs, subgs, unsgs, ugs, usegs } from "../../utils/rxGlobal";
+import { sgs, subgs, unsgs, ugs, usegs, ggs } from "../../utils/rxGlobal";
 import { PV_REPEATING_ITEM_ID, ACTIVE_ITEM_ID } from "./PlaylistViewer";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { CommentSection } from "./CommentSection";
+import { AUTH } from "../../services/auth";
+import { MODAL } from "../Modal";
 
 export const COMMENTS_OPEN = "COMMENT_OPEN";
 
@@ -107,7 +109,20 @@ const Item = ({ id, label, type, url, views, playlistId, handleShareItem }) => {
     setOpen(!open);
   };
 
-  const handleComments = () => setCommentsOpen(!commentsOpen);
+  const handleComments = () => {
+    const auth = ggs(AUTH);
+    if (auth) {
+      setCommentsOpen(!commentsOpen);
+    } else {
+      sgs(MODAL, {
+        component: "AUTH",
+        props: {
+          type: "login",
+          message: "Please sign in in order to view or make comments."
+        }
+      });
+    }
+  };
 
   const handleClose = (e) => {
     e.stopPropagation();

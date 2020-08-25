@@ -13,6 +13,7 @@ export const ACTIVE_URL = "ACTIVE_URL";
 export const PV_PLAYERS = "PLAYERS";
 export const PV_REPEATING_ITEM_ID = "PV_REPEATING_ITEM_ID";
 
+sgs(PV_ITEMS, []);
 sgs(PV_PLAYING, false);
 sgs(ACTIVE_ITEM_ID, null);
 sgs(ACTIVE_URL, "");
@@ -44,6 +45,7 @@ let previousItemId;
 
 subgs(ACTIVE_ITEM_ID, (id) => {
   if (id === null) {
+    previousItemId = null;
     sgs(ACTIVE_URL, "");
     return;
   }
@@ -192,13 +194,15 @@ export const PlaylistViewer = ({ videos, sequences, playlist, query }: any) => {
             share
           </i>
         </div>
-        <input
-          className="bg-grey-dark"
-          type="text"
-          placeholder="Search Playlist..."
-          value={search}
-          onChange={handleSearch}
-        />
+        <form onSubmit={(e) => e.preventDefault()}>
+          <input
+            className="bg-grey-dark"
+            type="text"
+            placeholder="Search Playlist..."
+            value={search}
+            onChange={handleSearch}
+          />
+        </form>
         <PlaylistViewerList
           handleShareItem={handleShareItem}
           searchedItems={searchedItems}

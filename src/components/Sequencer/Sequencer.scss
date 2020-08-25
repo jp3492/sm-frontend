@@ -2,6 +2,15 @@
   > * {
     background-color: white;
   }
+  > .sequencer_video {
+    background-color: black;
+    // display: flex;
+    > .player {
+      > video {
+        width: 100% !important;
+      }
+    }
+  }
   .sequencer_header {
     grid-column: 1 / 2;
     height: 45px;

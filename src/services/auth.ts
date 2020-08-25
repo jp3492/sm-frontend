@@ -1,3 +1,4 @@
+import { subgs } from "./../utils/rxGlobal";
 import { getProfile } from "./../stores/profile";
 import * as firebase from "firebase/app";
 import "firebase/auth";
@@ -5,6 +6,8 @@ import "firebase/auth";
 import { sgs } from "../utils/rxGlobal";
 
 export const AUTH = "AUTH";
+
+sgs(AUTH, false);
 
 const firebaseConfig = {
   apiKey: "AIzaSyB6BP4nchauDnzgyP02JY8w4HlKq-Hn0Co",
@@ -22,11 +25,11 @@ export const getUser = () => firebase.auth().currentUser;
 export const setAuthObserver = () => {
   firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
+      // @ts-ignore
+      const idToken = await firebase.auth().currentUser.getIdToken(false);
+      localStorage.setItem("ID_TOKEN", idToken);
+      sgs(AUTH, true);
       getProfile();
-      user.getIdToken().then(async (idToken) => {
-        localStorage.setItem("ID_TOKEN", idToken);
-        sgs(AUTH, true);
-      });
     } else {
       localStorage.removeItem("ID_TOKEN");
       sgs(AUTH, false);
@@ -54,9 +57,6 @@ export const register = async ({ email, password }) => {
 export const login = async ({ email, password }) => {
   try {
     await firebase.auth().signInWithEmailAndPassword(email, password);
-    // @ts-ignore
-    const idToken = await firebase.auth().currentUser.getIdToken(false);
-    localStorage.setItem("ID_TOKEN", idToken);
     sgs(AUTH, true);
   } catch (error) {
     sgs(AUTH, false);

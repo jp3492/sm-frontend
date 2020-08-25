@@ -6,11 +6,15 @@
     border: none;
     border-top: 1px solid var(--cl-grey);
   }
-  label {
-    border-radius: 8px;
-    padding: 0.2rem 0.5rem;
-  }
+
   > span {
     cursor: pointer;
+  }
+  .form-header > p {
+    padding: 1rem;
+    color: var(--cl-text-icon);
+    border: 2px solid var(--cl-orange);
+    border-radius: 8px;
+    font-weight: 500;
   }
 }

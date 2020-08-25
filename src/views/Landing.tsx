@@ -35,8 +35,9 @@ const Landing = ({ history: { push } }) => {
       <LandingHeader push={push} />
       <section className="public-content || intro-section || pd-2 || grid grid-tc-m1 grid-tr-11m gap-24 || cl-content-icon">
         <h2 className="align-e || size-25 || pd-0020">
-          A new Dimension <br />
-          for Online Streaming
+          A new Way of
+          <br />
+          Online Streaming
         </h2>
         <h3 className="weight-500">
           Viden is a platform to work and interact with streamable videos
@@ -122,7 +123,7 @@ export const LandingHeader = ({ isLanding = true, push }: any) => {
     });
 
   return (
-    <header className="grid align-i-c grid-tc-1m gap-l || pd-01 || bg-pri || shadow-s || cl-content-icon ">
+    <header className="grid align-i-c grid-tc-1m gap-l || pd-01 || cl-content-icon ">
       <Link to="/">
         <h1>
           Viden <small className="size-s">Beta</small>

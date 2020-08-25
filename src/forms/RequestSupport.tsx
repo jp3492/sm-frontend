@@ -32,6 +32,7 @@ export const RequestSupport = ({ closeModal }) => {
       <input
         name="email"
         type="email"
+        required={true}
         value={values.email}
         onChange={handleChange}
         placeholder="myemail@internet.com"
@@ -39,6 +40,8 @@ export const RequestSupport = ({ closeModal }) => {
       />
       <textarea
         name="text"
+        required={true}
+        minLength={50}
         value={values.text}
         onChange={handleChange}
         placeholder="Write us about you and why you want to try our platform? :)"

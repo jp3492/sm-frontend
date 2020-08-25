@@ -8,7 +8,6 @@ import { DIRECTORY_TYPES } from "../../stores/folder";
 import { Link } from "react-router-dom";
 import { MENU_OPEN } from "./Menu";
 import { usegs, ggs, sgs } from "../../utils/rxGlobal";
-import { logout } from "../../services/auth";
 
 export const VIDEO_DETECTED = "VIDEO_DETECTED";
 
@@ -24,8 +23,10 @@ export const Header = ({ push }) => {
   });
 
   const onFocus = async () => {
-    const url = await navigator.clipboard.readText();
-    addUrl(url);
+    if (navigator.clipboard.readText) {
+      const url = await navigator.clipboard.readText();
+      addUrl(url);
+    }
   };
 
   const handleChangeUrl = ({ target: { value } }) => {

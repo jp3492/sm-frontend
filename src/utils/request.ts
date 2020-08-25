@@ -1,3 +1,5 @@
+import { logout } from "./../services/auth";
+
 const APIS =
   process.env.NODE_ENV === "development"
     ? {
@@ -29,15 +31,30 @@ const APIS =
           "https://us-central1-streaming-manager-dc49e.cloudfunctions.net/landingPage"
       };
 
-export const request = (api: string, path: string = "", options: any = {}) => {
-  const url = APIS[api];
-
-  return fetch(`${url}${path}`, {
-    ...options,
-    headers: {
-      ...options.headers,
-      "Content-Type": "application/json",
-      authorization: localStorage.getItem("ID_TOKEN")
+export const request = async (
+  api: string,
+  path: string = "",
+  options: any = {}
+) => {
+  try {
+    const url = APIS[api];
+    const res: any = await fetch(`${url}${path}`, {
+      ...options,
+      headers: {
+        ...options.headers,
+        "Content-Type": "application/json",
+        authorization: localStorage.getItem("ID_TOKEN")
+      }
+    });
+    if (res.status !== 200) {
+      throw new Error(res.status);
     }
-  });
+
+    return res;
+  } catch (err) {
+    if (err.message === String(401)) {
+      logout();
+    }
+    throw Error(err);
+  }
 };
