@@ -15,6 +15,7 @@ export const Folder = ({ onSubmit, closeModal, id, directory, ...values }) => {
   );
   const [label, setLabel] = useState(values.label || "");
   const [loading, setLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const deletable = useMemo(() => {
     const usedFolderIds = ggs(DIRECTORY_TYPES[directory] + "S").reduce(
@@ -44,6 +45,7 @@ export const Folder = ({ onSubmit, closeModal, id, directory, ...values }) => {
     if (deletable) {
       const confirmed = window.confirm("Deleting Folder");
       if (confirmed) {
+        setDeleting(true);
         await deleteFolder(id);
         closeModal();
       }
@@ -80,8 +82,8 @@ export const Folder = ({ onSubmit, closeModal, id, directory, ...values }) => {
             onChange={({ target: { value } }) => setLabel(value)}
           />
         </label>
-        <button disabled={loading} type="submit">
-          Save
+        <button disabled={loading || deleting} type="submit">
+          {loading ? "Saving..." : deleting ? "Deleting..." : "Save"}
         </button>
       </div>
     </form>

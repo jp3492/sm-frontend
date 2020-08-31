@@ -2,6 +2,8 @@
   height: 100%;
   .loading-viewer  {
     height: 100vh;
+    color: var(--cl-text-icon);
+    font-weight: 500;
   }
   .playlist_viewer, .sequence_viewer {
     height: 100vh;
@@ -55,127 +57,7 @@
       }
     }
   }
-  .sequence_viewer {
-    > .viewer_list {
-      display: grid;
-      grid-template-rows: max-content max-content 1fr max-content;
-      > .viewer_list-sequence {
-        background-color: var(--cl-acc-l);
-        * {
-          color: var(--cl-text-sec);
-        }
-      }
-    }
-  }
-  .playlist_viewer {
-    > .players {
-      grid-area: players;
-      position: relative;
-      height: 100%;
-      max-height: 100vh;
-      .player {
-        z-index: -1;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        &[data-active="true"] {
-          z-index: 1;
-        }
-      }
-    }
-    > .viewer_list {
-      > .viewer_list-sequence {
-        z-index: 1;
-        box-shadow: var(--shadow-s);
-      }
-      input {
-        border-radius: 0;
-        border: none;
-        background-color: var(--cl-acc);
-        color: white;
-        border-bottom: 0.3rem solid var(--cl-acc-d);
-        &::placeholder {
-          color: white;
-        }
-      }
-      > ul {
-        display: grid;
-        grid-auto-rows: max-content;
-        > li {
-          background-color: var(--cl-acc);
-          &[data-comments-open="true"] {
-            position: absolute;
-            height: 100%;
-            width: 100%;
-            top: 0;
-            z-index: 2;
-          }
-        }
-      }
-    }
-  }
-  .comment-section {
-    background-color: var(--cl-acc-l);
-    > * {
-      color: var(--cl-text-sec);
-    }
-    textarea {
-      border: 1px solid var(--cl-acc);
-    }
-    > ul {
-      > * + * {
-        margin-top: 1rem;
-      }
-      > .comment {
-        position: relative;
-        color: var(--cl-acc-l);
-        background-color: var(--cl-acc);
-        display: flex;
-        align-items: center;
-        > div:first-of-type {
-          flex-grow: 1;
-          > small {
-            // text-decoration: underline;
-            // border-bottom: 1px solid white;
-            font-weight: 500;
-            font-size: 0.75rem;
-          }
-          > span {
-            position: absolute;
-            bottom: -0.2rem;
-            right: 0.5rem;
-            font-size: small;
-            color: var(--cl-text-sec);
-            transform: translateY(100%);
-          }
-        }
-        > .comment_options {
-          position: relative;
-          color: var(--cl-text-sec);
-          > div {
-            position: absolute;
-            top: 0;
-            right: 0;
-            box-shadow: var(--shadow-s);
-            padding: 1rem;
-            background-color: var(--cl-acc-l);
-            border-radius: 8px;
-            z-index: 1;
-            width: max-content;
-            > div {
-              cursor: pointer;
-              * {
-                cursor: pointer;
-              }
-              display: flex;
-              align-items: center;
-              gap: 1rem;
-            }
-          }
-        }
-      }
-    }
-  }
+
   .panel {
     display: flex;
     align-items: center;

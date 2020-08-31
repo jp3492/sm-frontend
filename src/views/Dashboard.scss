@@ -3,8 +3,11 @@
     "header header header"
     "menu directory playlist";
   height: 100vh;
+  background-color: var(--cl-acc-l);
 }
 .dashboard-loading {
   height: 100vh;
+
+  background-color: var(--cl-acc-l);
   grid-template-columns: minmax(0, 1fr) max-content;
 }

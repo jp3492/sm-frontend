@@ -66,6 +66,9 @@ export const postSequence = async (body) => {
     if (newFolderId) {
       await getFolder(newFolderId);
     }
+    // FILTERED SEQUENCES ARE NOT UPDATED HERE
+    // lets change filtered sequences to be 100% depending on sequences
+    // make list scroll when adding seuqences
     ugs(SEQUENCES, (sequences) =>
       sequences.map((i) => {
         if (!i.id && JSON.stringify(i) === JSON.stringify(body)) {

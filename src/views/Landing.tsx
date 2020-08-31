@@ -9,6 +9,7 @@ import {
 } from "../stores/landingPage";
 import ReactPlayer from "react-player";
 import { MODAL } from "../components/Modal";
+import { LoadingSpinner } from "../components/LoadingIndicators";
 
 export const platforms = {
   youtube: require("../assets/youtube.svg"),
@@ -26,16 +27,22 @@ const network = require("../assets/network.svg");
 
 const Landing = ({ history: { push } }) => {
   const [featuredPlaylists] = usegs(FEATURED_PLAYLISTS);
-  useMemo(() => {
-    getFeaturedPlaylists();
-  }, []);
+  const [loading, setLoading] = useState(false);
+
+  const initialGet = async () => {
+    setLoading(true);
+    await getFeaturedPlaylists();
+    setLoading(false);
+  };
+
+  useMemo(() => initialGet(), []);
 
   return (
     <div className="landing || flow-2">
       <LandingHeader push={push} />
       <section className="public-content || intro-section || pd-2 || grid grid-tc-m1 grid-tr-11m gap-24 || cl-content-icon">
         <h2 className="align-e || size-25 || pd-0020">
-          A new Way of
+          A new Way for
           <br />
           Online Streaming
         </h2>
@@ -70,7 +77,11 @@ const Landing = ({ history: { push } }) => {
       >
         <h4 className="cl-text-icon || size-18">Featured</h4>
         <ul className="grid gap-l">
-          {featuredPlaylists.map(FeaturedPlaylists)}
+          {loading ? (
+            <LoadingSpinner />
+          ) : (
+            featuredPlaylists.map(FeaturedPlaylists)
+          )}
         </ul>
       </section>
       <LandingFooter />

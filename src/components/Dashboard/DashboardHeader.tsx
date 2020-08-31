@@ -67,7 +67,7 @@ export const Header = ({ push }) => {
   const handleClearSearch = () => setUrl("");
 
   return (
-    <header className="dashboard-header || grid grid-tc-mm11m align-i-c || bg-grey || shadow-s z1">
+    <header className="dashboard-header || grid grid-tc-mm11m align-i-c || shadow-s z1">
       <div
         onClick={() => setMenuOpen(!menuOpen)}
         className={`header_menu ${menuOpen ? "open" : ""}`}
@@ -88,13 +88,15 @@ export const Header = ({ push }) => {
           value={url}
           onChange={handleChangeUrl}
         />
-        <i onClick={handleClearSearch} className="material-icons">
-          clear
-        </i>
         {url ? (
-          <button disabled={!url} onClick={handleVideoAdd}>
-            <i className="material-icons">add</i>
-          </button>
+          <>
+            <i onClick={handleClearSearch} className="material-icons">
+              clear
+            </i>
+            <button disabled={!url} onClick={handleVideoAdd}>
+              <i className="material-icons">add</i>
+            </button>
+          </>
         ) : (
           <button onClick={handlePaste}>
             <i className="material-icons">content_paste</i>

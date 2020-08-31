@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./Modal.scss";
 
 // Consideration: lazy load all the modal content
 import { Folder } from "../forms/Folder";
 import { Video } from "../forms/Video";
 import { Playlist } from "../forms/Playlist";
-import { New } from "../forms/New";
 import { SelectFolder } from "../forms/SelectFolder";
 import { Share } from "../forms/Share";
 import { Replay } from "../forms/Replay";
@@ -27,7 +26,6 @@ const COMPONENTS = {
   FOLDER: Folder,
   VIDEO: Video,
   PLAYLIST: Playlist,
-  NEW: New,
   SELECTFOLDER: SelectFolder,
   SHARE: Share,
   REPLAY: Replay,
@@ -38,10 +36,13 @@ const COMPONENTS = {
   AUTH: Auth
 };
 
+let preventClose = false;
+
 export const Modal = () => {
   const [modal, setModal] = usegs(MODAL, INITIAL_CONFIG);
+  const ref: any = useRef(null);
 
-  const component = modal.component.toUpperCase();
+  const component = (modal.component || "").toUpperCase();
 
   const closeModal = (payload?: any) => {
     if (modal.onClose) {
@@ -55,9 +56,19 @@ export const Modal = () => {
     return null;
   }
 
-  const handleClick = (e) => {
-    if (e.target.classList.contains("modal")) {
+  const handleMouseDown = (e) => {
+    const clickInside = e.target !== ref.current;
+    if (clickInside) {
+      preventClose = true;
+    }
+  };
+
+  const handleMouseUp = (e) => {
+    if (!preventClose && e.target.classList.contains("modal")) {
+      preventClose = false;
       setModal(INITIAL_CONFIG);
+    } else {
+      preventClose = false;
     }
   };
 
@@ -74,7 +85,12 @@ export const Modal = () => {
   };
 
   return (
-    <div onClick={handleClick} className="modal centered-grid full-screen">
+    <div
+      ref={ref}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      className="modal centered-grid full-screen"
+    >
       {renderComponent(component)}
     </div>
   );

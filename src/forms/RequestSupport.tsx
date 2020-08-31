@@ -4,6 +4,7 @@ import { request } from "../utils/request";
 export const RequestSupport = ({ closeModal }) => {
   const [values, setValues] = useState({ email: "", text: "" });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,10 +14,12 @@ export const RequestSupport = ({ closeModal }) => {
         method: "POST",
         body: JSON.stringify(values)
       });
+      closeModal();
     } catch (error) {
+      setError(error.message);
       alert("Email already in use");
     }
-    closeModal();
+    setLoading(false);
   };
 
   const handleChange = ({ target: { name, value } }) =>
@@ -51,7 +54,7 @@ export const RequestSupport = ({ closeModal }) => {
         type="submit"
         className="bg-primary cl-white rounded pd-1010"
       >
-        Submit
+        {loading ? "Submitting..." : "Submit"}
       </button>
     </form>
   );

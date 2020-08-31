@@ -1,3 +1,4 @@
+import { MODAL } from "./../components/Modal";
 import { subgs } from "./../utils/rxGlobal";
 import { getProfile } from "./../stores/profile";
 import * as firebase from "firebase/app";
@@ -7,7 +8,7 @@ import { sgs } from "../utils/rxGlobal";
 
 export const AUTH = "AUTH";
 
-sgs(AUTH, false);
+sgs(AUTH, Boolean(localStorage.getItem("USER_LOGGED_IN") || false));
 
 const firebaseConfig = {
   apiKey: "AIzaSyB6BP4nchauDnzgyP02JY8w4HlKq-Hn0Co",
@@ -27,10 +28,12 @@ export const setAuthObserver = () => {
     if (user) {
       // @ts-ignore
       const idToken = await firebase.auth().currentUser.getIdToken(false);
+      localStorage.setItem("USER_LOGGED_IN", "true");
       localStorage.setItem("ID_TOKEN", idToken);
       sgs(AUTH, true);
       getProfile();
     } else {
+      localStorage.setItem("USER_LOGGED_IN", "false");
       localStorage.removeItem("ID_TOKEN");
       sgs(AUTH, false);
     }
@@ -68,6 +71,7 @@ export const logout = async () => {
   try {
     await firebase.auth().signOut();
     localStorage.removeItem("ID_TOKEN");
+    sgs(MODAL, {});
     sgs(AUTH, false);
   } catch (error) {
     console.log(error);

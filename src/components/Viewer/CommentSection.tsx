@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import "./CommentSection.scss";
+
 import { usegs, sgs } from "../../utils/rxGlobal";
 import { AUTH } from "../../services/auth";
 import { getComments, postComment, deleteComment } from "../../stores/comment";
 import { MODAL } from "../Modal";
 import { timestampToTimePassed } from "../../utils/timestampToTimePassed";
 import { onClickOutside } from "../../utils/clickOutside";
+import { LoadingBar } from "../LoadingIndicators";
 
 const handleLogin = () =>
   sgs(MODAL, {
@@ -28,8 +31,6 @@ export const CommentSection = ({
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
 
-  console.log(comments);
-
   const get = async () => {
     setLoading(true);
     await getComments({
@@ -48,29 +49,32 @@ export const CommentSection = ({
     // };
   }, []);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setComment("");
     await postComment({
       targetType,
       targetId,
       playlistId,
       content: comment
     });
-    setComment("");
+    setLoading(false);
   };
 
   return (
     <div className="comment-section">
       {auth ? (
-        <div className="pd-05 grid gap-s grid-tc-1m">
+        <form onSubmit={handleSubmit} className="pd-05 grid gap-s grid-tc-1m">
           <textarea
             placeholder="Write a comment.."
             value={comment}
             onChange={({ target: { value } }) => setComment(value)}
           ></textarea>
-          <button onClick={handleSubmit} className="align-e">
+          <button type="submit" className="align-e">
             <i className="material-icons">send</i>
           </button>
-        </div>
+        </form>
       ) : (
         <div className="text-align-c">
           <button onClick={handleLogin} className="cl-text-pri">
@@ -78,12 +82,9 @@ export const CommentSection = ({
           </button>
         </div>
       )}
+      {loading && <LoadingBar />}
       <ul className="pd-05 grid gap-s">
-        {loading && comments.length === 0 ? (
-          <li>
-            <b className="text-align-c">Loading comments...</b>
-          </li>
-        ) : comments.length === 0 ? (
+        {comments.length === 0 ? (
           <li className="pd-05 text-align-c">Be the first to comment!</li>
         ) : (
           comments.map((c, i) => (
@@ -93,7 +94,11 @@ export const CommentSection = ({
                 <p>{c.content}</p>
                 <span>{timestampToTimePassed(c.timestamp)}</span>
               </div>
-              <CommentOptions id={c.id} stateId={stateId} />
+              <CommentOptions
+                id={c.id}
+                stateId={stateId}
+                setLoading={setLoading}
+              />
             </li>
           ))
         )}
@@ -102,16 +107,16 @@ export const CommentSection = ({
   );
 };
 
-const CommentOptions = ({ id, stateId }) => {
+const CommentOptions = ({ id, stateId, setLoading: setParentLoading }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  console.log(id, stateId);
-
   const handleDelete = async () => {
     setLoading(true);
+    setParentLoading(true);
     await deleteComment(id, stateId);
     setLoading(false);
+    setParentLoading(false);
   };
 
   useEffect(() => {

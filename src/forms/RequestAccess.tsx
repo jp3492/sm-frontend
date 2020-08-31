@@ -4,6 +4,7 @@ import { request } from "../utils/request";
 export const RequestAccess = ({ closeModal }) => {
   const [values, setValues] = useState({ email: "", text: "" });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,10 +14,12 @@ export const RequestAccess = ({ closeModal }) => {
         method: "POST",
         body: JSON.stringify(values)
       });
+      closeModal();
     } catch (error) {
+      setError(error.message);
       alert("Email already in use");
     }
-    closeModal();
+    setLoading(false);
   };
 
   const handleChange = ({ target: { name, value } }) =>
@@ -40,9 +43,12 @@ export const RequestAccess = ({ closeModal }) => {
         onChange={handleChange}
         placeholder="myemail@internet.com"
         alt="enter email address"
+        required={true}
       />
       <textarea
         name="text"
+        required={true}
+        minLength={50}
         value={values.text}
         onChange={handleChange}
         placeholder="Write us about you and why you want to try our platform? :)"
@@ -52,7 +58,7 @@ export const RequestAccess = ({ closeModal }) => {
         type="submit"
         className="bg-primary cl-white rounded pd-1010"
       >
-        Submit
+        {loading ? "Submitting..." : "Submit"}
       </button>
     </form>
   );

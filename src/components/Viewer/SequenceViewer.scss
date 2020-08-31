@@ -1,0 +1,13 @@
+// Additional styling for this component in Viewer.scss in ../views
+.sequence_viewer {
+  > .viewer_list {
+    display: grid;
+    grid-template-rows: max-content max-content 1fr max-content;
+    > .viewer_list-sequence {
+      background-color: var(--cl-acc-l);
+      * {
+        color: var(--cl-text-sec);
+      }
+    }
+  }
+}

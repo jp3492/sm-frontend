@@ -2,7 +2,7 @@ import React from "react";
 
 const Impressum = () => {
   return (
-    <div className="public-content || pd-1">
+    <div className="impressum || public-content || pd-1">
       <h1>Impressum</h1>
       <p>Angaben gemäß § 5 TMG</p>
       <p>

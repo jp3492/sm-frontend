@@ -5,6 +5,8 @@ import React, {
   useCallback,
   useMemo
 } from "react";
+import "./SequenceViewer.scss";
+
 import ReactPlayer from "react-player";
 
 import { platforms } from "../../views/Landing";

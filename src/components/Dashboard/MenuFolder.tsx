@@ -1,15 +1,12 @@
-import React, { useMemo } from "react";
+import React from "react";
 import {
   OPEN_FOLDERS,
   DIRECTORY_TYPES,
   SELECTED_DIRECTORY
 } from "../../stores/folder";
 import { MODAL } from "../Modal";
-import { VIDEOS } from "../../stores/videos";
-import { PLAYLISTS } from "../../stores/playlists";
-import { SEQUENCES } from "../../stores/sequences";
 import { MenuFolderCount } from "./MenuFolderCount";
-import { usegs, sgs, ggs } from "../../utils/rxGlobal";
+import { usegs, sgs } from "../../utils/rxGlobal";
 
 const handleDragStart = (e) => {
   const folderId = e.target.closest(".folder").id;
@@ -19,18 +16,6 @@ const handleDragStart = (e) => {
     "text/plain",
     JSON.stringify({ ids: [folderId], type: "FOLDER", directory })
   );
-};
-
-const getItemsCount = (directory, folderId) => {
-  if (directory === DIRECTORY_TYPES.VIDEO) {
-    return ggs(VIDEOS).filter((v) => v.folder === folderId).length;
-  } else if (directory === DIRECTORY_TYPES.PLAYLIST) {
-    return ggs(PLAYLISTS).filter((p) => p.folder === folderId)
-      .length;
-  } else {
-    return ggs(SEQUENCES).filter((s) => s.folder === folderId)
-      .length;
-  }
 };
 
 export const MenuFolder = ({

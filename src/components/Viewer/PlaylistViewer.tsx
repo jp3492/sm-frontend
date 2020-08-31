@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import "./PlaylistViewer.scss";
+
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { sgs, subgs, unsgs, usegs, ggs } from "../../utils/rxGlobal";
 import { MODAL } from "../Modal";

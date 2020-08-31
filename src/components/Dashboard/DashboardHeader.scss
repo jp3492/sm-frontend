@@ -1,6 +1,7 @@
 .dashboard-header {
   grid-area: header;
   height: 55px;
+  background-color: var(--cl-acc);
   .header_menu {
     width: 50px;
     > i {

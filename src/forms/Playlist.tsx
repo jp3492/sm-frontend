@@ -14,6 +14,7 @@ export const Playlist = ({ onSubmit, closeModal, id, ...values }) => {
   const [keyword, setKeyword] = useState("");
   const [folderName, setFolderName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     const folders = ggs(FOLDERS);
@@ -34,6 +35,7 @@ export const Playlist = ({ onSubmit, closeModal, id, ...values }) => {
   const handleDelete = async () => {
     const confirmed = window.confirm("Deleting Playlist");
     if (confirmed) {
+      setDeleting(true);
       await deletePlaylist(id);
       closeModal();
     }
@@ -109,8 +111,8 @@ export const Playlist = ({ onSubmit, closeModal, id, ...values }) => {
             </li>
           ))}
         </ul>
-        <button disabled={loading} type="submit">
-          Save
+        <button disabled={loading || deleting} type="submit">
+          {loading ? "Saving..." : deleting ? "Deleting..." : "Save"}
         </button>
       </div>
     </form>

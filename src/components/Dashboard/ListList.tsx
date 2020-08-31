@@ -1,9 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import {
-  openPlayer,
-  PLAYER_PLAYING,
-  PLAYER_ITEM
-} from "./Player";
+import { openPlayer, PLAYER_PLAYING, PLAYER_ITEM } from "./Player";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { PLAYLIST_ITEMS } from "../../stores/playlist_items";
 import { ggs, sgs, usegs } from "../../utils/rxGlobal";
@@ -78,6 +74,7 @@ export const ListList = ({
 
     if (
       arrangeTarget.current &&
+      draggedTarget.current &&
       draggedTarget.current !== arrangeTarget.current
     ) {
       const { height, y } = arrangeTarget.current.getBoundingClientRect();

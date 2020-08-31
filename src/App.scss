@@ -2,4 +2,8 @@
   > * {
     position: relative;
   }
+  .impressum, .datenschutz {
+    background-color: var(--cl-acc);
+    color: var(--cl-text-icon);
+  }
 }

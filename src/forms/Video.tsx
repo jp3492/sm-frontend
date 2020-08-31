@@ -18,6 +18,7 @@ export const Video = ({ onSubmit, closeModal, id, ...values }) => {
   const [keyword, setKeyword] = useState("");
   const [folderName, setFolderName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const folderId = ggs(SELECTED_FOLDER_VIDEO) || "root";
   const folder = ggs(FOLDERS).find((f) => f.id === folderId);
@@ -89,6 +90,7 @@ export const Video = ({ onSubmit, closeModal, id, ...values }) => {
       deletable &&
       window.confirm("Are you sure you want to delete this video?")
     ) {
+      setDeleting(true);
       await deleteVideo(id);
       closeModal();
     } else {
@@ -160,8 +162,8 @@ export const Video = ({ onSubmit, closeModal, id, ...values }) => {
             </li>
           ))}
         </ul>
-        <button disabled={loading} type="submit">
-          Save
+        <button disabled={loading || deleting} type="submit">
+          {loading ? "Saving" : deleting ? "Deleting..." : "Save"}
         </button>
       </div>
     </form>

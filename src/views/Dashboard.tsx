@@ -35,7 +35,7 @@ const Dashboard = ({ history: { push } }) => {
 
   return initialized ? (
     <div
-      className={`dashboard grid grid-tr-m1 grid-tc-m1m bg-grey-light gap-s overflow-h cl-content-sec`}
+      className={`dashboard grid grid-tr-m1 grid-tc-m1m gap-s overflow-h cl-content-sec`}
     >
       <Header push={push} />
       <Menu />

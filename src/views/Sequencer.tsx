@@ -8,7 +8,7 @@ import { SequencerListHeader } from "../components/Sequencer/SequencerListHeader
 import { SequencerList } from "../components/Sequencer/SequencerList";
 import { SequencerHeader } from "../components/Sequencer/SequencerHeader";
 import { SequencerVideo } from "../components/Sequencer/SequencerVideo";
-import { SequencerControls } from "../components/Sequencer/SequencerControls";
+// import { SequencerControls } from "../components/Sequencer/SequencerControls";
 import { SequencerActions } from "../components/Sequencer/SequencerActions";
 import { getFolders } from "../stores/folder";
 import { usegs, sgs } from "../utils/rxGlobal";
@@ -124,7 +124,7 @@ const Sequencer = ({
         <SequencerList sequences={videoSequences} sequenceId={sequenceId} />
         <SequencerActions />
         <Tagger />
-        <SequencerControls />
+        {/* <SequencerControls /> */}
       </div>
     </div>
   );

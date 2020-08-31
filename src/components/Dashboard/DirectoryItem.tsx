@@ -1,9 +1,10 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useState, useCallback } from "react";
 import { DIRECTORY_TYPES } from "../../stores/folder";
 import { Link } from "react-router-dom";
 import { SEQUENCES } from "../../stores/sequences";
-import { ggs } from "../../utils/rxGlobal";
+import { ggs, subgs, unsgs } from "../../utils/rxGlobal";
 import { PLAYLISTS, patchPlaylist, STATUS_TYPES } from "../../stores/playlists";
+import { MOVING_ITEMS } from "./MenuItem";
 
 const getSequenceCount = (videoId) => {
   return ggs(SEQUENCES).filter((s) => s.videoId === videoId).length;
@@ -25,7 +26,25 @@ export const DirectoryItem = ({
   onShare,
   ...item
 }) => {
+  const [moving, setMoving] = useState(false);
+
   const handleShare = () => onShare(DIRECTORY_TYPES[type], id, label, item.url);
+
+  const handleMoving = useCallback(
+    (ids) => {
+      if (ids.includes(id) && !moving) {
+        setMoving(true);
+      } else {
+        setMoving(false);
+      }
+    },
+    [moving, id]
+  );
+
+  useEffect(() => {
+    subgs(MOVING_ITEMS, handleMoving);
+    return () => unsgs(MOVING_ITEMS, handleMoving);
+  }, [id]);
 
   if (type === DIRECTORY_TYPES.PLAYLIST) {
     return (
@@ -37,11 +56,11 @@ export const DirectoryItem = ({
         onDragOver={onDragOver}
         handleSelect={handleSelect}
         selected={selected}
-        keywords={keywords}
         items={items}
         handleEdit={handleEdit}
         handleShare={handleShare}
         status={item.status}
+        isMoving={moving}
       />
     );
   } else if (type === DIRECTORY_TYPES.VIDEO) {
@@ -57,6 +76,7 @@ export const DirectoryItem = ({
         keywords={keywords}
         handleEdit={handleEdit}
         handleShare={handleShare}
+        isMoving={moving}
       />
     );
   } else {
@@ -73,6 +93,7 @@ export const DirectoryItem = ({
         start={item.start}
         stop={item.stop}
         videoId={item.videoId}
+        isMoving={moving}
       />
     );
   }
@@ -89,7 +110,8 @@ const SequenceItem = ({
   handleShare,
   videoId,
   start,
-  stop
+  stop,
+  isMoving
 }) => {
   return (
     <li
@@ -99,6 +121,7 @@ const SequenceItem = ({
       onDragOver={onDragOver}
       draggable={true}
       onClick={handleSelect}
+      data-moving={isMoving}
       data-selected={selected ? "selected" : ""}
       className={`SEQUENCE directory_item grid pd-051 gap-l`}
     >
@@ -137,7 +160,8 @@ const VideoItem = ({
   selected,
   keywords,
   handleShare,
-  handleEdit
+  handleEdit,
+  isMoving
 }) => {
   const count = useMemo(() => getSequenceCount(id), [id]);
   return (
@@ -148,6 +172,7 @@ const VideoItem = ({
       onDragOver={onDragOver}
       draggable={true}
       onClick={handleSelect}
+      data-moving={isMoving}
       data-selected={selected ? "selected" : ""}
       className={`VIDEO directory_item grid pd-051 gap-l`}
     >
@@ -196,11 +221,11 @@ const PlaylistItem = ({
   onDragOver,
   handleSelect,
   selected,
-  keywords,
   items,
   handleShare,
   handleEdit,
-  status
+  status,
+  isMoving
 }) => {
   const handleStatusChange = ({ target: { value } }) => {
     const playlist = ggs(PLAYLISTS).find((p) => p.id === id);
@@ -214,23 +239,12 @@ const PlaylistItem = ({
       onDragOver={onDragOver}
       draggable={true}
       onClick={handleSelect}
+      data-moving={isMoving}
       data-selected={selected ? "selected" : ""}
       className={`PLAYLIST directory_item grid pd-051 gap-l`}
     >
       <div className="directory_item-header aligned-grid grid-tc-1mm cgap-m">
         <h4>{label}</h4>
-        {/* <ul className="directory_item-keywords aligned-grid cgap-s">
-          <li>
-            <small>#</small>
-          </li>
-          {keywords.length === 0 ? (
-            <li>
-              <small>No keywords</small>
-            </li>
-          ) : (
-            keywords.map((k, i) => <li key={i}>{k}</li>)
-          )}
-        </ul> */}
       </div>
       <div className="directory_item-videos aligned-grid gap-s">
         <span>{items.length}</span>

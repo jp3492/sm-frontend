@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo
+} from "react";
 import { sgs, subgs, unsgs, ugs, usegs, ggs } from "../../utils/rxGlobal";
 import { PV_REPEATING_ITEM_ID, ACTIVE_ITEM_ID } from "./PlaylistViewer";
 import { DIRECTORY_TYPES } from "../../stores/folder";
@@ -45,6 +51,7 @@ export const PlaylistViewerList = ({
           handleShareItem={handleShareItem}
           playlistId={playlistId}
           key={i}
+          listRef={list}
         />
       ))}
     </ul>
@@ -53,34 +60,61 @@ export const PlaylistViewerList = ({
 
 const handleSelect = (e) => sgs(ACTIVE_ITEM_ID, e.target.closest("li").id);
 
-const Item = ({ id, label, type, url, views, playlistId, handleShareItem }) => {
+const scrollToItem = (id) => {
+  const ul: any = document.getElementById("playlist-viewer-list");
+  const li: any = document.getElementById(id);
+
+  ul.scrollTo({
+    top: li.offsetTop,
+    behavior: "smooth"
+  });
+};
+
+const Item = ({
+  id,
+  label,
+  type,
+  url,
+  views,
+  playlistId,
+  handleShareItem,
+  listRef
+}) => {
   const [active, setActive] = useState(false);
   const [open, setOpen] = useState(false);
   const [repeating, setRepeating] = useState(false);
   const [commentsOpen, setCommentsOpen] = usegs(COMMENTS_OPEN);
 
+  const isOpen = useMemo(() => commentsOpen === id, [commentsOpen, id]);
+
   useEffect(() => {
-    setOpen(commentsOpen ? true : active);
+    if (isOpen && listRef.current !== null) {
+      listRef.current.style.overflow = "hidden";
+    }
+    return () => {
+      if (listRef.current !== null) {
+        listRef.current.style.overflow = "auto";
+        scrollToItem(ggs(ACTIVE_ITEM_ID));
+      }
+    };
+  }, [isOpen, listRef]);
+
+  useEffect(() => {
+    setOpen(isOpen ? true : active);
 
     return () => {
       setRepeating(false);
       sgs(PV_REPEATING_ITEM_ID, null);
     };
-  }, [active]);
+  }, [active, isOpen]);
 
   useEffect(() => {
     if (open && active) {
-      if (active) {
-        const ul: any = document.getElementById("playlist-viewer-list");
-        const li: any = document.getElementById(id);
-
-        ul.scrollTo({
-          top: li.offsetTop,
-          behavior: "smooth"
-        });
+      if (active && commentsOpen === null) {
+        scrollToItem(id);
       }
     }
-  }, [open, active]);
+  }, [open, active, id, commentsOpen]);
 
   const handleActive = useCallback(
     (activeItemId) => setActive(activeItemId === id),
@@ -112,7 +146,7 @@ const Item = ({ id, label, type, url, views, playlistId, handleShareItem }) => {
   const handleComments = () => {
     const auth = ggs(AUTH);
     if (auth) {
-      setCommentsOpen(!commentsOpen);
+      setCommentsOpen(isOpen ? null : id);
     } else {
       sgs(MODAL, {
         component: "AUTH",
@@ -127,19 +161,19 @@ const Item = ({ id, label, type, url, views, playlistId, handleShareItem }) => {
   const handleClose = (e) => {
     e.stopPropagation();
     setOpen(active);
-    setCommentsOpen(false);
+    setCommentsOpen(null);
   };
 
   return (
     <li
       className="bg-grey-dark grid-tr-1m"
-      data-comments-open={commentsOpen}
-      data-active={active || commentsOpen}
+      data-comments-open={isOpen}
+      data-active={active || isOpen}
       id={id}
     >
       <div onClick={handleSelect} className="grid row-1m pd-0505051">
         <label>{label}</label>
-        {commentsOpen ? (
+        {isOpen ? (
           <i onClick={handleClose} className="material-icons cl-text-icon">
             clear
           </i>
@@ -168,21 +202,17 @@ const Item = ({ id, label, type, url, views, playlistId, handleShareItem }) => {
           >
             share
           </i>
-          {!commentsOpen && (
-            <i
-              data-icon-active={commentsOpen}
-              onClick={handleComments}
-              className="material-icons"
-            >
+          {!isOpen && (
+            <i onClick={handleComments} className="material-icons">
               comment
             </i>
           )}
         </div>
       )}
-      {commentsOpen && (
+      {isOpen && (
         <CommentSection
           targetType={type}
-          targetId={playlistId}
+          targetId={id}
           playlistId={playlistId}
         />
       )}

@@ -82,6 +82,13 @@
           font-size: 130%;
         }
       }
+      &[data-moving="true"] {
+        * {
+          cursor: not-allowed;
+          color: var(--cl-text-icon);
+        }
+        background-color: var(--cl-acc);
+      }
     }
   }
 

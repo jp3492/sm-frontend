@@ -12,8 +12,10 @@ import { moveVideos } from "../../stores/videos";
 import { moveSequences } from "../../stores/sequences";
 import { MenuFolder } from "./MenuFolder";
 import { getPath } from "./Path";
-import { MenuFolderCount } from "./MenuFolderCount";
 import { ggs, sgs, usegs, ugs } from "../../utils/rxGlobal";
+
+export const MOVING_ITEMS = "MOVING_ITEMS";
+sgs(MOVING_ITEMS, []);
 
 const handleSelectFolder = (id, directory) => {
   sgs(SELECTED_FOLDER, id);
@@ -49,14 +51,16 @@ const handleDrop = async (e) => {
     type === directory ||
     type === dropFolder.directory
   ) {
+    ugs(MOVING_ITEMS, (items) => [...items, ...ids]);
     // restricts movement into different directory
     if (type === DIRECTORY_TYPES.PLAYLIST) {
-      movePlaylists({ folderId: dropFolderId, ids, type });
+      await movePlaylists({ folderId: dropFolderId, ids, type });
     } else if (type === DIRECTORY_TYPES.VIDEO) {
-      moveVideos({ folderId: dropFolderId, ids, type });
+      await moveVideos({ folderId: dropFolderId, ids, type });
     } else {
-      moveSequences({ folderId: dropFolderId, ids, type });
+      await moveSequences({ folderId: dropFolderId, ids, type });
     }
+    ugs(MOVING_ITEMS, (items) => items.filter((i) => !ids.includes(i)));
   }
 };
 
