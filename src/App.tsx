@@ -9,6 +9,7 @@ import { AUTH } from "./services/auth";
 import { ErrorPage404 } from "./views/404";
 import { ErrorPage403 } from "./views/403";
 import { Modal } from "./components/Modal";
+import { Landing2 } from "./views/Landing2";
 
 // lazy load all pages
 const Dashboard = lazy(() => import("./views/Dashboard"));
@@ -28,6 +29,7 @@ const App = () => {
         <BrowserRouter>
           <Switch>
             <Route exact path="/" component={Landing} />
+            <Route exact path="/landing2" component={Landing2} />
             <Route exact path="/roadmap" component={Roadmap} />
             <Route exact path="/viewer/:type/:id" component={Viewer} />
             <Route exact path="/impressum" component={Impressum} />

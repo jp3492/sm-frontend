@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { getClientToken } from "../stores/payment";
-import BraintreeWebDropIn from "braintree-web-drop-in";
 
 export const Payment = () => {
   const [token, setToken]: [string, Function] = useState("");
@@ -11,20 +10,7 @@ export const Payment = () => {
     getClientToken().then((t) => setToken(t));
   }, []);
 
-  useEffect(() => {
-    createUi();
-  }, [token]);
-
-  const createUi = async () => {
-    try {
-      await BraintreeWebDropIn.create({
-        authorization: token,
-        container: container.current
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  useEffect(() => {}, [token]);
 
   return (
     <div className="payment">
